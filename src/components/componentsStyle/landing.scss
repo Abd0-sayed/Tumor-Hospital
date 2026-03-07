@@ -1,0 +1,68 @@
+@use "../../style/_mixins.scss" as m;
+@use "../../style/_global_vars.scss" as v;
+.hero {
+  position: relative;
+  min-height: 80vh;
+  background: url("../../assets/img1.jpg") no-repeat center right;
+  background-size: cover;
+  padding: 100px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .hero-content {
+    max-width: 600px;
+
+    .subtitle {
+      color: #2e5f9e;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      color: #1f2b6c;
+      margin: 20px 0;
+      line-height: 1.2;
+    }
+
+    .btn-primary {
+      background-color: #bfd2f8;
+      border: none;
+      padding: 15px 35px;
+      border-radius: 50px;
+      color: #1f2b6c;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #a5bef0;
+      }
+    }
+  }
+
+  .hero-cards {
+    display: flex;
+    width: 100%;
+    margin-top: 150px;
+    gap: 15px;
+    justify-content: center;
+    transform: translateY(80%);
+    .card {
+      flex-direction: row;
+      width: 18rem;
+      border: none;
+      &.dark-blue {
+        @include m.card(v.$main-nav-color);
+      }
+      &.light-blue {
+        @include m.card(v.$secondary-nav-color, v.$main-nav-color);
+      }
+      &.sky-blue {
+        @include m.card(v.$secondary-text-color);
+      }
+    }
+  }
+}
