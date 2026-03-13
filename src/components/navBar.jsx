@@ -5,6 +5,7 @@ import { LuClock4 } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
+import { Link } from 'react-router-dom';
 function NavDropdownExample() {
   return (
     <>
@@ -45,12 +46,13 @@ function NavDropdownExample() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav>
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/about">About</Nav.Link>
+              <link></link>
+              <Nav.Link href="link">Link</Nav.Link>
+              <Nav.Link href="link">Link</Nav.Link>
+              <Nav.Link href="link">Link</Nav.Link>
+              <Nav.Link href="link">Link</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
