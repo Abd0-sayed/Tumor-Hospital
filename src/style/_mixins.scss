@@ -34,3 +34,25 @@
     color: $text-color;
   }
 }
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin social-icon-style {
+  @include flex-center;
+  background-color: $main-nav-color;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: $secondary-nav-color;
+    transform: translateY(-2px);
+  }
+}

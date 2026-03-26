@@ -1,4 +1,5 @@
 import "./App.scss";
+import DoctorSection from "./components/doctors";
 import Landing from "./components/landing";
 import Appointment from "./components/form";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,6 +11,7 @@ function App() {
       <NavDropdownExample />
     <Outlet/>
       <Appointment />
+      <DoctorSection />
     </>
   );
 }
