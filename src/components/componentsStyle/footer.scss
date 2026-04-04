@@ -1,0 +1,138 @@
+@use "../../style/_global_vars.scss" as v;
+$bg-color: v.$main-nav-color;
+$text-light: white;
+$accent-light: v.$secondary-nav-color;
+
+.meddical-footer {
+  background-color: $bg-color;
+  color: $text-light;
+  padding: 60px 0 10px 0;
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 40px;
+
+    .footer-col {
+      flex: 1;
+      min-width: 200px;
+
+      h3 {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        font-weight: 600;
+      }
+
+      &.brand {
+        .logo {
+          font-family: "Times New Roman", Times, serif;
+          color: white;
+          &::after {
+            content: "AI";
+            color: v.$secondary-text-color;
+          }
+        }
+      }
+      &.links {
+        ul {
+          list-style: none;
+          padding: 0;
+          li {
+            margin-bottom: 12px;
+            a {
+              color: $text-light;
+              text-decoration: none;
+              transition: opacity 0.3s;
+              &:hover {
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+      }
+
+      &.contact p {
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+
+      &.newsletter {
+        .input-group {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: $accent-light;
+            color: $bg-color;
+            &::placeholder {
+              color: $bg-color;
+              opacity: 0.8;
+            }
+          }
+
+          .send-btn {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: $bg-color;
+            font-size: 1.2rem;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+
+      a {
+        background-color: $accent-light;
+        color: $bg-color;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: translateY(-3px);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+}
