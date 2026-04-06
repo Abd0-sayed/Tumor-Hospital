@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Landing from "./components/landing.jsx";
 import About from "./components/About.jsx";
+import AccordionSection from "./components/faqs.jsx";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -12,6 +13,7 @@ const routes = createBrowserRouter([
     children: [
       { path: "/", element: <Landing /> },
       { path: "/about", element: <About /> },
+      { path: "/faq", element: <AccordionSection /> },
     ],
   },
 ]);

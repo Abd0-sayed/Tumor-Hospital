@@ -5,11 +5,11 @@ import {
   FaInstagram,
   FaPaperPlane,
 } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 const Footer = () => {
   const year = new Date();
   return (
-    <footer className="meddical-footer">
+    <footer className="meddical-footer" id="scroll-animation">
       <div className="footer-container">
         <div className="footer-top">
           <div className="footer-col brand">
@@ -25,6 +25,9 @@ const Footer = () => {
               </li>
               <li>
                 <a href="#doctors">Doctors</a>
+              </li>
+              <li>
+                <Link to="/faq">Q&A</Link>
               </li>
               <li>
                 <a href="#services">Services</a>

@@ -1,20 +1,31 @@
 import "./App.scss";
 import DoctorSection from "./components/doctors";
-import Landing from "./components/landing";
+import AccordionSection from "./components/faqs";
 import Appointment from "./components/form";
 import Footer from "./components/footer";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Landing from "./components/landing.jsx";
 import NavDropdownExample from "./components/navBar";
-import { Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 function App() {
   return (
-    <>
-      <NavDropdownExample />
-      <Outlet />
-      <Appointment />
-      <DoctorSection />
-      <Footer />
-    </>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <NavDropdownExample />
+            <Landing />
+            <Appointment />
+            <DoctorSection />
+            <Footer />
+          </>
+        }
+      />
+
+      <Route path="/faq" element={<AccordionSection />} />
+    </Routes>
   );
 }
 

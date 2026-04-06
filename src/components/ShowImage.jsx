@@ -15,9 +15,7 @@ function ShowImage() {
   }, []);
 
   return (
-    <div>
-      {imageUrl && <img src={imageUrl} alt="Third item" width="300" />}
-    </div>
+    <div>{imageUrl && <img src={imageUrl} alt="Third item" width="300" />}</div>
   );
 }
 
