@@ -1,4 +1,4 @@
-import "./componentsStyle/footer.scss";
+import "./footer.scss";
 import {
   FaLinkedinIn,
   FaFacebookF,

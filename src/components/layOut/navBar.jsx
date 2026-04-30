@@ -1,11 +1,10 @@
 import Nav from "react-bootstrap/Nav";
-import "./componentsStyle/navBar.scss";
+import "./navBar.scss";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { LuClock4 } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { Link } from 'react-router-dom';
 function NavDropdownExample() {
   return (
     <>
@@ -48,8 +47,7 @@ function NavDropdownExample() {
             <Nav>
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/about">About</Nav.Link>
-              <link></link>
-              <Nav.Link href="link">Link</Nav.Link>
+              <Nav.Link href="/donations">Donate</Nav.Link>
               <Nav.Link href="link">Link</Nav.Link>
               <Nav.Link href="link">Link</Nav.Link>
               <Nav.Link href="link">Link</Nav.Link>

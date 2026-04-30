@@ -1,0 +1,4 @@
+@use "../../style/_mixins.scss" as *;
+.circle {
+  @include loading-spinner();
+}

@@ -1,0 +1,273 @@
+@use "../../../style/_mixins.scss" as m;
+@use "../../../style/_global_vars.scss" as v;
+$primary-teal: v.$main-nav-color;
+$accent-aqua: v.$secondary-nav-color;
+$card-bg: #ffffff;
+$text-main: #000;
+
+.donation-wrapper {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .needs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+
+    .need-card {
+      @include m.card(white, $text-main);
+      transition: all 0.3s ease;
+      flex-direction: column;
+      box-shadow: 1px 1px 1px 1px #eee;
+      border-radius: 12px;
+      &:hover {
+        transform: translateY(-5px);
+        cursor: initial;
+      }
+
+      .image-container {
+        position: relative;
+        height: 220px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .category-tag {
+          position: absolute;
+          top: -9px;
+          right: -9px;
+          background: rgba($primary-teal, 0.9);
+          color: white;
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+        }
+      }
+
+      h3 {
+        padding: 15px;
+        margin: 0;
+        font-size: 1.2rem;
+        color: $text-main;
+      }
+
+      .donate-btn {
+        padding: 12px;
+        background-color: $primary-teal;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 70%;
+        transition: background 0.2s;
+        &.completed {
+          cursor: not-allowed;
+        }
+
+        &:hover {
+          background-color: lighten($primary-teal, 13%);
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .arrow {
+      background: $primary-teal;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+
+    .page-info {
+      font-weight: 500;
+      color: $text-main;
+    }
+  }
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+
+  button {
+    padding: 8px 20px;
+    border: 2px solid $primary-teal;
+    background: transparent;
+    color: $primary-teal;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba($primary-teal, 0.1);
+    }
+
+    &.active {
+      background: $primary-teal;
+      color: white;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; // Use viewport width
+  height: 100vh; // Use viewport height
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; // Boost this significantly
+
+  .modal {
+    background: #ffffff !important; // Force white background
+    padding: 35px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    position: relative; // Helps with internal positioning
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    display: block; // Ensure it's not accidentally set to flex/none
+    color: #000;
+
+    .modal-actions {
+      display: flex;
+      gap: 15px; // Space between Confirm and Cancel
+      margin-top: 20px;
+
+      button {
+        flex: 1; // Makes both buttons the same width
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+
+        &:active {
+          transform: scale(0.97); // "Click" effect
+        }
+      }
+
+      .confirm-btn {
+        background: $primary-teal;
+        color: white;
+        box-shadow: 0 4px 10px rgba($primary-teal, 0.3);
+
+        &:hover {
+          background: lighten($primary-teal, 8%);
+          box-shadow: 0 6px 15px rgba($primary-teal, 0.4);
+        }
+      }
+
+      .cancel-btn {
+        background: #f1f3f5;
+        color: #495057;
+        border: 1px solid #dee2e6;
+
+        &:hover {
+          background: #e9ecef;
+          color: #212529;
+        }
+      }
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: $primary-teal;
+      font-size: 1.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      label {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: -10px;
+      }
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #fff;
+        color: #000;
+
+        &:focus {
+          border-color: $accent-aqua;
+          outline: none;
+          box-shadow: 0 0 5px rgba($accent-aqua, 0.5);
+        }
+      }
+    }
+  }
+}
+
+.need-summary {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid $primary-teal;
+
+  p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #444;
+    display: flex;
+    justify-content: space-between;
+
+    strong {
+      color: #000;
+    }
+  }
+
+  .remaining {
+    border-top: 1px solid #ddd;
+    margin-top: 8px;
+    padding-top: 8px;
+    color: $primary-teal;
+    font-weight: bold;
+  }
+}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaLinkedinIn, FaFacebookF, FaInstagram } from "react-icons/fa";
-import "./componentsStyle/doctorCards.scss";
+import "./homeStyle/doctorCards.scss";
 const DoctorCard = ({ name, specialty, imageUrl }) => {
   return (
     <div className="doctor-card">

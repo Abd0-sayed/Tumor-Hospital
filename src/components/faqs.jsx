@@ -1,6 +1,6 @@
 "use client";
 
-import NavDropdownExample from "./navBar";
+import PageLoad from "./pageLoad.jsx";
 import "./componentsStyle/faqs.scss";
 import { useState, useEffect } from "react";
 
@@ -29,30 +29,32 @@ export default function AccordionSection() {
     fetch("https://tumorhospital.runasp.net/api/FAQs")
       .then((res) => res.json())
       .then((data) => setData(data));
-  });
+  }, []);
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
-  return (
-    <>
-      <NavDropdownExample />
-      <div className="body">
-        <h1>General Questions</h1>
-        <hr />
-        <div className="questions">
-          {data &&
-            data.map((item, index) => (
-              <AccordionItem
-                key={index}
-                item={item}
-                isOpen={openIndex === index}
-                onToggle={() => handleToggle(index)}
-              />
-            ))}
+  if (data) {
+    return (
+      <>
+        <div className="body">
+          <h1>General Questions</h1>
+          <hr />
+          <div className="questions">
+            {data &&
+              data.map((item, index) => (
+                <AccordionItem
+                  key={index}
+                  item={item}
+                  isOpen={openIndex === index}
+                  onToggle={() => handleToggle(index)}
+                />
+              ))}
+          </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  } else {
+    return <PageLoad />;
+  }
 }

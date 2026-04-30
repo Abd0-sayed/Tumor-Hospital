@@ -1,0 +1,181 @@
+:root {
+  --medai-primary-navy: #1d2b66; /* Deep navy blue */
+  --medai-main-text-blue: #2a4893; /* Medium blue for main headings */
+  --medai-light-blue: #b3cbf2; /* Light blue for highlights/buttons */
+  --medai-accent-blue: #109cff; /* Bright blue accent */
+  --medai-background-white: #ffffff;
+  --medai-text-gray: #777777;
+}
+
+.medai-about-container {
+  font-family: "Poppins", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--medai-primary-navy);
+  background-color: var(--medai-background-white);
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header Section */
+.about-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.about-header .sub-header {
+  font-weight: 600;
+  color: var(--medai-text-gray);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.about-header h1 {
+  /* Using the lighter blue for the main title, like the image 1 text color */
+  color: var(--medai-main-text-blue);
+  font-size: 3rem;
+  margin-top: 10px;
+  font-weight: 700;
+  text-transform: capitalize; /* Hospital name is capitalized */
+}
+
+/* Content Main Section */
+.about-content h2 {
+  color: var(--medai-primary-navy);
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* 2. Description/Services */
+.description-section {
+  margin-bottom: 50px;
+}
+
+.description-section p {
+  color: var(--medai-text-gray);
+  line-height: 1.6;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+/* 3. Core Values Grid */
+.values-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.value-card {
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #ededed;
+}
+
+/* Mission card gets the deep navy styling, like card 1 in image 1 */
+.value-card.mission {
+  background-color: var(--medai-primary-navy);
+  color: var(--medai-background-white);
+}
+
+.value-card.mission h3 {
+  color: var(--medai-background-white);
+}
+
+/* Vision card gets the light blue styling, like card 2 in image 1 */
+.value-card.vision {
+  background-color: var(--medai-light-blue);
+  color: var(--medai-primary-navy);
+}
+
+.value-card h3 {
+  font-size: 1.5rem;
+  margin-top: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.value-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: inherit;
+}
+
+/* 4. Stats Section */
+.stats-section {
+  background-color: #f8f9fa;
+  padding: 50px;
+  border-radius: 12px;
+  margin-bottom: 60px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+}
+
+.stat-number {
+  display: block;
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--medai-accent-blue); /* High contrast accent blue */
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: var(--medai-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* 5. Footer / Contact */
+.about-footer {
+  text-align: center;
+}
+
+.contact-box {
+  background-color: var(--medai-background-white);
+  border: 2px solid var(--medai-light-blue);
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-box h2 {
+  color: var(--medai-primary-navy);
+}
+
+.contact-box p {
+  color: var(--medai-text-gray);
+  margin-bottom: 10px;
+}
+
+.contact-btn {
+  /* This button mimics the light-blue 'Our Services' button in image_1.png */
+  background-color: var(--medai-light-blue);
+  color: var(--medai-primary-navy);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 20px; /* Fully rounded pill shape */
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.contact-btn:hover {
+  background-color: #a1bbe8; /* Slightly darker shift for hover */
+}

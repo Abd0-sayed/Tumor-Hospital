@@ -1,4 +1,4 @@
-import "./componentsStyle/landing.scss";
+import "./homeStyle/landing.scss";
 import {
   MdCalendarToday,
   MdPeopleOutline,

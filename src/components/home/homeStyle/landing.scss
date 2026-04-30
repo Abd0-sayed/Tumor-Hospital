@@ -1,9 +1,9 @@
-@use "../../style/_mixins.scss" as m;
-@use "../../style/_global_vars.scss" as v;
+@use "../../../style/_mixins.scss" as m;
+@use "../../../style/_global_vars.scss" as v;
 .hero {
   position: relative;
   min-height: 80vh;
-  background: url("../../assets/img1.jpg") no-repeat center right;
+  background: url("../../../assets/img1.jpg") no-repeat center right;
   background-size: cover;
   padding: 100px 0 0;
   display: flex;

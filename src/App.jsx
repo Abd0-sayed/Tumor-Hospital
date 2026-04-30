@@ -1,32 +1,29 @@
 import "./App.scss";
-import DoctorSection from "./components/doctors";
+import RootLayout from "./components/layOut/rootLayout.jsx";
+import DonationPage from "./components/otherPages/needs.jsx";
 import AccordionSection from "./components/faqs";
-import Appointment from "./components/form";
-import Footer from "./components/footer";
+import Home from "./components/home/Home.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Landing from "./components/landing.jsx";
-import NavDropdownExample from "./components/navBar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AboutPage from "./components/About.jsx";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+      <Route index element={<Home />} />
+      <Route path="faq" element={<AccordionSection />} />
+      <Route path="about" element={<AboutPage />} />
+      <Route path="donations" element={<DonationPage />} />
+    </Route>,
+  ),
+);
 function App() {
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <NavDropdownExample />
-            <Landing />
-            <Appointment />
-            <DoctorSection />
-            <Footer />
-          </>
-        }
-      />
-
-      <Route path="/faq" element={<AccordionSection />} />
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

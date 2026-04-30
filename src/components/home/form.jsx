@@ -1,4 +1,4 @@
-import "./componentsStyle/form.scss";
+import "./homeStyle/form.scss";
 import { MdExpandMore } from "react-icons/md";
 
 const Appointment = () => {
