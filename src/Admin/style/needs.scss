@@ -1,0 +1,94 @@
+@use "../../style/_global_vars.scss" as v;
+
+.need-card {
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 0; // Removing gap for a "joined" button look
+    margin: 15px auto;
+    width: 85%;
+    border-radius: 8px;
+    overflow: hidden; // Caps the corners of the buttons inside
+    border: 1px solid #ddd;
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+
+      &.edit-btn {
+        background-color: v.$secondary-nav-color; // Cleaner amber
+        color: #000;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+        &:hover {
+          background-color: darken(v.$secondary-nav-color, 10%);
+        }
+      }
+
+      &.delete-btn {
+        background-color: #dc3545; // Professional red
+        color: white;
+
+        &:hover {
+          background-color: darken(#dc3545, 10%);
+        }
+      }
+    }
+  }
+}
+
+// Style for the "Add New Need" button at the top
+.add-new-btn {
+  padding: 12px 24px;
+  background-color: v.$secondary-text-color;
+  color: white;
+  min-width: 300px;
+  max-width: 400px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: darken(v.$secondary-text-color, 10%);
+  }
+}
+
+.admin-header {
+  display: flex;
+  margin-top: 40px;
+  justify-content: center;
+  gap: v.$margin-between; // Space between the two buttons
+  margin-bottom: calc(v.$margin-between * 2);
+}
+
+.export-btn {
+  background-color: lighten($color: #1e6f45, $amount: 15%);
+  color: #fff;
+  border: none;
+  border-radius: v.$main-border-raduis;
+  padding: v.$text-padding 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: darken(#1e6f45, 1%);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}

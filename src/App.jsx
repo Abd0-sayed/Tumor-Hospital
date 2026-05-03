@@ -1,6 +1,7 @@
 import "./App.scss";
 import RootLayout from "./components/layOut/rootLayout.jsx";
-import DonationPage from "./components/otherPages/needs.jsx";
+import NeedsGrid from "./components/otherPages/needs.jsx";
+import NeedManagement from "./Admin/needs.jsx";
 import AccordionSection from "./components/faqs";
 import Home from "./components/home/Home.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,7 +19,8 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="faq" element={<AccordionSection />} />
       <Route path="about" element={<AboutPage />} />
-      <Route path="donations" element={<DonationPage />} />
+      <Route path="donations" element={<NeedsGrid />} />
+      <Route path="admin/donations" element={<NeedManagement />} />
     </Route>,
   ),
 );
