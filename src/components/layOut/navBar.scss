@@ -46,10 +46,11 @@ header {
   }
 }
 nav.navbar {
+  margin-top: -10px;
   padding: 0;
   position: relative;
   background-color: v.$main-nav-color !important;
-  .nav-link {
+  .link {
     color: white !important;
   }
   .navbar-toggler {
@@ -74,11 +75,27 @@ nav.navbar {
   }
   #basic-navbar-nav {
     position: absolute;
-    top: 3em;
+    top: 3.5em;
     left: 0;
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     z-index: 99;
     background-color: v.$secondary-nav-color;
   }
+  .link {
+    padding-top: 10px;
+  }
+}
+
+div.container {
+  padding: 7px;
+  div.navbar-nav {
+    display: flex;
+    justify-content: space-between;
+    min-width: 40%;
+  }
+}
+.link {
+  color: white;
+  text-decoration: none;
 }

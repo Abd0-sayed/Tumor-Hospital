@@ -8,24 +8,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AboutPage from "./components/About.jsx";
 //
 import "./auth/styles/Auth.css";
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Admin from './admin/Admin.jsx'
-import Addreciptionist from './admin/Addreciptionist.jsx'
-import Addhospital from './admin/Addhospital.jsx'
-import Aupdateabout from './admin/Aupdateabout.jsx'
-import Addabout from './admin/Addabout.jsx'
-import Addfaq from './admin/Addfaq.jsx'
-import Adddoctor from './admin/Adddoctor.jsx'
-import Addspicialization from './admin/Addspicialization.jsx'
+import Admin from "./Admin/Admin.jsx";
+import Addreciptionist from "./Admin/Addreciptionist.jsx";
+import Addhospital from "./Admin/Addhospital.jsx";
+import Aupdateabout from "./Admin/Aupdateabout.jsx";
+import Addabout from "./Admin/Addabout.jsx";
+import Addfaq from "./Admin/Addfaq.jsx";
+import Adddoctor from "./Admin/Adddoctor.jsx";
+import Addspicialization from "./Admin/Addspicialization.jsx";
+import AdminLayout from "./Admin/adminLayout.jsx";
 
-import ConfirmEmail from './auth/ConfirmEmail.jsx'
-import Login from './auth/Login.jsx'
-import Register from './auth/Register.jsx'
-import Forgotpass from './auth/ForgotPassword.jsx'
-import Resetpass from './auth/ResetPassword.jsx'
-import Doctor from './auth/Doctor.jsx'
-import Patient from './auth/Patient.jsx'
-
+import ConfirmEmail from "./auth/ConfirmEmail.jsx";
+import Login from "./auth/Login.jsx";
+import Register from "./auth/Register.jsx";
+import Forgotpass from "./auth/ForgotPassword.jsx";
+import Resetpass from "./auth/ResetPassword.jsx";
+import Doctor from "./auth/Doctor.jsx";
+import Patient from "./auth/Patient.jsx";
 //
 import {
   Route,
@@ -41,25 +40,25 @@ const router = createBrowserRouter(
       <Route path="faq" element={<AccordionSection />} />
       <Route path="about" element={<AboutPage />} />
       <Route path="donations" element={<NeedsGrid />} />
-      <Route path="admin/donations" element={<NeedManagement />} />   
-         {/* ***************************************** */}
-      <Route path="admin" element= {<Admin/>} />
-      <Route path="Register" element= {<Register/>} />
-      <Route path="ConfirmEmail" element= {<ConfirmEmail/>} />
-      <Route path="Login" element= {<Login/>} />
-      <Route path="ForgotPassword" element= {<Forgotpass/>} />
-      <Route path="ResetPassword" element= {<Resetpass/>} />
-      <Route path="doctor" element= {<Doctor/>} />
-      <Route path="patient" element= {<Patient/>} />
-      <Route path="admin/editAbout/:aboutid" element= {<Aupdateabout/>} />
-      <Route path="admin/addAbout" element= {<Addabout/>} />
-      <Route path="admin/addFaq" element= {<Addfaq/>} />
-      <Route path="admin/addDoctor" element= {<Adddoctor/>} />
-      <Route path="admin/addRecipionist" element= {<Addreciptionist/>} />
-      <Route path="admin/addhospital" element= {<Addhospital/>} />
-      <Route path="admin/addSpicialization" element= {<Addspicialization/>} />
-      
-     
+      <Route path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
+      <Route path="confirmEmail" element={<ConfirmEmail />} />
+      <Route path="resetpassword" element={<Resetpass />} />
+      <Route path="forgotpassword" element={<Forgotpass />} />
+      <Route path="doctor" element={<Doctor />} />
+      <Route path="patient" element={<Patient />} />
+      {/* ***************************************** */}
+      <Route path="admin" element={<AdminLayout />}>
+        <Route index element={<Admin />} />
+        <Route path="donations" element={<NeedManagement />} />
+        <Route path="editAbout/:aboutid" element={<Aupdateabout />} />
+        <Route path="addAbout" element={<Addabout />} />
+        <Route path="addFaq" element={<Addfaq />} />
+        <Route path="addDoctor" element={<Adddoctor />} />
+        <Route path="addRecipionist" element={<Addreciptionist />} />
+        <Route path="addhospital" element={<Addhospital />} />
+        <Route path="addSpicialization" element={<Addspicialization />} />
+      </Route>
     </Route>,
   ),
 );

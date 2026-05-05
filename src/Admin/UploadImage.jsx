@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
 function UploadImage() {
   const [file, setFile] = useState(null);
@@ -9,20 +9,19 @@ function UploadImage() {
 
   const handleUpload = async () => {
     const formData = new FormData();
-    formData.append("file", file); 
+    formData.append("file", file);
 
     try {
       const response = await fetch(
         "https://tumorhospital.runasp.net/api/Test",
         {
           method: "POST",
-          body: formData
-        }
+          body: formData,
+        },
       );
 
       const result = await response.json();
       console.log(result);
-
     } catch (error) {
       console.error(error);
     }

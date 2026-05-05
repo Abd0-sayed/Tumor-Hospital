@@ -1,0 +1,187 @@
+@use "../../style/_global_vars.scss" as *;
+@use "../../style/_mixins.scss" as m;
+
+%transition {
+  transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+%rotat {
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cards {
+  flex-wrap: wrap;
+  @include m.flex-center;
+  justify-content: space-evenly;
+  margin: 40px 0;
+  gap: 40px;
+}
+.card {
+  position: relative;
+  @include m.flex-center;
+  width: 250px;
+  border-radius: 24px;
+  line-height: 1.6;
+  @extend %transition;
+  margin-left: 50px;
+  &:nth-of-type(odd) .content {
+    background: $secondary-text-color;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    background: $main-nav-color;
+    align-items: center;
+    gap: 24px;
+    padding: 36px;
+    border-radius: 22px;
+    color: #ffffff;
+    overflow: hidden;
+    @extend %transition;
+    width: 250px;
+    &::before {
+      position: absolute;
+      content: "";
+      top: -4%;
+      left: 50%;
+      width: 90%;
+      height: 90%;
+      transform: translate(-50%);
+      background: $secondary-nav-color;
+      z-index: -1;
+      transform-origin: bottom;
+      border-radius: inherit;
+      @extend %transition;
+    }
+    &::after {
+      position: absolute;
+      content: "";
+      top: -8%;
+      left: 50%;
+      width: 80%;
+      height: 80%;
+      transform: translate(-50%);
+      background: lighten($color: $secondary-nav-color, $amount: 10%);
+      z-index: -2;
+      transform-origin: bottom;
+      border-radius: inherit;
+      @extend %transition;
+    }
+    img {
+      width: 90px;
+      height: 80px;
+    }
+  }
+  &:hover {
+    transform: translate(0px, -16px);
+    .content::before {
+      @extend %rotat;
+      rotate: -8deg;
+    }
+
+    .content::after {
+      @extend %rotat;
+      rotate: 8deg;
+    }
+  }
+}
+
+.content .para {
+  z-index: 1;
+  opacity: 1;
+  font-size: 32px;
+  @extend %transition;
+}
+
+.content .link {
+  z-index: 1;
+  color: #fea000;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 16px;
+  @extend %transition;
+}
+
+.content .link:hover {
+  text-decoration: underline;
+}
+
+.rqm {
+  font-size: 30px;
+}
+.main-div {
+  margin-left: auto;
+}
+#chart {
+  margin-top: 50px;
+}
+.ldng {
+  height: 100vh;
+}
+.addbtn {
+  margin-left: 45%;
+}
+
+#chart {
+  .recharts-responsive-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: $main-border-raduis;
+    border: 3px solid $white-box-border;
+    margin-top: $margin-between;
+    margin-bottom: 30px;
+  }
+}
+
+.table-custome {
+  @include m.modern-table;
+}
+
+.dashboard-btn {
+  padding: 8px 16px;
+  border-radius: $main-border-raduis; //[cite: 3]
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+}
+
+.btn-edit {
+  @extend .dashboard-btn;
+  background-color: $secondary-nav; //[cite: 3]
+  color: white;
+}
+
+.btn-delete {
+  @extend .dashboard-btn;
+  background-color: red;
+  color: white;
+  margin-left: 10px;
+
+  &:hover {
+    background-color: darken($color: red, $amount: 8%);
+    color: white;
+  }
+}
+
+.btn-add-main {
+  @extend .dashboard-btn;
+  background-color: $main-nav-color; //[cite: 3]
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  display: inline-flex; // Ensure it's a block to respect auto margins
+  margin: 20px auto; // Centers it perfectly without overflow
+}

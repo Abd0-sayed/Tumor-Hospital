@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function ShowImage() {
   const [imageUrl, setImageUrl] = useState("");
@@ -15,9 +15,7 @@ function ShowImage() {
   }, []);
 
   return (
-    <div>
-      {imageUrl && <img src={imageUrl} alt="Third item" width="300" />}
-    </div>
+    <div>{imageUrl && <img src={imageUrl} alt="Third item" width="300" />}</div>
   );
 }
 

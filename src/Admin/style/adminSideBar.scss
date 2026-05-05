@@ -1,0 +1,124 @@
+@use "../../style/_global_vars.scss" as v;
+$sidebar-bg: v.$main-nav-color;
+$active-pill-bg: v.$secondary-nav-color; // Light lilac/blue pill background
+$active-text-color: v.$main-nav-color; // Dark text for the active pill
+$inactive-text-color: white;
+
+.admin-sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: $sidebar-bg;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+
+  &.closed {
+    transform: translateX(-100%);
+  }
+
+  .sidebar-header {
+    padding: 2rem 1rem 1.5rem 1.5rem;
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .brand-text {
+        color: white;
+        margin: 0;
+        font-weight: 700;
+        font-size: 1.4rem;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: darken($color: $inactive-text-color, $amount: 40%);
+        font-size: 1.6rem;
+        cursor: pointer;
+        display: flex;
+        &:hover {
+          color: $inactive-text-color;
+        }
+      }
+    }
+
+    .sub-header {
+      color: v.$secondary-text-color;
+      font-size: 0.7rem;
+      margin-top: 5px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    display: flex;
+    width: 15.9rem;
+    flex-direction: column;
+    gap: 2px;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      margin-right: 1.5rem; // Stops the pill before the right edge
+      color: $inactive-text-color;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 0 30px 30px 0; // Rounded on the right side
+      transition: all 0.2s ease;
+
+      .nav-icon {
+        margin-right: 12px;
+        font-size: 1.3rem;
+        opacity: 0.8;
+      }
+
+      // Replicating the hover/active effect from image_0358d7.png
+      &:hover,
+      &.active {
+        background-color: $active-pill-bg;
+        color: $active-text-color;
+
+        .nav-icon {
+          color: $active-text-color;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid darken($color: $inactive-text-color, $amount: 20%);
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: red;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      width: 100%;
+      padding: 0.5rem;
+
+      .nav-icon {
+        margin-right: 12px;
+        font-size: 1.2rem;
+      }
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+      }
+    }
+  }
+}

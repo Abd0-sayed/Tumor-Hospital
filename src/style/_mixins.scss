@@ -112,3 +112,57 @@
     transform: rotate(-270deg);
   }
 }
+
+@mixin modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: $margin-between; //
+  border: 1px solid $white-box-border; //
+  border-radius: $main-border-raduis; //
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  thead {
+    background-color: $main-nav-color; //
+    color: white;
+
+    th {
+      padding: $text-padding * 1.5; //[cite: 3]
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      border: none;
+      text-align: left;
+    }
+  }
+
+  tbody {
+    tr {
+      background-color: white;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: lighten($secondary-nav-color, 10%); //[cite: 3]
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: $text-padding * 1.2; //[cite: 3]
+      color: $main-header-color; //[cite: 3]
+      border-bottom: 1px solid $white-box-border; //[cite: 3]
+      vertical-align: middle;
+    }
+  }
+
+  // Styling the action buttons inside the table
+  .btn {
+    border-radius: $main-border-raduis; //[cite: 3]
+    padding: 5px 15px;
+    font-weight: 500;
+  }
+}

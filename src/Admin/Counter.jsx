@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const NumberTicker = ({
   value,
   duration = 2000,
   delay = 0,
   decimalPlaces = 0,
-  prefix = '',
-  suffix = '',
-  className = '',
-  onComplete
+  prefix = "",
+  suffix = "",
+  className = "",
+  onComplete,
 }) => {
   const [displayValue, setDisplayValue] = useState(0);
   useEffect(() => {
@@ -18,7 +18,7 @@ const NumberTicker = ({
     const startAnimation = () => {
       const startTime = performance.now();
       const startValue = 0;
-      const animate = currentTime => {
+      const animate = (currentTime) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
@@ -38,13 +38,15 @@ const NumberTicker = ({
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [value, duration, delay, onComplete]);
-  const formatNumber = num => {
-    return num.toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const formatNumber = (num) => {
+    return num.toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  return <span className={`inline-block ${className}`}>
-            {prefix}
-            {formatNumber(displayValue)}
-            {suffix}
-        </span>;
+  return (
+    <span className={`inline-block ${className}`}>
+      {prefix}
+      {formatNumber(displayValue)}
+      {suffix}
+    </span>
+  );
 };
 export default NumberTicker;
