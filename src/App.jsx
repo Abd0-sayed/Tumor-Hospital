@@ -14,6 +14,7 @@ import Addhospital from "./Admin/Addhospital.jsx";
 import Aupdateabout from "./Admin/Aupdateabout.jsx";
 import Addabout from "./Admin/Addabout.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
+import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
 import Adddoctor from "./Admin/Adddoctor.jsx";
 import Addspicialization from "./Admin/Addspicialization.jsx";
 import AdminLayout from "./Admin/adminLayout.jsx";
@@ -25,6 +26,16 @@ import Forgotpass from "./auth/ForgotPassword.jsx";
 import Resetpass from "./auth/ResetPassword.jsx";
 import Doctor from "./auth/Doctor.jsx";
 import Patient from "./auth/Patient.jsx";
+//
+import ChangeInactivePassword from"../src/components/ChangeInactivePassword.jsx"
+import PatientProfile from"../src/components/PatientProfile.jsx"
+import UpdateProfile from"../src/components/UpdateProfile.jsx"
+import ChangePassword from"../src/components/ChangePassword.jsx"
+import DoctorProfile from"../src/components/DoctorProfile.jsx"
+import Reciptionprofile from"../src/components/Reciptionprofile.jsx"
+import UpdateDoctorProfile from"../src/components/UpdateDoctorProfile.jsx"
+import UpdateReceptionistProfile from"../src/components/UpdateReceptionistProfile.jsx"
+
 //
 import {
   Route,
@@ -54,6 +65,7 @@ const router = createBrowserRouter(
         <Route path="editAbout/:aboutid" element={<Aupdateabout />} />
         <Route path="addAbout" element={<Addabout />} />
         <Route path="addFaq" element={<Addfaq />} />
+        <Route path="/admin/editFaq/:faqid" element={<Aupdatefaq />} />
         <Route path="addDoctor" element={<Adddoctor />} />
         <Route path="addRecipionist" element={<Addreciptionist />} />
         <Route path="addhospital" element={<Addhospital />} />
