@@ -4,6 +4,7 @@ import {
   MdBarChart,
   MdEventNote,
   MdGroup,
+  MdAttachMoney,
   MdAssignmentInd,
   MdAddCircle,
   MdVaccines,
@@ -86,6 +87,13 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
           className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
         >
           <MdEditNote className="nav-icon" /> Content (FAQ/About)
+        </NavLink>
+
+        <NavLink
+          to="donations"
+          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+        >
+          <MdAttachMoney className="nav-icon" /> Manage Donations
         </NavLink>
       </nav>
 

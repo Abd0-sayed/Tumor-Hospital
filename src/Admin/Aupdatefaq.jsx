@@ -84,4 +84,3 @@ function Aupdatefaq() {
   );
 }
 export default Aupdatefaq;
-
