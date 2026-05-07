@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import "../auth/styles/Auth.css";
+import "./styles/Password.scss";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const Login = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // Clear the field error as the user types
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
@@ -62,14 +61,15 @@ const Login = () => {
             password: form.password,
             rememberMe: form.rememberMe ? "true" : "false",
           }),
-        }
+        },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        // The backend returns { Errors: { Identity: [...], Email: [...], ... } }
-        setErrors(data.errors || data.Errors || { general: ["Something went wrong"] });
+        setErrors(
+          data.errors || data.Errors || { general: ["Something went wrong"] },
+        );
         return;
       }
 
@@ -78,31 +78,26 @@ const Login = () => {
       storage.setItem("token", data.Token ?? data.token);
       storage.setItem("refreshToken", data.RefreshToken ?? data.refreshToken);
       storage.setItem("userId", data.UserId ?? data.userId);
-      
-      const activeacc=data.isActiveAccount??data.isActiveAccount;
+
+      const activeacc = data.isActiveAccount ?? data.isActiveAccount;
       const token = data.Token ?? data.token;
       const decoded = jwtDecode(token);
-      const role= decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]; 
+      const role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
       storage.setItem("role", role);
-      console.log(role);
-      
-      if(role ==="Admin"){
-        navigate("/admin");            // ← change to your dashboard route
-      }
-      else if(role ==="Doctor"){
-          console.log(activeacc);
-          if(activeacc == true){
-             navigate("/doctor");
-             }
-          else{
-              navigate("/changepassword")
-            }
-      }
-      else if(role ==="Patient"){
-        navigate("/Patient")
-      }
 
-    } catch (error){
+      if (role === "Admin") {
+        navigate("/admin");
+      } else if (role === "Doctor") {
+        if (activeacc === true) {
+          navigate("/doctor");
+        } else {
+          navigate("/changepassword");
+        }
+      } else if (role === "Patient") {
+        navigate("/Patient");
+      }
+    } catch (error) {
       console.error(error);
       setErrors({ general: ["Server error, please try again later"] });
     } finally {
@@ -116,29 +111,33 @@ const Login = () => {
     return Array.isArray(val) ? val[0] : val;
   };
 
-  // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        {/* ── Brand mark ── */}
-        <div className="auth-brand">
-          <span className="auth-brand-icon">✦</span>
-          <span className="auth-brand-name">TumorCare</span>
+    <div className="pw-page">
+      <div className="pw-card">
+        <div className="pw-brand">
+          <span className="pw-brand-icon">✦</span>
+          <span className="pw-brand-name">TumorCare</span>
         </div>
 
-        <h1 className="auth-title">Welcome back</h1>
-        <p className="auth-subtitle">Sign in to your patient portal</p>
+        <h1 className="pw-title">Welcome back</h1>
+        <p className="pw-subtitle">Sign in to your patient portal</p>
 
-        {/* ── Global / Identity error ── */}
-        {(fieldError("general") || fieldError("Identity") || fieldError("identity")) && (
-          <div className="auth-alert">
-            {fieldError("general") || fieldError("Identity") || fieldError("identity")}
+        {/* Global / Identity error */}
+        {(fieldError("general") ||
+          fieldError("Identity") ||
+          fieldError("identity")) && (
+          <div className="pw-error-alert">
+            {fieldError("general") ||
+              fieldError("Identity") ||
+              fieldError("identity")}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} noValidate className="auth-form">
+        <form onSubmit={handleSubmit} noValidate className="pw-form">
           {/* Email */}
-          <div className={`auth-field ${fieldError("email") || fieldError("Email") ? "has-error" : ""}`}>
+          <div
+            className={`pw-field ${fieldError("email") || fieldError("Email") ? "has-error" : ""}`}
+          >
             <label htmlFor="email">Email address</label>
             <input
               id="email"
@@ -150,12 +149,16 @@ const Login = () => {
               onChange={handleChange}
             />
             {(fieldError("email") || fieldError("Email")) && (
-              <span className="auth-error">{fieldError("email") || fieldError("Email")}</span>
+              <span className="pw-error">
+                {fieldError("email") || fieldError("Email")}
+              </span>
             )}
           </div>
 
           {/* Password */}
-          <div className={`auth-field ${fieldError("password") || fieldError("Password") ? "has-error" : ""}`}>
+          <div
+            className={`pw-field ${fieldError("password") || fieldError("Password") ? "has-error" : ""}`}
+          >
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -167,35 +170,57 @@ const Login = () => {
               onChange={handleChange}
             />
             {(fieldError("password") || fieldError("Password")) && (
-              <span className="auth-error">{fieldError("password") || fieldError("Password")}</span>
+              <span className="pw-error">
+                {fieldError("password") || fieldError("Password")}
+              </span>
             )}
           </div>
 
-          {/* Remember Me */}
-          <div className="auth-remember">
-            <label className="auth-checkbox-label">
+          {/* Remember Me & Forgot Password */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: "0.85rem",
+            }}
+          >
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                cursor: "pointer",
+                color: "#1f2c6c",
+                fontWeight: "600",
+              }}
+            >
               <input
                 type="checkbox"
                 name="rememberMe"
                 checked={form.rememberMe}
                 onChange={handleChange}
+                style={{ width: "16px", height: "16px" }}
               />
-              <span>Remember me for 30 days</span>
+              Remember me
             </label>
-            <Link to="/ForgotPassword" className="auth-link-small">
+            <Link
+              to="/ForgotPassword"
+              className="pw-link"
+              style={{ fontSize: "0.85rem" }}
+            >
               Forgot password?
             </Link>
           </div>
 
-          {/* Submit */}
-          <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? <span className="auth-spinner" /> : "Sign in"}
+          <button type="submit" className="pw-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        <p className="auth-footer">
+        <p className="pw-footer">
           Don't have an account?{" "}
-          <Link to="/Register" className="auth-link">
+          <Link to="/Register" className="pw-link">
             Register
           </Link>
         </p>

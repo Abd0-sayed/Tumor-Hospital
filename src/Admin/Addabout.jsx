@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../Admin/style/admin.scss";
+import "./style/about.scss";
 import { Link, useNavigate } from "react-router-dom";
 
 function Addabout() {
@@ -19,94 +19,105 @@ function Addabout() {
         }
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         myNavigator("/admin");
       });
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <h1 className="display-1 text-primary mt-5">ADD About</h1>
-        <form onSubmit={addabout} className="my-5">
-          <div className="form-group">
-            <label htmlFor="hospitalName">HospitalName</label>
-            <input
-              type="text"
-              id="hospitalName"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, hospitalName: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <input
-              type="text"
-              id="description"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, description: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="mission">Mission</label>
-            <input
-              type="text"
-              id="mission"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, mission: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="vision">Vision</label>
-            <input
-              type="text"
-              id="vision"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, vision: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="text"
-              id="email"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, email: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phone">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              className="form-control mt-2 mb-4"
-              onChange={(e) =>
-                setabout((prev) => ({ ...prev, phone: e.target.value }))
-              }
-            />
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          ADD <span>About</span>
+        </h1>
+
+        <form onSubmit={addabout} className="admin-form">
+          <div className="input-grid">
+            <div className="form-group full-width">
+              <label htmlFor="hospitalName">Hospital Name</label>
+              <input
+                type="text"
+                id="hospitalName"
+                placeholder="Enter hospital name"
+                onChange={(e) =>
+                  setabout((prev) => ({
+                    ...prev,
+                    hospitalName: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="form-group full-width">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                rows="3"
+                placeholder="Hospital overview..."
+                onChange={(e) =>
+                  setabout((prev) => ({ ...prev, description: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="mission">Mission</label>
+              <input
+                type="text"
+                id="mission"
+                onChange={(e) =>
+                  setabout((prev) => ({ ...prev, mission: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="vision">Vision</label>
+              <input
+                type="text"
+                id="vision"
+                onChange={(e) =>
+                  setabout((prev) => ({ ...prev, vision: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="contact@hospital.com"
+                onChange={(e) =>
+                  setabout((prev) => ({ ...prev, email: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input
+                type="text"
+                id="phone"
+                placeholder="+20..."
+                onChange={(e) =>
+                  setabout((prev) => ({ ...prev, phone: e.target.value }))
+                }
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary me-3">
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
               Add About
             </button>
-            <Link to="/admin" className="btn btn-secondary">
+            <Link to="/admin" className="btn-cancel">
               Back to Dashboard
             </Link>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 export default Addabout;

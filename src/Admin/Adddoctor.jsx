@@ -1,55 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./style/admin.scss";
+import "./style/doctor.scss";
+
 export default function Adddoctor() {
   const [Specialization, setSpec] = useState([]);
   const [hospitalname, sethosName] = useState([]);
-  // const [Specation,setpec]=useState("")
-  // const [selectedSpec, setSelectedSpec] = useState("");
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
-    lastName: "try",
+    lastName: "",
     email: "",
     gender: "",
-    specializationName: "Brain",
-    hospitalName: "treatment",
-    isVideoCallDoctor: true,
+    specializationName: "",
+    hospitalName: "",
+    isVideoCallDoctor: false,
     consultationCost: 0,
     followUpCost: 0,
     videoCallCost: 0,
     schedules: [],
   });
-
-  // Specialization//
-  useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Specialization")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        //  const names = data.map(spc => spc.name);
-        setSpec(data);
-        //setSpec(data);
-        //console.log(Specialization);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
-
-  // Hospital Names//
-  useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        sethosName(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
 
   const dayOfWeek = [
     "Sunday",
@@ -61,23 +31,27 @@ export default function Adddoctor() {
     "Saturday",
   ];
 
-  // Handle basic inputs
+  useEffect(() => {
+    fetch("https://tumorhospital.runasp.net/api/Specialization")
+      .then((res) => res.json())
+      .then((data) => setSpec(data))
+      .catch((err) => console.error(err));
+
+    fetch("https://tumorhospital.runasp.net/api/Hospitals")
+      .then((res) => res.json())
+      .then((data) => sethosName(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Gender
   const handleGenderChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      gender: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, gender: e.target.value }));
   };
-  // Vediocall check
+
   const handleVedioChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -85,63 +59,52 @@ export default function Adddoctor() {
     }));
   };
 
-  //handle costs to numbers
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value === "" ? "" : Number(value),
     }));
   };
 
-  // Add / Remove Day
-  const handleDayToggle = (dayOfWeek) => {
+  const handleDayToggle = (day) => {
     setFormData((prev) => {
-      const exists = prev.schedules.find((d) => d.dayOfWeek === dayOfWeek);
-
+      const exists = prev.schedules.find((d) => d.dayOfWeek === day);
       if (exists) {
         return {
           ...prev,
-          schedules: prev.schedules.filter((d) => d.dayOfWeek !== dayOfWeek),
+          schedules: prev.schedules.filter((d) => d.dayOfWeek !== day),
         };
       } else {
         return {
           ...prev,
-          schedules: [...prev.schedules, { dayOfWeek, startTime: "" }],
+          schedules: [...prev.schedules, { dayOfWeek: day, startTime: "" }],
         };
       }
     });
   };
 
-  // Update time
-  const handleTimeChange = (dayOfWeek, field, value) => {
+  const handleTimeChange = (day, field, value) => {
     setFormData((prev) => ({
       ...prev,
       schedules: prev.schedules.map((d) =>
-        d.dayOfWeek === dayOfWeek ? { ...d, [field]: value } : d,
+        d.dayOfWeek === day ? { ...d, [field]: value } : d,
       ),
     }));
   };
 
-  // Create Doctor//
-
   function createDoctor(e) {
     e.preventDefault();
-
     if (formData.schedules.length < 3) {
       alert("Select at least 3 days");
       return;
     }
-
-    // check times filled
     for (let s of formData.schedules) {
       if (!s.startTime) {
         alert(`Please set time for ${s.dayOfWeek}`);
         return;
       }
     }
-    console.log(formData);
 
     fetch(`https://tumorhospital.runasp.net/api/Admin/create-doctor`, {
       method: "POST",
@@ -149,216 +112,221 @@ export default function Adddoctor() {
       body: JSON.stringify(formData),
     })
       .then((res) => {
-        if (!res.ok) {
-          throw "Doctor couldn't be Created . Kindly try again";
-        }
+        if (!res.ok) throw new Error("Doctor couldn't be created.");
         return res.json();
       })
-      .then((data) => {
-        console.log(data);
-
-        myNavigator("/admin");
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+      .then(() => myNavigator("/admin"))
+      .catch((err) => console.error(err));
   }
 
-  // ///////////////////////////////////////////////////////////////////////////////
-  // ///////////////////////////////////////////////////////////////////////////////
-  // ///////////////////////////////////////////////////////////////////////////////
-  // ///////////////////////////////////////////////////////////////////////////////
-  // ///////////////////////////////////////////////////////////////////////////////
-  // ///////////////////////////////////////////////////////////////////////////////
-
   return (
-    <form onSubmit={createDoctor}>
-      <div className="container">
-        <h2>Create Doctor</h2>
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          Add <span>Doctor</span>
+        </h1>
 
-        {/* Name */}
-        <input
-          type="text"
-          name="firstName"
-          placeholder="firstName"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="lastName"
-          placeholder="lastName"
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={createDoctor} className="admin-form">
+          <div className="input-grid">
+            {/* Personal Info */}
+            <div className="form-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="Enter first name"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Enter last name"
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group full-width">
+              <label>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="doctor@hospital.com"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        {/* Email */}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
+            {/* Selects */}
+            <div className="form-group select-group">
+              <label>Specialization</label>
+              <select
+                value={formData.specializationName}
+                onChange={(e) =>
+                  setFormData((p) => ({
+                    ...p,
+                    specializationName: e.target.value,
+                  }))
+                }
+                required
+              >
+                <option value="">Select Specialization</option>
+                {Specialization.map((spc) => (
+                  <option key={spc.id} value={spc.name}>
+                    {spc.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group select-group">
+              <label>Hospital</label>
+              <select
+                value={formData.hospitalName}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, hospitalName: e.target.value }))
+                }
+                required
+              >
+                <option value="">Select Hospital</option>
+                {hospitalname.map((h) => (
+                  <option key={h.id} value={h.name}>
+                    {h.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        {/* Specialization */}
-        <select
-          value={formData.specializationName}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              specializationName: e.target.value,
-            }))
-          }
-        >
-          <option value="">Select Specialization</option>
-
-          {Specialization.map((spc) => (
-            <option key={spc.id} value={spc.name}>
-              {spc.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Hopital Names */}
-        <select
-          value={formData.hospitalName}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              hospitalName: e.target.value,
-            }))
-          }
-        >
-          <option value="">Select hospitalName</option>
-
-          {hospitalname.map((hospital) => (
-            <option key={hospital.id} value={hospital.name}>
-              {hospital.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Gender */}
-        <div className="my-2 ">
-          <h3 className="d-inline-block">Gender :</h3>
-          <label className="mx-2">
-            <input
-              name="gender"
-              type="radio"
-              value="Male"
-              onChange={handleGenderChange}
-            />
-            Male
-          </label>
-          <label>
-            <input
-              name="gender"
-              type="radio"
-              value="Female"
-              onChange={handleGenderChange}
-            />
-            Female
-          </label>
-        </div>
-
-        {/* Vedio Doctor */}
-        <div className="my-2">
-          <h3 className="d-inline-block">
-            Is Doctor available for VedioCall :
-          </h3>
-          <label className="mx-2">
-            <input
-              name="vedio"
-              type="radio"
-              value="true"
-              onChange={handleVedioChange}
-            />
-            Yes
-          </label>
-          <label>
-            <input
-              name="vedio"
-              type="radio"
-              value="false"
-              onChange={handleVedioChange}
-            />
-            No
-          </label>
-        </div>
-
-        {/* Cost */}
-
-        <input
-          type="number"
-          name="consultationCost"
-          placeholder="Consultation Cost"
-          value={formData.consultationCost}
-          onChange={handleNumberChange}
-        />
-
-        <input
-          type="number"
-          name="followUpCost"
-          placeholder="Follow Up Cost"
-          value={formData.followUpCost}
-          onChange={handleNumberChange}
-        />
-
-        <input
-          type="number"
-          name="videoCallCost"
-          placeholder="Video Call Cost"
-          value={formData.videoCallCost}
-          onChange={handleNumberChange}
-        />
-
-        {/* Schedule */}
-        <div>
-          <p>Select days and times:</p>
-
-          {dayOfWeek.map((dayOfWeek) => {
-            const selectedDay = formData.schedules.find(
-              (d) => d.dayOfWeek === dayOfWeek,
-            );
-
-            return (
-              <div key={dayOfWeek}>
-                <label>
+            {/* Radio Options */}
+            <div className="form-group">
+              <label>Gender</label>
+              <div className="gender-radio-group">
+                <label className="radio-label">
                   <input
-                    type="checkbox"
-                    checked={!!selectedDay}
-                    onChange={() => handleDayToggle(dayOfWeek)}
+                    name="gender"
+                    type="radio"
+                    value="Male"
+                    onChange={handleGenderChange}
+                    required
                   />
-                  {dayOfWeek}
+                  <span>Male</span>
                 </label>
-
-                {selectedDay && (
-                  <>
-                    <input
-                      type="time"
-                      value={selectedDay.startTime}
-                      onChange={(e) =>
-                        handleTimeChange(dayOfWeek, "startTime", e.target.value)
-                      }
-                    />
-                  </>
-                )}
+                <label className="radio-label">
+                  <input
+                    name="gender"
+                    type="radio"
+                    value="Female"
+                    onChange={handleGenderChange}
+                  />
+                  <span>Female</span>
+                </label>
               </div>
-            );
-          })}
-        </div>
+            </div>
+            <div className="form-group">
+              <label>Video Call Available?</label>
+              <div className="gender-radio-group">
+                <label className="radio-label">
+                  <input
+                    name="vedio"
+                    type="radio"
+                    value="true"
+                    onChange={handleVedioChange}
+                  />
+                  <span>Yes</span>
+                </label>
+                <label className="radio-label">
+                  <input
+                    name="vedio"
+                    type="radio"
+                    value="false"
+                    onChange={handleVedioChange}
+                  />
+                  <span>No</span>
+                </label>
+              </div>
+            </div>
 
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary me-3">
-            Add Doctor
-          </button>
-          <Link to="/admin" className="btn btn-secondary">
-            Back to Dashboard
-          </Link>
-        </div>
+            {/* Costs Section */}
+            <div className="form-group">
+              <label>Consultation Cost</label>
+              <input
+                type="number"
+                name="consultationCost"
+                value={formData.consultationCost}
+                onChange={handleNumberChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Follow Up Cost</label>
+              <input
+                type="number"
+                name="followUpCost"
+                value={formData.followUpCost}
+                onChange={handleNumberChange}
+              />
+            </div>
+            <div className="form-group full-width">
+              <label>Video Call Cost</label>
+              <input
+                type="number"
+                name="videoCallCost"
+                value={formData.videoCallCost}
+                onChange={handleNumberChange}
+              />
+            </div>
+
+            {/* Schedule Section */}
+            <div className="form-group full-width">
+              <label style={{ marginBottom: "1.5rem" }}>
+                Weekly Schedule (Min. 3 Days)
+              </label>
+              <div className="schedule-list">
+                {dayOfWeek.map((day) => {
+                  const selectedDay = formData.schedules.find(
+                    (d) => d.dayOfWeek === day,
+                  );
+                  return (
+                    <div
+                      key={day}
+                      className={`schedule-item ${selectedDay ? "active" : ""}`}
+                    >
+                      <label className="day-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={!!selectedDay}
+                          onChange={() => handleDayToggle(day)}
+                        />
+                        <span>{day}</span>
+                      </label>
+                      {selectedDay && (
+                        <input
+                          type="time"
+                          value={selectedDay.startTime}
+                          onChange={(e) =>
+                            handleTimeChange(day, "startTime", e.target.value)
+                          }
+                          className="time-picker"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Add Doctor
+            </button>
+            <Link to="/admin" className="btn-cancel">
+              Back to Dashboard
+            </Link>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
-

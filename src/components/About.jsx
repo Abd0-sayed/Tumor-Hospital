@@ -4,15 +4,29 @@ import PageLoad from "./pageLoad";
 
 const AboutPage = () => {
   const [hospitalData, setData] = useState(null);
+  const [showNoData, setShowNoData] = useState(false);
+
   useEffect(() => {
+    // 1. Fetch the data
     fetch("https://tumorhospital.runasp.net/api/about")
       .then((res) => res.json())
-      .then((data) => setData(data));
+      .then((data) => {
+        if (data && Object.keys(data).length > 0) {
+          setData(data);
+        }
+      })
+      .catch((err) => console.error("Fetch error:", err));
+
+    const timer = setTimeout(() => {
+      setShowNoData(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, []);
 
+  // SUCCESS STATE
   if (hospitalData) {
     const {
-      id,
       hospitalName,
       description,
       mission,
@@ -23,6 +37,7 @@ const AboutPage = () => {
       totalPatients = "0",
       totalReceptionist = "0",
     } = hospitalData;
+
     return (
       <div className="medai-about-container">
         <header className="about-header">
@@ -80,9 +95,20 @@ const AboutPage = () => {
         </footer>
       </div>
     );
-  } else {
-    return <PageLoad />;
   }
+
+  return (
+    <div className="medai-about-container loading-state">
+      {showNoData ? (
+        <div className="no-data-msg">
+          <h1>No Data Found</h1>
+          <p>Please try again later.</p>
+        </div>
+      ) : (
+        <PageLoad />
+      )}
+    </div>
+  );
 };
 
 export default AboutPage;

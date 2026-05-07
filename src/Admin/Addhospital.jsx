@@ -1,30 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "../Admin/style/admin.scss"; // Ensure SASS is imported
 
 export default function Addhospital() {
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: "",
+    name: "", // Changed from firstName to match your input name
     government: "",
     address: "",
     maxNumberOfDoctors: 0,
     maxNumberOfReceptionists: 0,
   });
 
-  useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        sethosName(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
-
-  // Handle basic inputs
+  // Basic Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -33,25 +21,16 @@ export default function Addhospital() {
     }));
   };
 
-  // Gender
-  const handleGenderChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      gender: e.target.value,
-    }));
-  };
-
-  //handle Max to numbers
+  // Handle Max to numbers
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value === "" ? "" : Number(value),
     }));
   };
 
-  function Addhospital(e) {
+  function handleSubmit(e) {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/Hospital`, {
       method: "POST",
@@ -60,79 +39,101 @@ export default function Addhospital() {
     })
       .then((res) => {
         if (!res.ok) {
-          throw "Hospital couldn't be Created . Kindly try again";
+          throw new Error("Hospital couldn't be created. Kindly try again");
         }
         return res.json();
       })
-      .then((data) => {
-        console.log(formData);
-
+      .then(() => {
         myNavigator("/admin");
-      });
+      })
+      .catch((err) => console.error(err));
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <h1 className="display-1 text-primary mt-5">Add Hospital</h1>
-        <form onSubmit={Addhospital} className="my-5">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-            required
-          />
-          <br />
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          Add <span>Hospital</span>
+        </h1>
 
-          {/* government */}
-          <input
-            type="text"
-            name="government"
-            placeholder="Government"
-            onChange={handleChange}
-            required
-          />
-          <br />
-          {/* Address */}
-          <input
-            type="text"
-            name="address"
-            placeholder="Adress"
-            onChange={handleChange}
-            required
-          />
+        <form onSubmit={handleSubmit} className="admin-form">
+          <div className="input-grid">
+            {/* Hospital Name */}
+            <div className="form-group full-width">
+              <label htmlFor="name">Hospital Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter hospital name"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <br />
+            {/* Government */}
+            <div className="form-group">
+              <label htmlFor="government">Government / Province</label>
+              <input
+                type="text"
+                id="government"
+                name="government"
+                placeholder="e.g. Cairo"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          {/*Max numbers */}
+            {/* Address */}
+            <div className="form-group">
+              <label htmlFor="address">Address</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Street address"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <input
-            type="number"
-            name="maxNumberOfDoctors"
-            placeholder="Max Number Of Doctors"
-            value={formData.maxNumberOfDoctors}
-            onChange={handleNumberChange}
-          />
-          <br />
-          <input
-            type="number"
-            name="maxNumberOfReceptionists"
-            placeholder="Max Number Of Receptionists"
-            value={formData.maxNumberOfReceptionists}
-            onChange={handleNumberChange}
-          />
+            {/* Max Doctors */}
+            <div className="form-group">
+              <label htmlFor="maxNumberOfDoctors">Max Doctors</label>
+              <input
+                type="number"
+                id="maxNumberOfDoctors"
+                name="maxNumberOfDoctors"
+                value={formData.maxNumberOfDoctors}
+                onChange={handleNumberChange}
+              />
+            </div>
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary me-3">
-              Add Hospital
+            {/* Max Receptionists */}
+            <div className="form-group">
+              <label htmlFor="maxNumberOfReceptionists">
+                Max Receptionists
+              </label>
+              <input
+                type="number"
+                id="maxNumberOfReceptionists"
+                name="maxNumberOfReceptionists"
+                value={formData.maxNumberOfReceptionists}
+                onChange={handleNumberChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Create Hospital
             </button>
-            <Link to="/admin" className="btn btn-secondary">
+            <Link to="/admin" className="btn-cancel">
               Back to Dashboard
             </Link>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }

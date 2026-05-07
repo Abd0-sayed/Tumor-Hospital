@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "../auth/styles/Password.css";
+import "../auth/styles/Password.scss";
 
 // ── ResendCode button with countdown ─────────────────────────────────────
 const ResendButton = ({ email }) => {
@@ -14,7 +14,10 @@ const ResendButton = ({ email }) => {
     setSeconds(COOLDOWN);
     timerRef.current = setInterval(() => {
       setSeconds((s) => {
-        if (s <= 1) { clearInterval(timerRef.current); return 0; }
+        if (s <= 1) {
+          clearInterval(timerRef.current);
+          return 0;
+        }
         return s - 1;
       });
     }, 1000);
@@ -34,7 +37,7 @@ const ResendButton = ({ email }) => {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
-        }
+        },
       );
       const data = await response.json();
 
@@ -77,7 +80,9 @@ const ResendButton = ({ email }) => {
         )}
       </button>
       {resendMsg && (
-        <p className={`resend-msg ${resendStatus === "success" ? "resend-msg--ok" : "resend-msg--err"}`}>
+        <p
+          className={`resend-msg ${resendStatus === "success" ? "resend-msg--ok" : "resend-msg--err"}`}
+        >
           {resendMsg}
         </p>
       )}
@@ -107,17 +112,22 @@ const ResetPassword = () => {
     const e = {};
 
     if (!form.email) e.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Invalid email format";
+    else if (!/^\S+@\S+\.\S+$/.test(form.email))
+      e.email = "Invalid email format";
 
     if (!form.token.trim()) e.token = "Reset code is required";
 
     if (!form.newPassword) e.newPassword = "New password is required";
     else if (
-      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}/.test(form.newPassword)
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}/.test(
+        form.newPassword,
+      )
     )
-      e.newPassword = "8+ chars with uppercase, lowercase, number & special character";
+      e.newPassword =
+        "8+ chars with uppercase, lowercase, number & special character";
 
-    if (!form.confirmPassword) e.confirmPassword = "Please confirm your password";
+    if (!form.confirmPassword)
+      e.confirmPassword = "Please confirm your password";
     else if (form.newPassword !== form.confirmPassword)
       e.confirmPassword = "Passwords do not match";
 
@@ -146,10 +156,10 @@ const ResetPassword = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             email: form.email,
-            token: form.token,         // sent as plain string
+            token: form.token, // sent as plain string
             newPassword: form.newPassword,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -192,15 +202,25 @@ const ResetPassword = () => {
             <span className="pw-brand-name">TumorCare</span>
           </div>
           <div className="pw-icon-wrap pw-icon-wrap--success">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
           <h1 className="pw-title">Password reset!</h1>
           <p className="pw-subtitle">
-            Your password has been updated successfully. Redirecting you to sign in…
+            Your password has been updated successfully. Redirecting you to sign
+            in…
           </p>
-          <div className="pw-progress-bar"><div className="pw-progress-fill" /></div>
+          <div className="pw-progress-bar">
+            <div className="pw-progress-fill" />
+          </div>
         </div>
       </div>
     );
@@ -217,7 +237,14 @@ const ResetPassword = () => {
         </div>
 
         <div className="pw-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
         </div>
@@ -281,7 +308,9 @@ const ResetPassword = () => {
           </div>
 
           {/* Confirm password */}
-          <div className={`pw-field ${errors.confirmPassword ? "has-error" : ""}`}>
+          <div
+            className={`pw-field ${errors.confirmPassword ? "has-error" : ""}`}
+          >
             <label htmlFor="rp-confirmPassword">Confirm new password</label>
             <input
               id="rp-confirmPassword"
@@ -307,7 +336,16 @@ const ResetPassword = () => {
 
         <p className="pw-footer">
           <Link to="/login" className="pw-back-link">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="14"
+              height="14"
+            >
               <polyline points="15 18 9 12 15 6" />
             </svg>
             Back to sign in

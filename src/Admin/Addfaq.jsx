@@ -1,6 +1,5 @@
-import React from "react";
 import { useState } from "react";
-import "./style/admin.scss";
+import "../Admin/style/admin.scss"; // Ensure the path is correct for your project
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Addfaq() {
@@ -16,58 +15,64 @@ export default function Addfaq() {
     })
       .then((res) => {
         if (!res.ok) {
-          throw "FAQ couldn't be updated. Kindly try again";
+          throw new Error("FAQ couldn't be created. Kindly try again");
         }
         return res.json();
       })
-      .then((data) => {
-        console.log(faq);
-
+      .then(() => {
         myNavigator("/admin");
-      });
+      })
+      .catch((err) => console.error(err));
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <h1 className="display-1 text-primary mt-5">ADD faq</h1>
-        <form onSubmit={addfaq} className="my-5">
-          <div className="mb-3">
-            <label htmlFor="Question" className="form-label">
-              Question
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="Question"
-              onChange={(e) =>
-                setfaq((prev) => ({ ...prev, question: e.target.value }))
-              }
-            />
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          Add <span>FAQ</span>
+        </h1>
+
+        <form onSubmit={addfaq} className="admin-form">
+          <div className="input-grid">
+            {/* Question Field */}
+            <div className="form-group full-width">
+              <label htmlFor="Question">Question</label>
+              <input
+                type="text"
+                id="Question"
+                placeholder="Enter the common question here..."
+                required
+                onChange={(e) =>
+                  setfaq((prev) => ({ ...prev, question: e.target.value }))
+                }
+              />
+            </div>
+
+            {/* Answer Field - Using textarea for better text entry */}
+            <div className="form-group full-width">
+              <label htmlFor="Answer">Answer</label>
+              <textarea
+                id="Answer"
+                rows="5"
+                placeholder="Provide a detailed answer..."
+                required
+                onChange={(e) =>
+                  setfaq((prev) => ({ ...prev, answer: e.target.value }))
+                }
+              />
+            </div>
           </div>
-          <div className="mb-3">
-            <label htmlFor="Answer" className="form-label">
-              ANSWER
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="Answer"
-              onChange={(e) =>
-                setfaq((prev) => ({ ...prev, answer: e.target.value }))
-              }
-            />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary me-3">
-              Add faq
+
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Add FAQ
             </button>
-            <Link to="/admin" className="btn btn-secondary">
+            <Link to="/admin" className="btn-cancel">
               Back to Dashboard
             </Link>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }

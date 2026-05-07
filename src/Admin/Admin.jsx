@@ -1,4 +1,5 @@
 import "./style/admin.scss";
+import patient from "../assets/patient-svgrepo-com.svg";
 import doctor from "../assets/doctor-svgrepo-com.svg";
 import Admincrd from "./Admincrd";
 import profit from "../assets/money-receive-svgrepo-com.svg";
@@ -96,46 +97,25 @@ function Admin() {
   //----------------------------------------------------//
 
   if (loading) return <PageLoad />;
-  {
-    /*
-
-  firstName: "",
-    lastName: "try",
-    email: "",
-    gender: "",
-    specializationName: "Brain",
-    hospitalName: "treatment",
-    isVideoCallDoctor: true,
-    consultationCost: 250,
-    followUpCost: 100,
-    videoCallCost: 50,
-    schedules: []
-*/
-  }
 
   return (
     <>
-      <div className="main-div row">
+      <div className="main-div">
         {/* ----Admin Card---- */}
         <div className="cards">
-          <Admincrd
-            image={doctor}
-            val={da.totalDoctors}
-            pfx={""}
-            title={"DOCTORS"}
-          />
+          <Admincrd image={doctor} val={da.totalDoctors} title={"Doctors"} />
           <Admincrd
             image={reciptionist}
             val={da.totalReceptionists}
-            pfx={""}
             title={"Receptionists"}
           />
           <Admincrd
             image={profit}
             val={da.totalRevenue}
             pfx={"$"}
-            title={"PROFITS"}
+            title={"Profit"}
           />
+          <Admincrd image={patient} val={da.totalPatients} title={"Patients"} />
         </div>
 
         {/* ----Charts---- */}
@@ -149,7 +129,7 @@ function Admin() {
           </div>
         </div>
 
-        <div className="container">
+        <div className="my-container">
           <h1>FAQS</h1>
 
           <table className="table-custome">

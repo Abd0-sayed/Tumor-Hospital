@@ -1,0 +1,53 @@
+@use "../../style/_global_vars.scss" as *;
+
+$med-blue: darken($secondary-nav, 2%);
+$med-dark: #152e4d;
+$med-gray: #f2f5f9;
+$border-soft: $white-box-border;
+$text-light: #8898aa;
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: $med-gray;
+  padding: 1.5rem;
+  border-radius: 12px;
+
+  .schedule-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+
+    &.active {
+      border-color: $med-blue;
+      box-shadow: 0 2px 8px rgba($med-blue, 0.05);
+    }
+
+    .day-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: $med-dark;
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: $med-blue;
+      }
+    }
+
+    .time-picker {
+      max-width: 150px;
+      padding: 0.4rem !important;
+      font-size: 0.9rem !important;
+    }
+  }
+}

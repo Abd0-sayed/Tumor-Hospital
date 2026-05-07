@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "../Admin/style/admin.scss";
 
-export default function Addreciptionist() {
-  // const [reciptionist,setreciptionist]= useState({})
+export default function Addreceptionist() {
   const [hospitalname, sethosName] = useState([]);
-  // const [Specation,setpec]=useState("")
-  // const [selectedSpec, setSelectedSpec] = useState("");
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -18,32 +16,18 @@ export default function Addreciptionist() {
 
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Hospitals")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        sethosName(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      .then((response) => response.json())
+      .then((data) => sethosName(data))
+      .catch((error) => console.error("Error:", error));
   }, []);
 
-  // Handle basic inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Gender
   const handleGenderChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      gender: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, gender: e.target.value }));
   };
 
   function Addrec(e) {
@@ -54,104 +38,126 @@ export default function Addreciptionist() {
       body: JSON.stringify(formData),
     })
       .then((res) => {
-        if (!res.ok) {
-          throw "Reciptionist couldn't be Created . Kindly try again";
-        }
+        if (!res.ok) throw new Error("Receptionist couldn't be created.");
         return res.json();
       })
-      .then((data) => {
-        console.log(formData);
-
-        myNavigator("/admin");
-      });
+      .then(() => myNavigator("/admin"))
+      .catch((err) => console.error(err));
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <h1 className="display-1 text-primary mt-5">Add Reciptionist</h1>
-        <form onSubmit={Addrec} className="my-5">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="firstName"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="lastName"
-            onChange={handleChange}
-            required
-          />
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          Add <span>Receptionist</span>
+        </h1>
 
-          {/* Email */}
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            required
-          />
-          {/* Hopital Names */}
-          <select
-            value={formData.hospitalName}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                hospitalName: e.target.value,
-              }))
-            }
-          >
-            <option value="">Select hospitalName</option>
+        <form onSubmit={Addrec} className="admin-form">
+          <div className="input-grid">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                placeholder="Enter first name"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-            {hospitalname.map((hospital) => (
-              <option key={hospital.id} value={hospital.name}>
-                {hospital.name}
-              </option>
-            ))}
-          </select>
-          {/* Gender */}
-          <div className="my-2 ">
-            <h3 className="d-inline-block">Gender :</h3>
-            <label className="mx-2">
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
               <input
-                name="gender"
-                type="radio"
-                value="Male"
-                onChange={handleGenderChange}
+                type="text"
+                id="lastName"
+                name="lastName"
+                placeholder="Enter last name"
+                onChange={handleChange}
+                required
               />
-              Male
-            </label>
-            <label>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
               <input
-                name="gender"
-                type="radio"
-                value="Female"
-                onChange={handleGenderChange}
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@hospital.com"
+                onChange={handleChange}
+                required
               />
-              Female
-            </label>
+            </div>
+
+            {/* Hospital Selection with specific class for arrow */}
+            <div className="form-group select-group">
+              <label htmlFor="hospitalName">Assigned Hospital</label>
+              <select
+                id="hospitalName"
+                value={formData.hospitalName}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, hospitalName: e.target.value }))
+                }
+                required
+              >
+                <option value="">Select Hospital</option>
+                {hospitalname.map((h) => (
+                  <option key={h.id} value={h.name}>
+                    {h.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group full-width">
+              <label htmlFor="address">Address</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Residential address"
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group full-width">
+              <label>Gender</label>
+              <div className="gender-radio-group">
+                <label className="radio-label">
+                  <input
+                    name="gender"
+                    type="radio"
+                    value="Male"
+                    onChange={handleGenderChange}
+                    required
+                  />
+                  <span>Male</span>
+                </label>
+                <label className="radio-label">
+                  <input
+                    name="gender"
+                    type="radio"
+                    value="Female"
+                    onChange={handleGenderChange}
+                  />
+                  <span>Female</span>
+                </label>
+              </div>
+            </div>
           </div>
-          {/* Address */}
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            onChange={handleChange}
-            required
-          />
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary me-3">
-              Add Reciptionist
+
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
+              Create Receptionist
             </button>
-            <Link to="/admin" className="btn btn-secondary">
+            <Link to="/admin" className="btn-cancel">
               Back to Dashboard
             </Link>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }

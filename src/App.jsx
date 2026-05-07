@@ -7,7 +7,7 @@ import Home from "./components/home/Home.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AboutPage from "./components/About.jsx";
 //
-import "./auth/styles/Auth.css";
+import "./auth/styles/Password.scss";
 import Admin from "./Admin/Admin.jsx";
 import Addreciptionist from "./Admin/Addreciptionist.jsx";
 import Addhospital from "./Admin/Addhospital.jsx";
@@ -27,14 +27,14 @@ import Resetpass from "./auth/ResetPassword.jsx";
 import Doctor from "./auth/Doctor.jsx";
 import Patient from "./auth/Patient.jsx";
 //
-import ChangeInactivePassword from"../src/components/ChangeInactivePassword.jsx"
-import PatientProfile from"../src/components/PatientProfile.jsx"
-import UpdateProfile from"../src/components/UpdateProfile.jsx"
-import ChangePassword from"../src/components/ChangePassword.jsx"
-import DoctorProfile from"../src/components/DoctorProfile.jsx"
-import Reciptionprofile from"../src/components/Reciptionprofile.jsx"
-import UpdateDoctorProfile from"../src/components/UpdateDoctorProfile.jsx"
-import UpdateReceptionistProfile from"../src/components/UpdateReceptionistProfile.jsx"
+import ChangeInactivePassword from "../src/components/ChangeInactivePassword.jsx";
+import PatientProfile from "../src/components/PatientProfile.jsx";
+import UpdateProfile from "../src/components/UpdateProfile.jsx";
+import ChangePassword from "../src/components/ChangePassword.jsx";
+import DoctorProfile from "../src/components/DoctorProfile.jsx";
+import Reciptionprofile from "../src/components/Reciptionprofile.jsx";
+import UpdateDoctorProfile from "../src/components/UpdateDoctorProfile.jsx";
+import UpdateReceptionistProfile from "../src/components/UpdateReceptionistProfile.jsx";
 
 //
 import {

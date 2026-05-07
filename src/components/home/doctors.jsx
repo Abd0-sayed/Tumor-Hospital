@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaLinkedinIn, FaFacebookF, FaInstagram } from "react-icons/fa";
 import "./homeStyle/doctorCards.scss";
-const DoctorCard = ({ name, specialty, imageUrl }) => {
+import PageLoad from "../pageLoad";
+const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
   return (
     <div className="doctor-card">
       <div className="image-container">
-        <img src={imageUrl} alt={name} />
+        <img
+          src={profileImageUrl || "https://via.placeholder.com/400x500"}
+          alt={firstName}
+        />
       </div>
 
       <div className="info-body">
-        <h3 className="name">{name}</h3>
-        <p className="specialty">{specialty}</p>
+        <h3 className="name">
+          Dr. {firstName} {lastName}
+        </h3>
+        <p className="specialty">{specialty || "General Medicine"}</p>
 
         <div className="social-links">
           <a href="#" aria-label="LinkedIn">
@@ -31,85 +37,33 @@ const DoctorCard = ({ name, specialty, imageUrl }) => {
 };
 
 const DoctorSection = () => {
+  const [doctors, setDoctors] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const doctors = [
-    {
-      id: 1,
-      name: "Dr. Adnan Khan",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 2,
-      name: "Dr. Sarah Jenkins",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 3,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 4,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 5,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 6,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 7,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 8,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 9,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-    {
-      id: 10,
-      name: "Dr. Michael Chen",
-      specialty: "NEUROLOGY",
-      imageUrl:
-        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=500",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://tumorhospital.runasp.net/api/Doctors")
+      .then((res) => res.json())
+      .then((responseBody) => {
+        if (responseBody.data) {
+          setDoctors(responseBody.data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
   const itemsPerPage = 3;
   const pages = [];
   for (let i = 0; i < doctors.length; i += itemsPerPage) {
     pages.push(doctors.slice(i, i + itemsPerPage));
   }
+
+  if (loading) return <PageLoad />;
+  if (doctors.length === 0) return <h1>No Doctors</h1>;
   return (
     <section className="doctor-section">
       <div className="section-header">
@@ -132,17 +86,20 @@ const DoctorSection = () => {
         </div>
       </div>
 
-      <div className="pagination-dots">
-        {pages.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index)}
-            className={currentPage === index ? "active" : ""}
-            aria-label={`Go to page ${index + 1}`}
-          />
-        ))}
-      </div>
+      {pages.length > 1 && (
+        <div className="pagination-dots">
+          {pages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentPage(index)}
+              className={currentPage === index ? "active" : ""}
+              aria-label={`Go to page ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
+
 export default DoctorSection;

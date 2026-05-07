@@ -1,0 +1,163 @@
+@use "../../style/_global_vars.scss" as *;
+@use "../../style/_mixins.scss" as m;
+
+// Local Variable Adjustments
+$med-blue: darken($secondary-nav, 2%);
+$med-dark: #152e4d;
+$med-gray: #f2f5f9;
+$border-soft: $white-box-border;
+$text-light: #8898aa;
+
+.admin-form-page {
+  background-color: $med-gray;
+  margin: -2rem;
+  padding: 40px 20px;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: $med-gray;
+  @include m.flex-center;
+
+  width: calc(100% + 40px);
+  .form-card {
+    background: #fff;
+    width: 100%;
+    max-width: 850px;
+    padding: 3.5rem;
+    border-radius: 20px;
+    box-shadow: 10px 10px 30px rgba($med-dark, 0.08);
+    border: 1px solid $border-soft;
+    position: relative;
+    overflow: hidden;
+
+    .form-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: $med-dark;
+      margin-bottom: 2.5rem;
+
+      span {
+        color: $med-blue;
+      }
+    }
+  }
+
+  .admin-form {
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      &.full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: lighten($med-dark, 15%);
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      input,
+      textarea,
+      select {
+        padding: 0.9rem 1.1rem;
+        border: 2px solid $med-gray;
+        border-radius: 10px;
+        background-color: $med-gray;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 1rem;
+        color: $med-dark;
+        width: 100%;
+
+        &:focus {
+          outline: none;
+          background-color: #fff;
+          border-color: $med-blue;
+          box-shadow: 0 0 0 4px rgba($med-blue, 0.15);
+          transform: translateY(-2px);
+        }
+      }
+
+      select {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 3rem;
+      }
+
+      &.select-group::after {
+        content: "";
+        position: absolute;
+        right: 1.2rem;
+        bottom: 1.2rem;
+        width: 0.6rem;
+        height: 0.4rem;
+        background-color: $med-dark;
+        clip-path: polygon(100% 0%, 0% 0%, 50% 100%);
+        pointer-events: none;
+      }
+    }
+
+    .form-actions {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px dashed $border-soft;
+
+      .btn-submit {
+        background-color: $med-blue;
+        color: white;
+        padding: 0.9rem 2.8rem;
+        border-radius: 10px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        &:hover {
+          background-color: darken($med-blue, 8%);
+          transform: translateY(-2px);
+        }
+      }
+
+      .btn-cancel {
+        text-decoration: none;
+        color: $text-light;
+        padding: 0.9rem 2rem;
+        font-weight: 600;
+        &:hover {
+          color: $med-dark;
+        }
+      }
+    }
+  }
+}
+
+.gender-radio-group {
+  display: flex;
+  gap: 2rem;
+  padding: 0.5rem 0;
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: $med-dark;
+    input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: $med-blue;
+    }
+  }
+}

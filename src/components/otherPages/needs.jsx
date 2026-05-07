@@ -77,9 +77,14 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    }).then((res) => {
-      if (res.ok) {
-        alert("Thank you for your donation!");
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
         setShowModal(false);
         setFormData({
           volunteerName: "",
@@ -87,8 +92,8 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
-      }
-    });
+        window.open(data.paymentUrl, "_blank");
+      });
   };
 
   useEffect(() => {
