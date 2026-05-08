@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "././pagesStyle/needs.scss";
 import PageLoad from "../pageLoad";
+import { useNavigate } from "react-router-dom";
 
-// 1. Separate the NeedCard to make it reusable
 const NeedCard = ({ need, mode, onEdit, onDelete, onDonate }) => {
   const { id, title, imagePath, charityCategory, isCompleted } = need;
 
@@ -92,10 +92,24 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
+        url = data.paymentUrl;
         window.open(data.paymentUrl, "_blank");
       });
   };
+  let url;
 
+  const CheckoutPage = () => {
+    const navigate = useNavigate();
+
+    const handlePayment = () => {
+      navigate("/donations/successful", {
+        state: {
+          id: url,
+          amount: formData.amountDonated,
+        },
+      });
+    };
+  };
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Need/Categories")
       .then((res) => res.json())

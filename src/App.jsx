@@ -13,6 +13,7 @@ import Addreciptionist from "./Admin/Addreciptionist.jsx";
 import Addhospital from "./Admin/Addhospital.jsx";
 import Aupdateabout from "./Admin/Aupdateabout.jsx";
 import Addabout from "./Admin/Addabout.jsx";
+import TransactionFailure from "./components/otherPages/donationfail.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
 import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
 import Adddoctor from "./Admin/Adddoctor.jsx";
@@ -26,6 +27,7 @@ import Forgotpass from "./auth/ForgotPassword.jsx";
 import Resetpass from "./auth/ResetPassword.jsx";
 import Doctor from "./auth/Doctor.jsx";
 import Patient from "./auth/Patient.jsx";
+import TransactionSuccess from "./components/otherPages/donationSucc.jsx";
 //
 import ChangeInactivePassword from "../src/components/ChangeInactivePassword.jsx";
 import PatientProfile from "../src/components/PatientProfile.jsx";
@@ -57,6 +59,8 @@ const router = createBrowserRouter(
       <Route path="resetpassword" element={<Resetpass />} />
       <Route path="forgotpassword" element={<Forgotpass />} />
       <Route path="doctor" element={<Doctor />} />
+      <Route path="donations/successful" element={<TransactionSuccess />} />
+      <Route path="donations/fail" element={<TransactionFailure />} />
       <Route path="patient" element={<Patient />} />
       {/* ***************************************** */}
       <Route path="admin" element={<AdminLayout />}>
