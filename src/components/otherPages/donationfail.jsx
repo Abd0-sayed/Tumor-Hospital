@@ -3,6 +3,19 @@ import { XCircle, RefreshCw } from "lucide-react";
 import "./pagesStyle/donations.scss"; // Assuming you kept them in the same file or imported accordingly
 
 const TransactionFailure = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  let urlid = urlParams.get("invoice_id");
+  let errorMsg = urlParams.get("errorMessage");
+
+  fetch(
+    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/fail?invoice_id=${urlid}&errorMessage=${errorMsg}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+
   return (
     <div className="failure-container">
       <div className="failure-card">
