@@ -93,12 +93,13 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
-        urlid = data.paymentUrl.split("/")[4];
+        urlid = currentUrl.split("=");
         sessionStorage.setItem("invID", urlid);
         window.open(data.paymentUrl, "_blank");
       });
   };
 
+  const currentUrl = window.location.href;
   fetch(
     `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${urlid}`,
     {
