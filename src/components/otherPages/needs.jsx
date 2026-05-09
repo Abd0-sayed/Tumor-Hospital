@@ -52,7 +52,6 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
     phone: "",
     amountDonated: "",
   });
-  let urlid;
 
   const activeNeed = needsData?.data.find((n) => n.id === selectedNeedId);
 
@@ -98,7 +97,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
   };
 
   fetch(
-    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${urlid}`,
+    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${sessionStorage.getItem("invID")}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

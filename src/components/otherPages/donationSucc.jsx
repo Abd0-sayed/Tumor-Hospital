@@ -9,8 +9,9 @@ const TransactionSuccess = () => {
   const month = date.getMonth();
   const day = date.getDate();
 
-  const currentUrl = window.location.href;
-  let urlid = currentUrl.split("=");
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  let urlid = urlParams.get("invoice_id");
   sessionStorage.setItem("invID", urlid);
 
   if (!sessionStorage.getItem("invID")) {
