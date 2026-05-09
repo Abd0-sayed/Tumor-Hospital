@@ -40,10 +40,10 @@ const Footer = () => {
 
           <div className="footer-col contact">
             <h3>Contact Us</h3>
-            <p>Call: (237) 681-812-255</p>
-            <p>Email: fildineesoe@gmail.com</p>
+            <p>Call: 010230123144</p>
+            <p>Email: smsmsemo99@gmail.com</p>
             <p>Address: 0123 Some place</p>
-            <p>Some country</p>
+            <p>EGYPT</p>
           </div>
 
           <div className="footer-col newsletter">

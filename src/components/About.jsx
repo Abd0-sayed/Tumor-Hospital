@@ -31,8 +31,6 @@ const AboutPage = () => {
       description,
       mission,
       vision,
-      email,
-      phone,
       totalDoctors = "0",
       totalPatients = "0",
       totalReceptionist = "0",
@@ -79,20 +77,6 @@ const AboutPage = () => {
             </div>
           </section>
         </main>
-
-        <footer className="about-footer">
-          <div className="contact-box">
-            <h2>Get In Touch</h2>
-            <p>For inquiries, please contact our team:</p>
-            <p>
-              <strong>Email:</strong> {email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {phone}
-            </p>
-            <button className="contact-btn">Email Us Now</button>
-          </div>
-        </footer>
       </div>
     );
   }

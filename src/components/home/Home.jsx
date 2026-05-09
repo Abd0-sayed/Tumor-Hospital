@@ -1,4 +1,4 @@
-import Appointment from "./form";
+import AboutPage from "../About.jsx";
 import Landing from "./landing.jsx";
 import DoctorSection from "./doctors.jsx";
 
@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div>
       <Landing />
-      <Appointment />
+      <AboutPage />
       <DoctorSection />
     </div>
   );
