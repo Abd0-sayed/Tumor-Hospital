@@ -9,6 +9,10 @@ const TransactionSuccess = () => {
   const month = date.getMonth();
   const day = date.getDate();
 
+  const currentUrl = window.location.href;
+  let urlid = currentUrl.split("=");
+  sessionStorage.setItem("invID", urlid);
+
   if (!sessionStorage.getItem("invID")) {
     return <PageLoad />;
   }
