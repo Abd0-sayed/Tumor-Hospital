@@ -102,11 +102,10 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
   };
 
   fetch(
-    "https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success",
+    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${urlid}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(urlid),
     },
   );
 
