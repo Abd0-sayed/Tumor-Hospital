@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "././pagesStyle/needs.scss";
 import PageLoad from "../pageLoad";
-import { useNavigate } from "react-router-dom";
 
 const NeedCard = ({ need, mode, onEdit, onDelete, onDonate }) => {
   const { id, title, imagePath, charityCategory, isCompleted } = need;
@@ -43,6 +42,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
   const [categories, setCategories] = useState([]);
+  const [url, setUrl] = useState("");
 
   // Modal States
   const [showModal, setShowModal] = useState(false);
@@ -53,6 +53,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
     phone: "",
     amountDonated: "",
   });
+  let urlid;
 
   const activeNeed = needsData?.data.find((n) => n.id === selectedNeedId);
 
@@ -72,6 +73,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
       charityNeedId: selectedNeedId,
       amountDonated: Number(formData.amountDonated), // Fixed key mismatch
     };
+    sessionStorage.setItem("amount", formData.amountDonated);
 
     fetch("https://tumorhospital.runasp.net/api/Donation/Donate", {
       method: "POST",
@@ -92,24 +94,22 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
-        url = data.paymentUrl;
-        window.open(data.paymentUrl, "_blank");
+        setUrl(data.paymentUrl);
+        urlid = url.split("/")[4];
+        sessionStorage.setItem("invID", urlid);
+        window.open(url, "_blank");
       });
   };
-  let url;
 
-  const CheckoutPage = () => {
-    const navigate = useNavigate();
+  fetch(
+    "https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success",
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(urlid),
+    },
+  );
 
-    const handlePayment = () => {
-      navigate("/donations/successful", {
-        state: {
-          id: url,
-          amount: formData.amountDonated,
-        },
-      });
-    };
-  };
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Need/Categories")
       .then((res) => res.json())

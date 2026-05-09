@@ -86,7 +86,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
           to="addFaq"
           className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
         >
-          <MdEditNote className="nav-icon" /> Content (FAQ/About)
+          <MdEditNote className="nav-icon" /> Add FAQs
         </NavLink>
 
         <NavLink

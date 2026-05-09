@@ -62,6 +62,9 @@ const router = createBrowserRouter(
       <Route path="donations/successful" element={<TransactionSuccess />} />
       <Route path="donations/fail" element={<TransactionFailure />} />
       <Route path="patient" element={<Patient />} />
+      <Route path="DoctorProfile" element={<DoctorProfile />} />
+      <Route path="ReceptionistProfile" element={<Reciptionprofile />} />
+      <Route path="PatientProfile" element={<PatientProfile />} />
       {/* ***************************************** */}
       <Route path="admin" element={<AdminLayout />}>
         <Route index element={<Admin />} />

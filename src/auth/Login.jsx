@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, replace, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./styles/Password.scss";
 
@@ -85,17 +85,20 @@ const Login = () => {
       const role =
         decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
       storage.setItem("role", role);
+      window.dispatchEvent(new Event("storageUpdate"));
 
       if (role === "Admin") {
-        navigate("/admin");
+        navigate("/admin", { replace: true });
       } else if (role === "Doctor") {
         if (activeacc === true) {
-          navigate("/doctor");
+          navigate("/DoctorProfile", { replace: true });
         } else {
-          navigate("/changepassword");
+          navigate("/changepassword", { replace: true });
         }
       } else if (role === "Patient") {
-        navigate("/Patient");
+        navigate("/PatientProfile", { replace: true });
+      } else {
+        navigate("/ReceptionistProfile", { replace: true });
       }
     } catch (error) {
       console.error(error);

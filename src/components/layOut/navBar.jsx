@@ -1,12 +1,16 @@
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./navBar.scss";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { LuClock4 } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
+
 function NavDropdownExample() {
+  const location = useLocation();
+  const role = sessionStorage.getItem("role");
   return (
     <>
       <Container>
@@ -58,9 +62,15 @@ function NavDropdownExample() {
               <Link to="/login" className="link">
                 Login
               </Link>
-              <Link to="link" className="link">
-                Link
-              </Link>
+              {role === "Admin" ? (
+                <Link to="/admin" className="link">
+                  Profile
+                </Link>
+              ) : (
+                <Link to={"/" + role + "Profile"} className="link">
+                  Profile
+                </Link>
+              )}
               <Link to="link" className="link">
                 Link
               </Link>

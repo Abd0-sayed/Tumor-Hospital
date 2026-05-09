@@ -48,7 +48,6 @@ function Admin() {
     fetch("https://tumorhospital.runasp.net/api/about")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setabout(data);
       })
       .catch((error) => console.error("Error:", error));
@@ -73,7 +72,6 @@ function Admin() {
     fetch("https://tumorhospital.runasp.net/api/FAQs")
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         setfaqs(data);
       })
       .catch((error) => console.error("Error:", error));

@@ -1,16 +1,19 @@
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import "./pagesStyle/donations.scss";
-import { useLocation } from "react-router-dom";
+import PageLoad from "../pageLoad";
 
 const TransactionSuccess = () => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  const location = useLocation();
-  const { id, amount } = location.state || { id: "N/A", amount: "0.00" };
 
+  if (!sessionStorage.getItem("invID")) {
+    return <PageLoad />;
+  }
+  let amount = sessionStorage.getItem("amount");
+  let id = sessionStorage.getItem("invID");
   return (
     <div className="success-container">
       <div className="success-card">
@@ -27,11 +30,11 @@ const TransactionSuccess = () => {
         <div className="details-box">
           <div className="detail-row">
             <span className="label">Amount Paid</span>
-            <span className="value amount">{id.split("/")[4]}</span>
+            <span className="value amount">${amount}</span>
           </div>
           <div className="detail-row">
             <span className="label">Transaction ID</span>
-            <span className="value">${amount}</span>
+            <span className="value">{id}</span>
           </div>
           <div className="detail-row">
             <span className="label">Date</span>
