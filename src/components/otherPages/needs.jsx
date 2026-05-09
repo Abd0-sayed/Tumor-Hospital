@@ -42,7 +42,6 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
   const [categories, setCategories] = useState([]);
-  const [url, setUrl] = useState("");
 
   // Modal States
   const [showModal, setShowModal] = useState(false);
@@ -94,11 +93,9 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
-        setUrl(data.paymentUrl);
-        urlid = url.split("/")[4];
+        urlid = data.paymentUrl.split("/")[4];
         sessionStorage.setItem("invID", urlid);
-        console.log(url === data.paymentUrl);
-        window.open(url, "_blank");
+        window.open(data.paymentUrl, "_blank");
       });
   };
 
