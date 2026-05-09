@@ -97,6 +97,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
         setUrl(data.paymentUrl);
         urlid = url.split("/")[4];
         sessionStorage.setItem("invID", urlid);
+        console.log(url === data.paymentUrl);
         window.open(url, "_blank");
       });
   };
