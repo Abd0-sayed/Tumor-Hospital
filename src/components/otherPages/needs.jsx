@@ -96,14 +96,6 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
       });
   };
 
-  fetch(
-    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${sessionStorage.getItem("invID")}`,
-    {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    },
-  );
-
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Need/Categories")
       .then((res) => res.json())

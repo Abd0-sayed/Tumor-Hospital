@@ -12,13 +12,19 @@ const TransactionSuccess = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   let urlid = urlParams.get("invoice_id");
-  sessionStorage.setItem("invID", urlid);
 
-  if (!sessionStorage.getItem("invID")) {
+  fetch(
+    `https://tumorhospital.runasp.net/api/Payment/fawaterak/webhooks/success?invoice_id=${urlid}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+
+  if (!urlid) {
     return <PageLoad />;
   }
   let amount = sessionStorage.getItem("amount");
-  let id = sessionStorage.getItem("invID");
   return (
     <div className="success-container">
       <div className="success-card">
@@ -39,7 +45,7 @@ const TransactionSuccess = () => {
           </div>
           <div className="detail-row">
             <span className="label">Transaction ID</span>
-            <span className="value">{id}</span>
+            <span className="value">{urlid}</span>
           </div>
           <div className="detail-row">
             <span className="label">Date</span>
