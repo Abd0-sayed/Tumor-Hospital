@@ -10,6 +10,9 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import PageLoad from "../components/pageLoad";
+//
+import HospitalCard from './HospitalCard';
+
 function Admin() {
   var x1array = ["Appointments", "Bills", "Patients"];
   var y1array = [100, 220, 150];
@@ -23,6 +26,7 @@ function Admin() {
   const [da, setdata] = useState("");
   const [faqs, setfaqs] = useState([]);
   const [about, setabout] = useState({});
+    const[hospitals,sethospitals]=useState([])
   const [loading, setLoading] = useState(false);
   const notify = () => toast.success("FAQ Deleted Successfully!");
   //----dashboard------
@@ -66,6 +70,18 @@ function Admin() {
       })
       .catch((err) => console.log(err));
   }
+
+
+  //---------hospital data-------
+useEffect(()=>{
+fetch("https://tumorhospital.runasp.net/api/Hospitals")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+            sethospitals(data)
+    })
+    .catch((error) => console.error("Error:", error));
+  },[])
 
   //-------FAQS--------
   useEffect(() => {
@@ -127,6 +143,25 @@ function Admin() {
           </div>
         </div>
 
+      {/*****************Hospitals Cards ******************/}
+<div>
+          {
+            hospitals.map(hospitals => {
+              let hosid=hospitals.id
+              return (
+                <>
+                    <HospitalCard key={hospitals.id}
+                        id={hospitals.id}
+                        name={hospitals.name}
+                        ></HospitalCard>        
+                                  </>
+                                )
+                            })
+           }
+        </div>
+
+
+      {/************* FAQS *************************/}
         <div className="my-container">
           <h1>FAQS</h1>
 

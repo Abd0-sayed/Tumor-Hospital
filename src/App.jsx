@@ -39,6 +39,11 @@ import UpdateDoctorProfile from "../src/components/UpdateDoctorProfile.jsx";
 import UpdateReceptionistProfile from "../src/components/UpdateReceptionistProfile.jsx";
 
 //
+import Hosinfo from"./components/otherPages/hosinfo/HospitalInfo.jsx"
+import DoctorDetail from"./components/otherPages/hosinfo/DoctorDetail.jsx"
+
+
+//
 import {
   Route,
   RouterProvider,
@@ -84,6 +89,8 @@ const router = createBrowserRouter(
         <Route path="addRecipionist" element={<Addreciptionist />} />
         <Route path="addhospital" element={<Addhospital />} />
         <Route path="addSpicialization" element={<Addspicialization />} />
+        <Route path="HospitalInfo/:hospitalId" element={<Hosinfo />} />
+        <Route path="/admin/HospitalInfo/:hospitalId/DoctorDetail/:docId" element={<DoctorDetail />} />
       </Route>
     </Route>,
   ),
