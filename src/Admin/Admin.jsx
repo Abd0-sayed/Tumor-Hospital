@@ -145,7 +145,10 @@ function Admin() {
                     <td>{faqs.question}</td>
                     <td>{faqs.answer}</td>
                     <td>
-                      <Link to={`/faqs/${faqs.id}/edit`} className="btn-edit">
+                      <Link
+                        to={`/admin/editFaq/${faqs.id}`}
+                        className="btn-edit"
+                      >
                         Edit
                       </Link>
                       <button

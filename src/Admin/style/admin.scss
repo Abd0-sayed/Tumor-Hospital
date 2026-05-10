@@ -176,13 +176,13 @@
   @extend .dashboard-btn;
   background-color: $secondary-nav; //[cite: 3]
   color: white;
+  margin-right: 10px;
 }
 
 .btn-delete {
   @extend .dashboard-btn;
   background-color: red;
   color: white;
-  margin-left: 10px;
 
   &:hover {
     background-color: darken($color: red, $amount: 8%);

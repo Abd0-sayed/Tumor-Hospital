@@ -128,7 +128,7 @@
     color: white;
 
     th {
-      padding: $text-padding * 1.5; //[cite: 3]
+      padding: $text-padding * 1.5 $text-padding; //[cite: 3]
       text-transform: uppercase;
       font-size: 0.85rem;
       letter-spacing: 1px;

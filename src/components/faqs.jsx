@@ -1,6 +1,6 @@
 "use client";
 
-import PageLoad from "./pageLoad.jsx";
+import PageLoad from "./pageLoad";
 import "./componentsStyle/faqs.scss";
 import { useState, useEffect } from "react";
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./style/Profile.css";
 
-const getToken  = () => sessionStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 const getUserId = () => sessionStorage.getItem("userId");
 
 // ── Split full name helper ───────────────────────────────────────────────
@@ -17,8 +17,11 @@ const getUserId = () => sessionStorage.getItem("userId");
 // ── Format date to yyyy-mm-dd for <input type="date"> ───────────────────
 const toDateInputValue = (dateStr) => {
   if (!dateStr) return "";
-  try { return new Date(dateStr).toISOString().split("T")[0]; }
-  catch { return ""; }
+  try {
+    return new Date(dateStr).toISOString().split("T")[0];
+  } catch {
+    return "";
+  }
 };
 
 const UpdateProfile = () => {
@@ -27,23 +30,23 @@ const UpdateProfile = () => {
   const existingProfile = state?.profile || {};
 
   const userId = getUserId();
-  const token  = getToken();
+  const token = getToken();
 
   // const { firstName: initFirst, lastName: initLast } = splitName(existingProfile?.fullName);
 
   const [form, setForm] = useState({
-    firstName:   existingProfile?.firstName,
-    lastName:    existingProfile?.lastName,
-    phoneNumber: existingProfile?.phoneNumber  || "",
-    gender:      existingProfile?.gender       || "",
-    address:     existingProfile?.address      || "",
+    firstName: existingProfile?.firstName,
+    lastName: existingProfile?.lastName,
+    phoneNumber: existingProfile?.phoneNumber || "",
+    gender: existingProfile?.gender || "",
+    address: existingProfile?.address || "",
     dateOfBirth: toDateInputValue(existingProfile?.dateOfBirth),
   });
 
-  const [errors,      setErrors]      = useState({});
+  const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
-  const [loading,     setLoading]     = useState(false);
-  const [success,     setSuccess]     = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   // ── Validation ───────────────────────────────────────────────────────────
   const validate = () => {
@@ -96,20 +99,25 @@ const UpdateProfile = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            firstName:   form.firstName,
-            lastName:    form.lastName,
+            firstName: form.firstName,
+            lastName: form.lastName,
             phoneNumber: form.phoneNumber,
-            gender:      form.gender,
-            address:     form.address,
+            gender: form.gender,
+            address: form.address,
             dateOfBirth: form.dateOfBirth,
           }),
-        }
-      )
+        },
+      );
 
-      if (response.status === 401) { navigate("/login"); return; }
+      if (response.status === 401) {
+        navigate("/login");
+        return;
+      }
 
       if (response.status === 429) {
-        setServerError("Too many requests. Please wait a moment before trying again.");
+        setServerError(
+          "Too many requests. Please wait a moment before trying again.",
+        );
         return;
       }
 
@@ -156,7 +164,14 @@ const UpdateProfile = () => {
       <div className="profile-page">
         <div className="profile-card profile-card--center">
           <div className="profile-success-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
@@ -164,7 +179,9 @@ const UpdateProfile = () => {
           <p className="profile-success-msg">
             Your changes have been saved. Redirecting to your profile…
           </p>
-          <div className="pw-progress-bar"><div className="pw-progress-fill" /></div>
+          <div className="pw-progress-bar">
+            <div className="pw-progress-fill" />
+          </div>
         </div>
       </div>
     );
@@ -175,8 +192,20 @@ const UpdateProfile = () => {
     <div className="profile-page">
       <div className="profile-card">
         {/* Back link */}
-        <button className="profile-back-btn" onClick={() => navigate("/PatientProfile")}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <button
+          className="profile-back-btn"
+          onClick={() => navigate("/PatientProfile")}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            width="15"
+            height="15"
+          >
             <polyline points="15 18 9 12 15 6" />
           </svg>
           Back to profile
@@ -184,14 +213,23 @@ const UpdateProfile = () => {
 
         <div className="profile-form-header">
           <div className="profile-form-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
           <div>
             <h1 className="profile-form-title">Update profile</h1>
-            <p className="profile-form-subtitle">Edit your personal information below</p>
+            <p className="profile-form-subtitle">
+              Edit your personal information below
+            </p>
           </div>
         </div>
 
@@ -200,7 +238,9 @@ const UpdateProfile = () => {
         <form onSubmit={handleSubmit} noValidate className="profile-form">
           {/* Name row */}
           <div className="profile-row">
-            <div className={`profile-field-wrap ${errors.firstName ? "has-error" : ""}`}>
+            <div
+              className={`profile-field-wrap ${errors.firstName ? "has-error" : ""}`}
+            >
               <label htmlFor="up-firstName">First name</label>
               <input
                 id="up-firstName"
@@ -211,10 +251,14 @@ const UpdateProfile = () => {
                 value={form.firstName}
                 onChange={handleChange}
               />
-              {errors.firstName && <span className="profile-error">{errors.firstName}</span>}
+              {errors.firstName && (
+                <span className="profile-error">{errors.firstName}</span>
+              )}
             </div>
 
-            <div className={`profile-field-wrap ${errors.lastName ? "has-error" : ""}`}>
+            <div
+              className={`profile-field-wrap ${errors.lastName ? "has-error" : ""}`}
+            >
               <label htmlFor="up-lastName">Last name</label>
               <input
                 id="up-lastName"
@@ -225,28 +269,36 @@ const UpdateProfile = () => {
                 value={form.lastName}
                 onChange={handleChange}
               />
-              {errors.lastName && <span className="profile-error">{errors.lastName}</span>}
+              {errors.lastName && (
+                <span className="profile-error">{errors.lastName}</span>
+              )}
             </div>
           </div>
 
           {/* Phone */}
-            <div className={`profile-field-wrap ${errors.phoneNumber ? "has-error" : ""}`}>
-              <label htmlFor="up-phone">Phone number</label>
-              <input
-                id="up-phone"
-                name="phoneNumber"
-                type="tel"
-                autoComplete="tel"
-                placeholder="+201234567890"
-                value={form.phoneNumber}
-                onChange={handleChange}
-              />
-              {errors.phoneNumber && <span className="profile-error">{errors.phoneNumber}</span>}
-            </div>
+          <div
+            className={`profile-field-wrap ${errors.phoneNumber ? "has-error" : ""}`}
+          >
+            <label htmlFor="up-phone">Phone number</label>
+            <input
+              id="up-phone"
+              name="phoneNumber"
+              type="tel"
+              autoComplete="tel"
+              placeholder="+201234567890"
+              value={form.phoneNumber}
+              onChange={handleChange}
+            />
+            {errors.phoneNumber && (
+              <span className="profile-error">{errors.phoneNumber}</span>
+            )}
+          </div>
 
           {/* Gender + DOB row */}
           <div className="profile-row">
-            <div className={`profile-field-wrap ${errors.gender ? "has-error" : ""}`}>
+            <div
+              className={`profile-field-wrap ${errors.gender ? "has-error" : ""}`}
+            >
               <label htmlFor="up-gender">Gender</label>
               <select
                 id="up-gender"
@@ -258,10 +310,14 @@ const UpdateProfile = () => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-              {errors.gender && <span className="profile-error">{errors.gender}</span>}
+              {errors.gender && (
+                <span className="profile-error">{errors.gender}</span>
+              )}
             </div>
 
-            <div className={`profile-field-wrap ${errors.dateOfBirth ? "has-error" : ""}`}>
+            <div
+              className={`profile-field-wrap ${errors.dateOfBirth ? "has-error" : ""}`}
+            >
               <label htmlFor="up-dob">Date of birth</label>
               <input
                 id="up-dob"
@@ -271,12 +327,16 @@ const UpdateProfile = () => {
                 value={form.dateOfBirth}
                 onChange={handleChange}
               />
-              {errors.dateOfBirth && <span className="profile-error">{errors.dateOfBirth}</span>}
+              {errors.dateOfBirth && (
+                <span className="profile-error">{errors.dateOfBirth}</span>
+              )}
             </div>
           </div>
 
           {/* Address */}
-          <div className={`profile-field-wrap ${errors.address ? "has-error" : ""}`}>
+          <div
+            className={`profile-field-wrap ${errors.address ? "has-error" : ""}`}
+          >
             <label htmlFor="up-address">Address</label>
             <input
               id="up-address"
@@ -287,7 +347,9 @@ const UpdateProfile = () => {
               value={form.address}
               onChange={handleChange}
             />
-            {errors.address && <span className="profile-error">{errors.address}</span>}
+            {errors.address && (
+              <span className="profile-error">{errors.address}</span>
+            )}
           </div>
 
           <div className="profile-form-actions">
@@ -299,7 +361,11 @@ const UpdateProfile = () => {
             >
               Cancel
             </button>
-            <button type="submit" className="profile-btn profile-btn--primary" disabled={loading}>
+            <button
+              type="submit"
+              className="profile-btn profile-btn--primary"
+              disabled={loading}
+            >
               {loading ? <span className="profile-spinner" /> : "Save changes"}
             </button>
           </div>

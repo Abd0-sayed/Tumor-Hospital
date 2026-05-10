@@ -21,11 +21,11 @@ function Aupdatefaq() {
         setupdatedfaq(item);
       })
       .catch((errors) => console.log(errors));
-  }, []);
+  }, [id]);
 
   function updatefaq(e) {
     e.preventDefault();
-    fetch(`https://tumorhospital.runasp.net/api/FAQs/${params.faqid}`, {
+    fetch(`https://tumorhospital.runasp.net/api/FAQs/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedfaq),
@@ -36,51 +36,58 @@ function Aupdatefaq() {
         }
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         myNavigator("/admin");
       });
   }
 
   return (
-    <>
-      <div className="container-fluid">
-        <h1 className="display-1 text-primary mt-5">Edit FAQ</h1>
-        <form onSubmit={updatefaq} className="my-5">
-          <div className="form-group">
+    <div className="admin-form-page">
+      <div className="form-card">
+        <h1 className="form-title">
+          Edit <span>FAQ</span>
+        </h1>
+
+        <form onSubmit={updatefaq} className="admin-form">
+          <div className="form-group full-width">
             <label htmlFor="question">Question</label>
             <input
               type="text"
               id="question"
-              className="form-control mt-2 mb-4"
               value={updatedfaq.question || ""}
               onChange={(e) =>
                 setupdatedfaq((prev) => ({ ...prev, question: e.target.value }))
               }
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="answer">Answer</label>
-            <input
+
+          <div className="form-group full-width">
+            <label htmlFor="answer" className="para">
+              Answer
+            </label>
+            <textarea
               type="text"
               id="answer"
-              className="form-control mt-2 mb-4"
+              className="form-control"
               value={updatedfaq.answer || ""}
               onChange={(e) =>
                 setupdatedfaq((prev) => ({ ...prev, answer: e.target.value }))
               }
             />
           </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary me-3">
+
+          <div className="form-actions">
+            <button type="submit" className="btn-submit">
               Update FAQ
             </button>
-            <Link to="/admin" className="btn btn-secondary">
+            <Link to="/admin" className="btn-cancel">
               Back to Dashboard
             </Link>
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
+
 export default Aupdatefaq;

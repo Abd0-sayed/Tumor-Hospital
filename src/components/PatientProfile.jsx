@@ -1,41 +1,56 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style/Profile.css";
 
-const getToken  = () => sessionStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 const getUserId = () => sessionStorage.getItem("userId");
 
 const PatientProfile = () => {
   const navigate = useNavigate();
 
-  const [profile, setProfile]   = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [error,   setError]     = useState("");
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const userId = getUserId();
-  const token  = getToken();
+  const token = getToken();
 
   // ── Fetch profile ────────────────────────────────────────────────────────
   useEffect(() => {
-     if (!token) { navigate("/login"); return; }
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     console.log(token);
-    
+
     const fetchProfile = async () => {
       try {
         const response = await fetch(
           `https://tumorhospital.runasp.net/api/Profile/Patient`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
-        if (response.status === 401) { navigate("/login"); return; }
-        if (response.status === 403) { setError("You don't have permission to view this profile."); return; }
-        if (response.status === 404) { setError("Patient profile not found."); return; }
-        if (!response.ok)            { setError("Failed to load profile. Please try again."); return; }
+        if (response.status === 401) {
+          navigate("/login");
+          return;
+        }
+        if (response.status === 403) {
+          setError("You don't have permission to view this profile.");
+          return;
+        }
+        if (response.status === 404) {
+          setError("Patient profile not found.");
+          return;
+        }
+        if (!response.ok) {
+          setError("Failed to load profile. Please try again.");
+          return;
+        }
         const data = await response.json();
         console.log(data);
-        
+
         setProfile(data);
       } catch {
         setError("Server error. Please try again later.");
@@ -45,7 +60,7 @@ const PatientProfile = () => {
     };
 
     fetchProfile();
-  }, [userId, token, navigate]);////////////////////////////////////////////////
+  }, [userId, token, navigate]); ////////////////////////////////////////////////
 
   // ── Split full name into first / last ────────────────────────────────────
   // const splitName = (fullName = "") => {
@@ -75,7 +90,14 @@ const PatientProfile = () => {
       <div className="profile-page">
         <div className="profile-card profile-card--center">
           <div className="profile-error-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -83,7 +105,10 @@ const PatientProfile = () => {
           </div>
           <h2 className="profile-error-title">Unable to load profile</h2>
           <p className="profile-error-msg">{error}</p>
-          <button className="profile-btn profile-btn--primary" onClick={() => navigate("/login")}>
+          <button
+            className="profile-btn profile-btn--primary"
+            onClick={() => navigate("/login")}
+          >
             Back to sign in
           </button>
         </div>
@@ -92,17 +117,17 @@ const PatientProfile = () => {
   }
 
   // const { firstName, lastName } = splitName(profile?.fullName);
-  const  firstName=profile.firstName;
-  const lastName=profile.lastName;
-  const fullname=firstName+" "+lastName;
+  const firstName = profile.firstName;
+  const lastName = profile.lastName;
+  const fullname = firstName + " " + lastName;
   // ── Avatar initials ──────────────────────────────────────────────────────
   const initials =
-    (firstName?.[0] ?? "").toUpperCase() + (lastName?.[0] ?? "").toUpperCase() || "?";
+    (firstName?.[0] ?? "").toUpperCase() +
+      (lastName?.[0] ?? "").toUpperCase() || "?";
 
   return (
     <div className="profile-page">
       <div className="profile-card">
-
         {/* ── Header ── */}
         <div className="profile-header">
           <div className="profile-avatar">
@@ -110,7 +135,9 @@ const PatientProfile = () => {
           </div>
           <div className="profile-header-info">
             <h1 className="profile-name">{fullname || "—"}</h1>
-            <span className={`profile-badge profile-badge--${(profile?.gender || "").toLowerCase()}`}>
+            <span
+              className={`profile-badge profile-badge--${(profile?.gender || "").toLowerCase()}`}
+            >
               {profile?.gender || "—"}
             </span>
           </div>
@@ -123,36 +150,58 @@ const PatientProfile = () => {
         <div className="profile-grid">
           <div className="profile-field">
             <span className="profile-field-label">First name</span>
-            <span className="profile-field-value">{firstName || <span className="profile-empty">Not provided</span>}</span>
+            <span className="profile-field-value">
+              {firstName || <span className="profile-empty">Not provided</span>}
+            </span>
           </div>
 
           <div className="profile-field">
             <span className="profile-field-label">Last name</span>
-            <span className="profile-field-value">{lastName || <span className="profile-empty">Not provided</span>}</span>
+            <span className="profile-field-value">
+              {lastName || <span className="profile-empty">Not provided</span>}
+            </span>
           </div>
 
           <div className="profile-field profile-field--full">
             <span className="profile-field-label">Email address</span>
-            <span className="profile-field-value">{profile?.email || <span className="profile-empty">Not provided</span>}</span>
+            <span className="profile-field-value">
+              {profile?.email || (
+                <span className="profile-empty">Not provided</span>
+              )}
+            </span>
           </div>
 
           <div className="profile-field">
             <span className="profile-field-label">Gender</span>
-            <span className="profile-field-value">{profile?.gender || <span className="profile-empty">Not provided</span>}</span>
+            <span className="profile-field-value">
+              {profile?.gender || (
+                <span className="profile-empty">Not provided</span>
+              )}
+            </span>
           </div>
 
           <div className="profile-field">
             <span className="profile-field-label">Date of birth</span>
             <span className="profile-field-value">
-              {profile?.dateOfBirth
-                ? new Date(profile.dateOfBirth).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })
-                : <span className="profile-empty">Not provided</span>}
+              {profile?.dateOfBirth ? (
+                new Date(profile.dateOfBirth).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })
+              ) : (
+                <span className="profile-empty">Not provided</span>
+              )}
             </span>
           </div>
 
           <div className="profile-field profile-field--full">
             <span className="profile-field-label">Address</span>
-            <span className="profile-field-value">{profile?.address || <span className="profile-empty">Not provided</span>}</span>
+            <span className="profile-field-value">
+              {profile?.address || (
+                <span className="profile-empty">Not provided</span>
+              )}
+            </span>
           </div>
         </div>
 
@@ -162,7 +211,16 @@ const PatientProfile = () => {
             className="profile-btn profile-btn--primary"
             onClick={() => navigate("/UpdateProfile", { state: { profile } })}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="16"
+              height="16"
+            >
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
@@ -173,7 +231,16 @@ const PatientProfile = () => {
             className="profile-btn profile-btn--outline"
             onClick={() => navigate("/ChangePassword")}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="16"
+              height="16"
+            >
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>

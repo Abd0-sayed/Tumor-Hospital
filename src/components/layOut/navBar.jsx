@@ -66,6 +66,10 @@ function NavDropdownExample() {
                 <Link to="/admin" className="link">
                   Profile
                 </Link>
+              ) : !role ? (
+                <Link to="/login" className="link">
+                  Profile
+                </Link>
               ) : (
                 <Link to={"/" + role + "Profile"} className="link">
                   Profile
