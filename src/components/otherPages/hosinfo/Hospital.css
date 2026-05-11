@@ -49,9 +49,7 @@
   padding: 2.5rem 1.5rem 4rem;
   font-family: var(--ff-body);
 }
-/* main{
-  padding: 0 !important;
-} */
+
 .hosp-inner {
   max-width: 1100px;
   margin: 0 auto;
@@ -909,4 +907,289 @@
   .hosp-detail-hero { flex-direction: column; gap: 1rem; }
   .hosp-cost-grid { grid-template-columns: 1fr; }
   .hosp-page-title { font-size: 1.6rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ADD SCHEDULE INLINE PANEL
+══════════════════════════════════════════════════════════════ */
+
+/* Section header row: title + Add button side by side */
+.hosp-schedule-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.hosp-schedule-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Add schedule button */
+.hosp-schedule-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 34px;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1.5px solid var(--blue-light);
+  font-family: var(--ff-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), box-shadow var(--transition);
+}
+.hosp-schedule-add-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.hosp-schedule-add-btn:hover {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(26,143,227,0.25);
+}
+.hosp-schedule-add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+/* edit schedule button */
+.hosp-schedule-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 34px;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1.5px solid var(--blue-light);
+  font-family: var(--ff-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), box-shadow var(--transition);
+}
+.hosp-schedule-edit-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.hosp-schedule-edit-btn:hover {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(26,143,227,0.25);
+}
+.hosp-schedule-edit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.hosp-schedule-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 34px;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  background: var(--danger);
+  color: var(--blue-light);
+  border: 1.5px solid var(--danger);
+  font-family: var(--ff-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), box-shadow var(--transition);
+}
+.hosp-schedule-delete-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.hosp-schedule-delete-btn:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: var(--danger);
+  box-shadow: 0 4px 14px rgba(26,143,227,0.25);
+}
+.hosp-schedule-delete-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Inline panel wrapper — slides down */
+.hosp-schedule-form-panel {
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius-lg);
+  background: var(--blue-light);
+  padding: 1.35rem 1.5rem 1.25rem;
+  margin-bottom: 1.25rem;
+  animation: panel-slide-down 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes panel-slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hosp-schedule-form-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hosp-schedule-form-title svg { width: 15px; height: 15px; color: var(--blue); }
+
+/* Form fields row */
+.hosp-schedule-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.hosp-schedule-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hosp-schedule-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.hosp-schedule-field select,
+.hosp-schedule-field input[type="time"] {
+  height: 42px;
+  padding: 0 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--dark);
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  font-weight: 400;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Custom arrow for select */
+.hosp-schedule-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A93A8' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+.hosp-schedule-field select:focus,
+.hosp-schedule-field input[type="time"]:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(26,143,227,0.13);
+}
+
+.hosp-schedule-field.has-error select,
+.hosp-schedule-field.has-error input[type="time"] {
+  border-color: var(--danger);
+  background-color: var(--danger-bg);
+}
+
+.hosp-schedule-field-error {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--danger);
+}
+
+/* Server error alert inside panel */
+.hosp-schedule-alert {
+  background: var(--danger-bg);
+  border: 1px solid #f5c6c2;
+  border-left: 3px solid var(--danger);
+  color: var(--danger);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+  animation: shake 0.3s ease;
+}
+
+/* Success message inside panel */
+.hosp-schedule-success {
+  background: var(--success-bg);
+  border: 1px solid #a7d9ba;
+  border-left: 3px solid var(--success);
+  color: var(--success);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Panel action buttons */
+.hosp-schedule-form-actions {
+  display: flex;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+/* Hint text under time field */
+.hosp-schedule-hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+/* Limit badge next to section title */
+.hosp-schedule-limit {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  background: var(--periwinkle-bg);
+  color: var(--navy);
+  letter-spacing: 0.04em;
+}
+.hosp-schedule-limit--full {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+@media (max-width: 600px) {
+  .hosp-schedule-form-row { grid-template-columns: 1fr; }
+  .hosp-schedule-header   { flex-wrap: wrap; gap: 0.5rem; }
+}
+
+/* Schedule header left group (title + count badge) */
+.hosp-schedule-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Skeleton flex wrapper for hero loading state */
+.hosp-skeleton-flex {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }

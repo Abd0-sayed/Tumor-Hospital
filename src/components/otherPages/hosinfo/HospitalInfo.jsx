@@ -138,6 +138,10 @@ const DeleteModal = ({ name, onConfirm, onCancel, loading }) => (
   </div>
 );
 
+
+
+
+
 // ── Main component ─────────────────────────────────────────────────────────
 const HospitalInfo = () => {
   const navigate = useNavigate();
@@ -171,6 +175,56 @@ const HospitalInfo = () => {
   const [deleteTarget, setDeleteTarget] = useState(null); // { id, name }
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError]   = useState("");
+    const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+// ////////////////////////////
+// ////////////////////////////
+// ////////////////////////////
+// ////////////////////////////
+// Delete Hospital
+const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this hospital? This action cannot be undone.")) return;
+
+    setDeleting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const res = await fetch(`https://tumorhospital.runasp.net/api/Hospital/${hospitalId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const msg = data.Message || data.message || "Failed to delete hospital. It may have doctors or receptionists associated with it.";
+        setError(msg);
+        return;
+      }
+
+      // Success - navigate away
+      navigate(-1); 
+    } catch {
+      setError("Server error. Please try again later.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+
+
+
+// ////////////////////////////
+// ////////////////////////////
+// ////////////////////////////
+// ////////////////////////////
+// ////////////////////////////
+
+
+
 
   const debouncedDocSearch = useDebounce(docSearch, 400);
   const debouncedRecSearch = useDebounce(recSearch, 400);
@@ -335,7 +389,7 @@ const HospitalInfo = () => {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Back to Dashboard
+          Back to hospitals
         </button>
 
         {/* ── Page header ── */}
@@ -601,8 +655,35 @@ const HospitalInfo = () => {
           loading={deleteLoading}
         />
       )}
+  <div>
+    <button className="hosp-action-btn hosp-action-btn--view" onClick={() => navigate(`/admin/HospitalInfo/${hospitalId}/UpdateHospital`, { state: { hospitalId } })}> 
+      Update Hospital data
+      </button>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem", marginTop: "1.75rem" }}>
+                <button 
+                  type="button" 
+                  className="hosp-btn hosp-btn--danger" 
+                  onClick={handleDelete} 
+                  disabled={submitting || deleting}
+                >
+                  {deleting ? <span className="hosp-spinner" /> : "Delete Hospital"}
+                </button>
+                
+                <div style={{ display: "flex", gap: "0.65rem" }}>
+                  <button type="button" className="hosp-btn hosp-btn--ghost" onClick={() => navigate(-1)} disabled={submitting || deleting}>Cancel</button>
+                  <button type="submit" className="hosp-btn hosp-btn--primary" disabled={submitting || deleting}>
+                    {submitting ? <span className="hosp-spinner" /> : "Save Changes"}
+                  </button>
+                </div>
+              </div>  
+    </div>  
     </div>
-  );
+);
 };
 
+
+
 export default HospitalInfo;
+
+
+

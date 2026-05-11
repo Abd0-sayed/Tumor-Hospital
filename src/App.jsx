@@ -41,6 +41,7 @@ import UpdateReceptionistProfile from "../src/components/UpdateReceptionistProfi
 //
 import Hosinfo from"./components/otherPages/hosinfo/HospitalInfo.jsx"
 import DoctorDetail from"./components/otherPages/hosinfo/DoctorDetail.jsx"
+import UpdateHospital from"./components/otherPages/hosinfo/UpdateHospital.jsx"
 
 
 //
@@ -91,6 +92,7 @@ const router = createBrowserRouter(
         <Route path="addSpicialization" element={<Addspicialization />} />
         <Route path="HospitalInfo/:hospitalId" element={<Hosinfo />} />
         <Route path="/admin/HospitalInfo/:hospitalId/DoctorDetail/:docId" element={<DoctorDetail />} />
+        <Route path="/admin/HospitalInfo/:hospitalId/UpdateHospital" element={<UpdateHospital />} />
       </Route>
     </Route>,
   ),
