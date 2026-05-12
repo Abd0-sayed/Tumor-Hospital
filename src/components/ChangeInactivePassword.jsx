@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 // import "./Password.css";
 import "./style/Password.css";
+import { jwtDecode } from "jwt-decode";
 
 // Helper: get token from either storage
 const getToken = () =>
@@ -25,6 +26,7 @@ const ChangeInactivePassword = () => {
   const [loading, setLoading]     = useState(false);
   const [success, setSuccess]     = useState(false);
 
+  
   // ── Validation ──────────────────────────────────────────────────────────
   const validate = () => {
     const e = {};
@@ -59,7 +61,9 @@ const ChangeInactivePassword = () => {
     setErrors({});
     setServerError("");
     setLoading(true);
-
+        console.log(form);
+        console.log(token);
+        
     try {
       const response = await fetch(
         "https://tumorhospital.runasp.net/api/Auth/Change-InActiveRole-Password",
@@ -74,9 +78,16 @@ const ChangeInactivePassword = () => {
             newPassword: form.newPassword,
           }),
         }
-      );
+      )
 
       const data = await response.json();
+      // storage.setItem("token", data.Token ?? data.token);
+      // storage.setItem("refreshToken", data.RefreshToken ?? data.refreshToken);
+      // storage.setItem("userId", data.UserId ?? data.userId);
+      // const decoded = jwtDecode(data.token);
+      //       const role =decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      //       storage.setItem("role", role);
+      //       window.dispatchEvent(new Event("storageUpdate"));
 
       if (response.status === 401) { navigate("/login"); return; }
 
@@ -98,11 +109,16 @@ const ChangeInactivePassword = () => {
       storage.setItem("token",        data.token        ?? data.Token);
       storage.setItem("refreshToken", data.refreshToken ?? data.RefreshToken);
       storage.setItem("userId",       data.userId       ?? data.UserId);
+      storage.setItem("userId",       data.userId       ?? data.UserId);
+      const decoded = jwtDecode(data.token);
+            const role =decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+            storage.setItem("role", role);
 
       setSuccess(true);
       setTimeout(() => navigate("/"), 2200);
     } catch {
-      setServerError("Server error. Please try again later.");
+        console.log(err);
+      setServerError(err.message ||"Server error. Please try again later.");
     } finally {
       setLoading(false);
     }

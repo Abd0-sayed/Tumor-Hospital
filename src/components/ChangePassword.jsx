@@ -4,12 +4,14 @@ import "./style/Profile.css";
 
 const getToken  = () =>  sessionStorage.getItem("token");
 const getUserId = () =>  sessionStorage.getItem("userId");
+const getUserrole = () =>  sessionStorage.getItem("role");
 
 const ChangePassword = () => {
   const navigate = useNavigate();
 
   const userId = getUserId();
   const token  = getToken();
+  const role = getUserrole();
 
   const [form, setForm] = useState({
     oldPassword:     "",
@@ -20,6 +22,19 @@ const ChangePassword = () => {
   const [serverError, setServerError] = useState("");
   const [loading,     setLoading]     = useState(false);
   const [success,     setSuccess]     = useState(false);
+
+const checkrole=()=>{
+  if(role==="Doctor"){
+  navigate("/DoctorProfile")
+  }
+  else if(role==="Patient"){
+    navigate("/PatientProfile")
+  }
+  else if(role==="Receptionist"){
+    navigate("/ReceptionistProfile")
+  }
+  
+}
 
   // ── Validation ───────────────────────────────────────────────────────────
   const validate = () => {
@@ -139,7 +154,7 @@ const ChangePassword = () => {
     <div className="profile-page">
       <div className="profile-card">
         {/* Back link */}
-        <button className="profile-back-btn" onClick={() => navigate("/PatientProfile")}>
+        <button className="profile-back-btn" onClick={(checkrole)}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
             <polyline points="15 18 9 12 15 6" />
           </svg>
@@ -229,7 +244,7 @@ const ChangePassword = () => {
             <button
               type="button"
               className="profile-btn profile-btn--ghost"
-              onClick={() => navigate("/PatientProfile")}
+              onClick={(checkrole)}
               disabled={loading}
             >
               Cancel

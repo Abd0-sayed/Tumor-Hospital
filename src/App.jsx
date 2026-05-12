@@ -72,6 +72,7 @@ const router = createBrowserRouter(
       <Route path="ReceptionistProfile" element={<Reciptionprofile />} />
       <Route path="PatientProfile" element={<PatientProfile />} />
       <Route path="ChangePassword" element={<ChangePassword />} />
+      <Route path="ChangeInactivePassword" element={<ChangeInactivePassword />} />
       <Route path="UpdateProfile" element={<UpdateProfile />} />
       <Route path="UpdateDoctorProfile" element={<UpdateDoctorProfile />} />
       <Route

@@ -95,11 +95,21 @@ const Login = () => {
         } else {
           navigate("/changepassword", { replace: true });
         }
-      } else if (role === "Patient") {
+      }
+      else if(role ==="InActiveDoctorRole"){
+              navigate("/ChangeInactivePassword")
+            }
+      
+      else if (role === "Patient") {
         navigate("/PatientProfile", { replace: true });
-      } else {
+      } 
+      else if(role ==="InActiveReceptionistRole"){
+              navigate("/ChangeInactivePassword")
+            }
+      else {
         navigate("/ReceptionistProfile", { replace: true });
       }
+      
     } catch (error) {
       console.error(error);
       setErrors({ general: ["Server error, please try again later"] });
@@ -118,8 +128,7 @@ const Login = () => {
     <div className="pw-page">
       <div className="pw-card">
         <div className="pw-brand">
-          <span className="pw-brand-icon">✦</span>
-          <span className="pw-brand-name">TumorCare</span>
+          <span className="pw-brand-name">Tumor Care</span>
         </div>
 
         <h1 className="pw-title">Welcome back</h1>

@@ -32,8 +32,8 @@ const getUserId = () =>  sessionStorage.getItem("userId");
 //     //   });
 //     }
 //   }, [initial]);
-        console.log(initial.profilePicturePath);
-        console.log(initial);
+        // console.log(initial.profilePicturePath);
+        // console.log(initial);
         
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -53,7 +53,11 @@ const getUserId = () =>  sessionStorage.getItem("userId");
       const res = await fetch(`https://tumorhospital.runasp.net/api/Profile/Doctor`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName: form.firstName, lastName: form.lastName, phoneNumber: form.phoneNumber, bio: form.bio, gender: form.gender })
+        body: JSON.stringify({ firstName: form.firstName,
+           lastName: form.lastName,
+           phoneNumber: form.phoneNumber, 
+           bio: form.bio, 
+           gender: form.gender })
       });
       if (!res.ok) throw new Error("Failed to update profile fields");
 
@@ -70,6 +74,8 @@ const getUserId = () =>  sessionStorage.getItem("userId");
       setSuccess(true);
       setTimeout(() => navigate("/DoctorProfile"), 1500);
     } catch (err) {
+      console.log(err);
+      
       setError(err.message || "An unexpected error occurred");
     } finally { setLoading(false); }
   };
