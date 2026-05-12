@@ -445,7 +445,7 @@ const DoctorDetail = () => {
   const hasImage = !!doctor?.profileImageUrl;
   const consultation = formatCurrency(doctor?.consultationCost);
   const followUp = formatCurrency(doctor?.followUpCost);
-  const surgery = formatCurrency(doctor?.surgeryCost);
+  const videoCallCost = formatCurrency(doctor?.videoCallCost);
 
   return (
     <div className="hosp-detail-page">
@@ -501,8 +501,8 @@ const DoctorDetail = () => {
                 {followUp ? <span className="hosp-cost-value">{followUp}</span> : <span className="hosp-cost-value--na">Not set</span>}
               </div>
               <div className="hosp-cost-card">
-                <span className="hosp-cost-label">Surgery</span>
-                {doctor?.isSurgeon ? surgery ? <span className="hosp-cost-value">{surgery}</span> : <span className="hosp-cost-value--na">Not set</span> : <span className="hosp-cost-value--na">Not a surgeon</span>}
+                <span className="hosp-cost-label">video</span>
+                {doctor?.videoCallCost ? videoCallCost ? <span className="hosp-cost-value">{videoCallCost}</span> : <span className="hosp-cost-value--na">Not set</span> : <span className="hosp-cost-value--na">Not Set</span>}
               </div>
             </div>
 

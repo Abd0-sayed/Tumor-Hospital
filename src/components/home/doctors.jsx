@@ -31,7 +31,7 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
         </div>
       </div>
 
-      <button className="view-profile-btn">View Profile</button>
+      <button className="view-profile-btn">Appoint Now</button>
     </div>
   );
 };

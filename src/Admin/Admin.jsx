@@ -144,7 +144,7 @@ fetch("https://tumorhospital.runasp.net/api/Hospitals")
         </div>
 
       {/*****************Hospitals Cards ******************/}
-<div>
+<div className="hoscards-container">
           {
             hospitals.map(hospitals => {
               let hosid=hospitals.id
@@ -153,6 +153,7 @@ fetch("https://tumorhospital.runasp.net/api/Hospitals")
                     <HospitalCard key={hospitals.id}
                         id={hospitals.id}
                         name={hospitals.name}
+                        government={hospitals.government}
                         ></HospitalCard>        
                                   </>
                                 )
