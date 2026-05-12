@@ -181,7 +181,7 @@ const hospitaldata = async () => {
       setSuccess(data.Message || data.message || "Hospital updated successfully!");
       setFieldErrors({});
       setTimeout(() => {
-        navigate(`/HospitalInfo/${hospitalId}`);
+        navigate(`/admin/HospitalInfo/${hospitalId}`);
       }, 200);
     } catch {
       setError("Server error. Please try again later.");

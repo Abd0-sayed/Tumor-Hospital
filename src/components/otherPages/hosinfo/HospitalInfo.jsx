@@ -400,6 +400,8 @@ const handleDelete = async () => {
           </div>
         </div>
 
+      
+
         {/* ══ DASHBOARD STATS ══ */}
         {dashLoading ? <StatSkeleton /> : dashError ? (
           <div className="hosp-alert">{dashError}</div>
@@ -437,6 +439,31 @@ const handleDelete = async () => {
             />
           </div>
         )}
+
+        {/* ****************** */}
+
+        <div>
+    <button className="hosp-action-btn hosp-action-btn--view" onClick={() => navigate(`/admin/HospitalInfo/${hospitalId}/UpdateHospital`, { state: { hospitalId } })}> 
+      Update Hospital data
+      </button>
+                {/* <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem", marginTop: "1.75rem" }}> */}
+                <button 
+                  type="button" 
+                  className="hosp-action-btn hosp-action-btn--delete mx-2" 
+                  onClick={handleDelete} 
+                  disabled={submitting || deleting}
+                >
+                  {deleting ? <span className="hosp-spinner" /> : "Delete Hospital"}
+                </button>
+                
+                {/* <div style={{ display: "flex", gap: "0.65rem" }}>
+                  <button type="button" className="hosp-btn hosp-btn--ghost" onClick={() => navigate(-1)} disabled={submitting || deleting}>Cancel</button>
+                  <button type="submit" className="hosp-btn hosp-btn--primary" disabled={submitting || deleting}>
+                    {submitting ? <span className="hosp-spinner" /> : "Save Changes"}
+                  </button>
+                </div> */}
+              {/* </div>   */}
+    </div>  
 
         {/* ══ DOCTORS PANEL ══ */}
         <div className="hosp-panel">
@@ -655,28 +682,7 @@ const handleDelete = async () => {
           loading={deleteLoading}
         />
       )}
-  <div>
-    <button className="hosp-action-btn hosp-action-btn--view" onClick={() => navigate(`/admin/HospitalInfo/${hospitalId}/UpdateHospital`, { state: { hospitalId } })}> 
-      Update Hospital data
-      </button>
-                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem", marginTop: "1.75rem" }}>
-                <button 
-                  type="button" 
-                  className="hosp-btn hosp-btn--danger" 
-                  onClick={handleDelete} 
-                  disabled={submitting || deleting}
-                >
-                  {deleting ? <span className="hosp-spinner" /> : "Delete Hospital"}
-                </button>
-                
-                <div style={{ display: "flex", gap: "0.65rem" }}>
-                  <button type="button" className="hosp-btn hosp-btn--ghost" onClick={() => navigate(-1)} disabled={submitting || deleting}>Cancel</button>
-                  <button type="submit" className="hosp-btn hosp-btn--primary" disabled={submitting || deleting}>
-                    {submitting ? <span className="hosp-spinner" /> : "Save Changes"}
-                  </button>
-                </div>
-              </div>  
-    </div>  
+  
     </div>
 );
 };

@@ -51,15 +51,48 @@ const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
     setSuccessMsg("");
   };
 
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const errs = validate();
+  //   if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
+  //   setLoading(true); setServerError(""); setSuccessMsg("");
+
+  //   try {
+  //     const res = await fetch(
+  //       `https://tumorhospital.runasp.net/api/Schedule?docId=${docId}`,
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+  //         body: JSON.stringify({ dayOfWeek: form.dayOfWeek, startTime: form.startTime + "" })
+  //       }
+  //     );
+  //     const data = await res.json().catch(() => ({}));
+  //     if (!res.ok) {
+  //       const errsObj = data.errors || data.Errors || {};
+  //       const msg = errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] || errsObj.startTime?.[0] || errsObj.StartTime?.[0] || errsObj.Identity?.[0] || errsObj.identity?.[0] || data.message || "Failed to create schedule. Please try again.";
+  //       setServerError(msg);
+  //       return;
+  //     }
+  //     setSuccessMsg("Schedule created successfully!");
+  //     setForm({ dayOfWeek: "", startTime: "" });
+  //     setFieldErrors({});
+  //     setTimeout(() => onSuccess(), 900);
+  //   } catch {
+  //     setServerError("Server error. Please try again later.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("SUBMIT FIRED");
     const errs = validate();
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
     setLoading(true); setServerError(""); setSuccessMsg("");
 
     try {
       const res = await fetch(
-        `https://tumorhospital.runasp.net/api/Schedule?docId=${docId}`,
+        `https://tumorhospital.runasp.net/api/Schedule?doctorId=${docId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -67,6 +100,7 @@ const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
         }
       );
       const data = await res.json().catch(() => ({}));
+            console.log(data);
       if (!res.ok) {
         const errsObj = data.errors || data.Errors || {};
         const msg = errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] || errsObj.startTime?.[0] || errsObj.StartTime?.[0] || errsObj.Identity?.[0] || errsObj.identity?.[0] || data.message || "Failed to create schedule. Please try again.";
@@ -78,6 +112,7 @@ const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
       setFieldErrors({});
       setTimeout(() => onSuccess(), 900);
     } catch {
+        console.log(errs);
       setServerError("Server error. Please try again later.");
     } finally {
       setLoading(false);
@@ -106,7 +141,33 @@ const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
           {successMsg}
         </div>
       )}
-      <form onSubmit={handleSubmit} noValidate>
+      {/* <form onSubmit={handleSubmit} noValidate>
+        <div className="hosp-schedule-form-row">
+          <div className={`hosp-schedule-field ${fieldErrors.dayOfWeek ? "has-error" : ""}`}>
+            <label htmlFor="sched-day">Day of week</label>
+            <select id="sched-day" name="dayOfWeek" value={form.dayOfWeek} onChange={handleChange}>
+              <option value="">Select a day…</option>
+              {ALLOWED_DAYS.map(day => (
+                <option key={day} value={day} disabled={takenDays.has(day)}>
+                  {day}{takenDays.has(day) ? " (already assigned)" : ""}
+                </option>
+              ))}
+            </select>
+            {fieldErrors.dayOfWeek && <span className="hosp-schedule-field-error">{fieldErrors.dayOfWeek}</span>}
+          </div>
+          <div className={`hosp-schedule-field ${fieldErrors.startTime ? "has-error" : ""}`}>
+            <label htmlFor="sched-time">Start time</label>
+            <input id="sched-time" name="startTime" type="time" min="06:00" max="16:00" value={form.startTime} onChange={handleChange} />
+            <span className="hosp-schedule-hint">Between 06:00 and 16:00 — shift is 8 hours</span>
+            {fieldErrors.startTime && <span className="hosp-schedule-field-error">{fieldErrors.startTime}</span>}
+          </div>
+        </div>
+        <div className="hosp-schedule-form-actions">
+          <button type="button" className="hosp-btn hosp-btn--ghost" onClick={onClose} disabled={loading}>Cancel</button>
+          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>{loading ? <span className="hosp-spinner" /> : "Add schedule"}</button>
+        </div>
+      </form> */}
+    <form onSubmit={handleSubmit} noValidate>
         <div className="hosp-schedule-form-row">
           <div className={`hosp-schedule-field ${fieldErrors.dayOfWeek ? "has-error" : ""}`}>
             <label htmlFor="sched-day">Day of week</label>
@@ -174,7 +235,7 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
     setLoading(true); setServerError("");
     try {
       const res = await fetch(
-        `https://tumorhospital.runasp.net/api/Schedule?scheduleId=${scheduleId}&docId=${docId}`,
+        `https://tumorhospital.runasp.net/api/Schedule?scheduleId=${scheduleId}&doctorId=${docId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -389,7 +450,7 @@ const DoctorDetail = () => {
   return (
     <div className="hosp-detail-page">
       <div className="hosp-detail-inner">
-        <button className="hosp-back-btn" onClick={() => hospitalId ? navigate(`/admin/HospitalInfo//${hospitalId}`) : navigate(-1)}>
+        <button className="hosp-back-btn" onClick={() => hospitalId ? navigate(`/admin/HospitalInfo/${hospitalId}`) : navigate(-1)}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
             <polyline points="15 18 9 12 15 6" />
           </svg>
