@@ -192,10 +192,19 @@
 
 .btn-add-main {
   @extend .dashboard-btn;
-  background-color: $main-nav-color; //[cite: 3]
+  background-color: $main-nav-color;
   color: white;
   padding: 12px 24px;
   font-size: 18px;
   display: block; // Ensure it's a block to respect auto margins
   margin: 20px auto; // Centers it perfectly without overflow
+}
+
+div.hoscards-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin: 60px 0;
+  flex-wrap: wrap;
+  flex-direction: row;
 }

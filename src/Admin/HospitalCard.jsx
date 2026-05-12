@@ -1,28 +1,33 @@
-import React from 'react'
-import "./style/hospitalcard.css"
-import { Link } from "react-router-dom";
-import hospital from'../assets/hospital.jpg'
+import "./style/hospitalcard.scss";
+import hospital from "../assets/hospital.jpg";
 import { useNavigate } from "react-router-dom";
-
 
 export default function HospitalCard(props) {
   const navigate = useNavigate();
-  const hosid=props.id
-  console.log(props.government);
-  
+  const hosid = props.id;
+
+  const handleNavigate = () => {
+    navigate(`HospitalInfo/${props.id}`, { state: { hosid } });
+  };
+
   return (
-    <>
-            <div className="hoscard my-5">
-                <div className="hoscard-details">
-                    <img className='img-card' src={hospital}  alt="" />
-                    <p className="hostext-title">{props.name}</p>
-                    <p className="hostext-gov">{props.government}</p>
-                </div>
-                <button className="hoscard-button"
-                   onClick={() => navigate(`HospitalInfo/${props.id}`, { state: { hosid } })} >
-                More info
-                </button>
-            </div>
-    </>
-  )
+    <div className="hoscard">
+      <div className="hoscard-details">
+        <div className="hoscard-img-wrapper">
+          <img className="img-card" src={hospital} alt={props.name} />
+        </div>
+
+        <div className="hoscard-content">
+          <h3 className="hostext-title">{props.name}</h3>
+          <p className="hostext-gov">
+            <i className="bi bi-geo-alt"></i> {props.government}
+          </p>
+        </div>
+      </div>
+
+      <button className="hoscard-button" onClick={handleNavigate}>
+        More Info
+      </button>
+    </div>
+  );
 }

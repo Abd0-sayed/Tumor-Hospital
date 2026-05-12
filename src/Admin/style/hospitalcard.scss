@@ -1,0 +1,115 @@
+@use "../../style/_global_vars.scss" as *;
+
+$primary-blue: $main-nav-color;
+$accent-blue: $secondary-nav;
+$text-gray: #64748b;
+$white: #ffffff;
+$shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+.hoscard {
+  width: 300px;
+  height: 380px;
+  background: $white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  transition: $transition;
+  box-shadow: $shadow-sm;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: $shadow-md;
+    border-color: $accent-blue;
+
+    .hoscard-button {
+      background-color: $primary-blue;
+      color: $white;
+    }
+  }
+
+  .hoscard-details {
+    width: 100%;
+    text-align: center;
+
+    .img-card {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      background: #f1f5f9; // Fallback background
+    }
+
+    .hostext-title {
+      font-size: 1.3rem;
+      text-transform: capitalize;
+      font-weight: 700;
+      color: $primary-blue;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hostext-gov {
+      font-size: 1rem;
+      color: $text-gray;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .hoscard-button {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1.5px solid $primary-blue;
+    background: transparent;
+    color: $primary-blue;
+    font-weight: 600;
+    cursor: pointer;
+    transition: $transition;
+    margin-top: auto; // Pushes button to bottom if titles vary in height
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.hoscard {
+  justify-content: space-between;
+
+  .hoscard-img-wrapper {
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+  }
+
+  &:hover .hoscard-img-wrapper img {
+    transform: scale(1.1);
+  }
+
+  .hoscard-content {
+    text-align: left;
+    padding: 0 0.5rem;
+  }
+}

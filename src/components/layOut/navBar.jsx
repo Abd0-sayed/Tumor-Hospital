@@ -1,6 +1,5 @@
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import "./navBar.scss";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { LuClock4 } from "react-icons/lu";
@@ -9,13 +8,13 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 
 function NavDropdownExample() {
-  const location = useLocation();
   const role = sessionStorage.getItem("role");
   return (
     <>
       <Container>
         <header>
           <h1 className="myLogo">MED</h1>
+
           <ul>
             <li>
               <MdOutlineLocalPhone />
@@ -59,9 +58,7 @@ function NavDropdownExample() {
               <Link to="/donations" className="link">
                 Donate
               </Link>
-              <Link to="/login" className="link">
-                Login
-              </Link>
+
               {role === "Admin" ? (
                 <Link to="/admin" className="link">
                   Profile
@@ -75,9 +72,15 @@ function NavDropdownExample() {
                   Profile
                 </Link>
               )}
-              <Link to="link" className="link">
-                Link
-              </Link>
+              {sessionStorage.getItem("token") ? (
+                <Link to="/logout" className="link">
+                  Logout
+                </Link>
+              ) : (
+                <Link to="/login" className="link">
+                  Login
+                </Link>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

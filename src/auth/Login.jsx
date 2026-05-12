@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Link, replace, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./styles/Password.scss";
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -85,31 +83,24 @@ const Login = () => {
       const role =
         decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
       storage.setItem("role", role);
-      window.dispatchEvent(new Event("storageUpdate"));
 
       if (role === "Admin") {
-        navigate("/admin", { replace: true });
+        window.location.href = "/admin";
       } else if (role === "Doctor") {
         if (activeacc === true) {
-          navigate("/DoctorProfile", { replace: true });
+          window.location.href = "/DoctorProfile";
         } else {
-          navigate("/changepassword", { replace: true });
+          window.location.href = "/changepassword";
         }
+      } else if (role === "InActiveDoctorRole") {
+        window.location.href = "/ChangeInactivePassword";
+      } else if (role === "Patient") {
+        window.location.href = "/PatientProfile";
+      } else if (role === "InActiveReceptionistRole") {
+        window.location.href = "/ChangeInactivePassword";
+      } else {
+        window.location.href = "/ReceptionistProfile";
       }
-      else if(role ==="InActiveDoctorRole"){
-              navigate("/ChangeInactivePassword")
-            }
-      
-      else if (role === "Patient") {
-        navigate("/PatientProfile", { replace: true });
-      } 
-      else if(role ==="InActiveReceptionistRole"){
-              navigate("/ChangeInactivePassword")
-            }
-      else {
-        navigate("/ReceptionistProfile", { replace: true });
-      }
-      
     } catch (error) {
       console.error(error);
       setErrors({ general: ["Server error, please try again later"] });
@@ -134,7 +125,6 @@ const Login = () => {
         <h1 className="pw-title">Welcome back</h1>
         <p className="pw-subtitle">Sign in to your patient portal</p>
 
-        {/* Global / Identity error */}
         {(fieldError("general") ||
           fieldError("Identity") ||
           fieldError("identity")) && (

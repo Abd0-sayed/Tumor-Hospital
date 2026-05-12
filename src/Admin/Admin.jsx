@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import PageLoad from "../components/pageLoad";
 //
-import HospitalCard from './HospitalCard';
+import HospitalCard from "./HospitalCard";
 
 function Admin() {
   var x1array = ["Appointments", "Bills", "Patients"];
@@ -26,7 +26,7 @@ function Admin() {
   const [da, setdata] = useState("");
   const [faqs, setfaqs] = useState([]);
   const [about, setabout] = useState({});
-    const[hospitals,sethospitals]=useState([])
+  const [hospitals, sethospitals] = useState([]);
   const [loading, setLoading] = useState(false);
   const notify = () => toast.success("FAQ Deleted Successfully!");
   //----dashboard------
@@ -71,17 +71,16 @@ function Admin() {
       .catch((err) => console.log(err));
   }
 
-
   //---------hospital data-------
-useEffect(()=>{
-fetch("https://tumorhospital.runasp.net/api/Hospitals")
+  useEffect(() => {
+    fetch("https://tumorhospital.runasp.net/api/Hospitals")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-            sethospitals(data)
-    })
-    .catch((error) => console.error("Error:", error));
-  },[])
+        sethospitals(data);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
 
   //-------FAQS--------
   useEffect(() => {
@@ -143,26 +142,24 @@ fetch("https://tumorhospital.runasp.net/api/Hospitals")
           </div>
         </div>
 
-      {/*****************Hospitals Cards ******************/}
-<div className="hoscards-container">
-          {
-            hospitals.map(hospitals => {
-              let hosid=hospitals.id
-              return (
-                <>
-                    <HospitalCard key={hospitals.id}
-                        id={hospitals.id}
-                        name={hospitals.name}
-                        government={hospitals.government}
-                        ></HospitalCard>        
-                                  </>
-                                )
-                            })
-           }
+        {/*****************Hospitals Cards ******************/}
+        <h1 style={{ margin: "20px 0 -40px" }}>Hospitals</h1>
+        <div className="hoscards-container">
+          {hospitals.map((hospitals) => {
+            return (
+              <>
+                <HospitalCard
+                  key={hospitals.id}
+                  id={hospitals.id}
+                  name={hospitals.name}
+                  government={hospitals.government}
+                ></HospitalCard>
+              </>
+            );
+          })}
         </div>
 
-
-      {/************* FAQS *************************/}
+        {/************* FAQS *************************/}
         <div className="my-container">
           <h1>FAQS</h1>
 

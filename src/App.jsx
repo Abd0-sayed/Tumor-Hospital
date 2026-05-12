@@ -16,6 +16,7 @@ import Addabout from "./Admin/Addabout.jsx";
 import TransactionFailure from "./components/otherPages/donationfail.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
 import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
+import LogoutButton from "./components/logout.jsx";
 import Adddoctor from "./Admin/Adddoctor.jsx";
 import Addspicialization from "./Admin/Addspicialization.jsx";
 import AdminLayout from "./Admin/adminLayout.jsx";
@@ -39,10 +40,9 @@ import UpdateDoctorProfile from "../src/components/UpdateDoctorProfile.jsx";
 import UpdateReceptionistProfile from "../src/components/UpdateReceptionistProfile.jsx";
 
 //
-import Hosinfo from"./components/otherPages/hosinfo/HospitalInfo.jsx"
-import DoctorDetail from"./components/otherPages/hosinfo/DoctorDetail.jsx"
-import UpdateHospital from"./components/otherPages/hosinfo/UpdateHospital.jsx"
-
+import Hosinfo from "./components/otherPages/hosinfo/HospitalInfo.jsx";
+import DoctorDetail from "./components/otherPages/hosinfo/DoctorDetail.jsx";
+import UpdateHospital from "./components/otherPages/hosinfo/UpdateHospital.jsx";
 
 //
 import {
@@ -61,6 +61,7 @@ const router = createBrowserRouter(
       <Route path="donations" element={<NeedsGrid />} />
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
+      <Route path="logout" element={<LogoutButton />} />
       <Route path="confirmEmail" element={<ConfirmEmail />} />
       <Route path="resetpassword" element={<Resetpass />} />
       <Route path="forgotpassword" element={<Forgotpass />} />
@@ -72,7 +73,10 @@ const router = createBrowserRouter(
       <Route path="ReceptionistProfile" element={<Reciptionprofile />} />
       <Route path="PatientProfile" element={<PatientProfile />} />
       <Route path="ChangePassword" element={<ChangePassword />} />
-      <Route path="ChangeInactivePassword" element={<ChangeInactivePassword />} />
+      <Route
+        path="ChangeInactivePassword"
+        element={<ChangeInactivePassword />}
+      />
       <Route path="UpdateProfile" element={<UpdateProfile />} />
       <Route path="UpdateDoctorProfile" element={<UpdateDoctorProfile />} />
       <Route
@@ -92,8 +96,14 @@ const router = createBrowserRouter(
         <Route path="addhospital" element={<Addhospital />} />
         <Route path="addSpicialization" element={<Addspicialization />} />
         <Route path="HospitalInfo/:hospitalId" element={<Hosinfo />} />
-        <Route path="/admin/HospitalInfo/:hospitalId/DoctorDetail/:docId" element={<DoctorDetail />} />
-        <Route path="/admin/HospitalInfo/:hospitalId/UpdateHospital" element={<UpdateHospital />} />
+        <Route
+          path="/admin/HospitalInfo/:hospitalId/DoctorDetail/:docId"
+          element={<DoctorDetail />}
+        />
+        <Route
+          path="/admin/HospitalInfo/:hospitalId/UpdateHospital"
+          element={<UpdateHospital />}
+        />
       </Route>
     </Route>,
   ),
