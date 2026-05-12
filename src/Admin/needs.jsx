@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import NeedsGrid from "../components/otherPages/needs.jsx";
 import "./style/needs.scss";
 import VolunteerExp from "./volunteerShow.jsx";
+import { toast } from "react-toastify";
 
 const NeedManagement = () => {
   // --- States ---
@@ -24,7 +25,10 @@ const NeedManagement = () => {
     fetch("https://tumorhospital.runasp.net/api/Need/Categories")
       .then((res) => res.json())
       .then((data) => setCategories(data.categories || []))
-      .catch((err) => console.error("Category fetch failed:", err));
+      .catch((err) => {
+        console.error("Category fetch failed:", err);
+        toast.error("Failed to load categories.");
+      });
   }, []);
 
   // --- UI Handlers ---
@@ -45,7 +49,7 @@ const NeedManagement = () => {
 
   // --- API Actions ---
 
-  //Removes a need based on ID
+  // Removes a need based on ID
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this need?")) return;
 
@@ -58,13 +62,17 @@ const NeedManagement = () => {
       );
 
       if (res.ok) {
-        alert("Deleted successfully.");
+        toast.success("Deleted successfully!", {
+          position: "bottom-right",
+          theme: "colored",
+        });
         triggerRefresh();
       } else {
-        alert("Delete failed. Check permissions.");
+        toast.error("Delete failed. Check permissions.");
       }
     } catch (err) {
       console.error("Delete Error:", err);
+      toast.error("A network error occurred while deleting.");
     }
   };
 
@@ -91,20 +99,25 @@ const NeedManagement = () => {
     try {
       const res = await fetch(url, {
         method: isEdit ? "PUT" : "POST",
-        body: payload, // Browser automatically sets multipart/form-data boundary
+        body: payload,
       });
 
       if (res.ok) {
-        alert(`Need ${isEdit ? "updated" : "created"} successfully!`);
+        toast.success(`Need ${isEdit ? "updated" : "created"} successfully!`, {
+          position: "bottom-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
         closeModal();
         triggerRefresh();
       } else {
         const errorText = await res.text();
         console.error("Server Error:", errorText);
-        alert(`Error: ${res.status}. Check console for details.`);
+        toast.error(`Error: ${res.status}. Please check your inputs.`);
       }
     } catch (err) {
       console.error("Network Error:", err);
+      toast.error("Network error. Please check your connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -117,7 +130,7 @@ const NeedManagement = () => {
       Title: need.title,
       CharityCategory: need.charityCategory,
       NeedAmount: need.needAmount,
-      Image: null, // Image must be re-selected if changing
+      Image: null,
     });
     setShowModal("edit");
   };

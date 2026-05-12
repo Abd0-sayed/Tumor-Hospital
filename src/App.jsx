@@ -1,4 +1,6 @@
 import "./App.scss";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "./components/layOut/rootLayout.jsx";
 import NeedsGrid from "./components/otherPages/needs.jsx";
 import NeedManagement from "./Admin/needs.jsx";
@@ -109,7 +111,12 @@ const router = createBrowserRouter(
   ),
 );
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </div>
+  );
 }
 
 export default App;
