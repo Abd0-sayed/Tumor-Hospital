@@ -21,11 +21,10 @@ const Footer = () => {
             <h3>Important Links</h3>
             <ul>
               <li>
-                <a href="#appointment">Appointment</a>
+                <Link to="/doctorsPage">Doctors</Link>
               </li>
-              <li>
-                <a href="#doctors">Doctors</a>
-              </li>
+
+              <li></li>
               <li>
                 <Link to="/faq">Q&A</Link>
               </li>

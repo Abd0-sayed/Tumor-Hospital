@@ -77,9 +77,11 @@ function NavDropdownExample() {
                   Logout
                 </Link>
               ) : (
-                <Link to="/login" className="link">
-                  Login
-                </Link>
+                <>
+                  <Link to="/login" className="link">
+                    Login
+                  </Link>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>

@@ -155,7 +155,7 @@
 
 .dashboard-btn {
   padding: 8px 16px;
-  border-radius: $main-border-raduis; //[cite: 3]
+  border-radius: $main-border-raduis;
   font-weight: 600;
   border: 1px solid transparent;
   transition: all 0.3s ease;
@@ -174,7 +174,7 @@
 
 .btn-edit {
   @extend .dashboard-btn;
-  background-color: $secondary-nav; //[cite: 3]
+  background-color: $secondary-nav;
   color: white;
   margin-right: 10px;
 }
@@ -196,8 +196,8 @@
   color: white;
   padding: 12px 24px;
   font-size: 18px;
-  display: block; // Ensure it's a block to respect auto margins
-  margin: 20px auto; // Centers it perfectly without overflow
+  display: block;
+  margin: 20px auto;
 }
 
 div.hoscards-container {

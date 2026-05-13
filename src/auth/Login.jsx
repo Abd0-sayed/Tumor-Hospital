@@ -74,7 +74,10 @@ const Login = () => {
       // ── Persist tokens ────────────────────────────────────────────────
       const storage = form.rememberMe ? localStorage : sessionStorage;
       storage.setItem("token", data.Token ?? data.token);
-      storage.setItem("refreshToken", data.RefreshToken ?? data.refreshToken);
+      localStorage.setItem(
+        "refreshToken",
+        data.RefreshToken ?? data.refreshToken,
+      );
       storage.setItem("userId", data.UserId ?? data.userId);
 
       const activeacc = data.isActiveAccount ?? data.isActiveAccount;

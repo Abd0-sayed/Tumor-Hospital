@@ -16,6 +16,7 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
         <h3 className="name">
           Dr. {firstName} {lastName}
         </h3>
+
         <p className="specialty">{specialty || "General Medicine"}</p>
 
         <div className="social-links">

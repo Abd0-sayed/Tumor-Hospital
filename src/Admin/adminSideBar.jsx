@@ -10,7 +10,6 @@ import {
   MdVaccines,
   MdBusiness,
   MdEditNote,
-  MdLogout,
   MdClose,
 } from "react-icons/md";
 
@@ -55,13 +54,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         </NavLink>
 
         <NavLink
-          to="doctor-schedules"
-          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
-        >
-          <MdAssignmentInd className="nav-icon" /> Doctor Schedules
-        </NavLink>
-
-        <NavLink
           to="addDoctor"
           className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
         >
@@ -97,10 +89,8 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         </NavLink>
       </nav>
 
-      <div className="sidebar-footer">
-        <button className="logout-btn">
-          <MdLogout className="nav-icon" /> Logout
-        </button>
+      <div className="sidebar-footer" style={{ color: "white" }}>
+        Admin Panel (c) 2026.
       </div>
     </aside>
   );

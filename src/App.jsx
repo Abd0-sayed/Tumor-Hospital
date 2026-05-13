@@ -17,10 +17,12 @@ import Aupdateabout from "./Admin/Aupdateabout.jsx";
 import Addabout from "./Admin/Addabout.jsx";
 import TransactionFailure from "./components/otherPages/donationfail.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
+import Appoint from "./components/appointment.jsx";
 import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
 import LogoutButton from "./components/logout.jsx";
 import Adddoctor from "./Admin/Adddoctor.jsx";
 import Addspicialization from "./Admin/Addspicialization.jsx";
+import DoctorsPage from "./components/home/doctorsPage.jsx";
 import AdminLayout from "./Admin/adminLayout.jsx";
 
 import ConfirmEmail from "./auth/ConfirmEmail.jsx";
@@ -79,6 +81,8 @@ const router = createBrowserRouter(
         path="ChangeInactivePassword"
         element={<ChangeInactivePassword />}
       />
+      <Route path="doctorsPage" element={<DoctorsPage />} />
+      <Route path="appointment/:doctorId" element={<Appoint />} />
       <Route path="UpdateProfile" element={<UpdateProfile />} />
       <Route path="UpdateDoctorProfile" element={<UpdateDoctorProfile />} />
       <Route
