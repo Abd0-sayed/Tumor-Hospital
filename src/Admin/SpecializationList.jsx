@@ -102,7 +102,18 @@ export default function SpecializationList() {
       setLoading(false);
     }
   };
+//
+useEffect(() => {
+  if (!alert) return;
 
+  const t = setTimeout(() => {
+    setAlert(null);
+  }, 1000);
+
+  return () => clearTimeout(t);
+}, [alert]);
+
+//
   useEffect(() => {
     fetchSpecializations();
   }, []);
