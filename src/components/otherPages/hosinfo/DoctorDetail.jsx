@@ -1,7 +1,8 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "./Hospital.css";
+
+const API = "https://tumorhospital.runasp.net/api";
 
 const getToken = () =>
   localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -19,8 +20,188 @@ const formatCurrency = (val) =>
 const ALLOWED_DAYS = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
 /* ══════════════════════════════════════════════════════════════
-Inline Add-Schedule Panel
-══════════════════════════════════════════════════════════════ */
+   Inline Specialization Changer
+   ══════════════════════════════════════════════════════════════ */
+const SpecializationChanger = ({ docId, currentSpec, onSuccess }) => {
+  const token = getToken();
+  const dropdownRef = useRef(null);
+
+  const [open, setOpen]               = useState(false);
+  const [specializations, setSpecs]   = useState([]);
+  const [loadingSpecs, setLoadingSpecs] = useState(false);
+  const [selected, setSelected]       = useState("");
+  const [saving, setSaving]           = useState(false);
+  const [error, setError]             = useState("");
+  const [successMsg, setSuccessMsg]   = useState("");
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        handleClose();
+      }
+    };
+    if (open) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  // Fetch all specializations when dropdown opens
+  const handleOpen = async () => {
+    if (open) { handleClose(); return; }
+    setOpen(true);
+    setError("");
+    setSuccessMsg("");
+    setSelected(currentSpec || "");
+    setLoadingSpecs(true);
+    try {
+      const res  = await fetch(`${API}/Specialization`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && Array.isArray(data)) {
+        setSpecs(data);
+      } else {
+        setError("Failed to load specializations.");
+      }
+    } catch {
+      setError("Network error loading specializations.");
+    } finally {
+      setLoadingSpecs(false);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setError("");
+    setSuccessMsg("");
+    setSelected("");
+  };
+
+  const handleSave = async () => {
+    if (!selected || selected === currentSpec) { handleClose(); return; }
+    setSaving(true);
+    setError("");
+    try {
+      const res = await fetch(
+        `${API}/Specialization/assign-to-doctor?doctorId=${encodeURIComponent(docId)}&specializationName=${encodeURIComponent(selected)}`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const errs = data.Errors || data.errors || {};
+        const msg =
+          errs.Name?.[0] ||
+          errs.name?.[0] ||
+          errs.Identity?.[0] ||
+          errs.identity?.[0] ||
+          data.message ||
+          "Failed to assign specialization.";
+        setError(msg);
+        return;
+      }
+      setSuccessMsg("Specialization updated!");
+      setTimeout(() => {
+        handleClose();
+        onSuccess();
+      }, 900);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="hosp-spec-changer" ref={dropdownRef}>
+      {/* Trigger button — pencil SVG next to specialization text */}
+      <button
+        className="hosp-spec-edit-btn"
+        onClick={handleOpen}
+        title="Change specialization"
+        aria-label="Change specialization"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </svg>
+      </button>
+
+      {/* Dropdown panel */}
+      {open && (
+        <div className="hosp-spec-dropdown">
+          <p className="hosp-spec-dropdown-title">Change Specialization</p>
+
+          {error && (
+            <div className="hosp-schedule-alert" style={{ marginBottom: "10px" }}>
+              {error}
+            </div>
+          )}
+
+          {successMsg && (
+            <div className="hosp-schedule-success" style={{ marginBottom: "10px" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                width="14" height="14">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {successMsg}
+            </div>
+          )}
+
+          {loadingSpecs ? (
+            <div className="hosp-spec-loading">
+              <span className="hosp-spinner hosp-spinner--dark" />
+              <span>Loading…</span>
+            </div>
+          ) : (
+            <div className="hosp-spec-dropdown-field">
+              <label htmlFor="spec-select">Specialization</label>
+              <select
+                id="spec-select"
+                value={selected}
+                onChange={(e) => { setSelected(e.target.value); setError(""); }}
+                disabled={saving}
+              >
+                <option value="">Select specialization…</option>
+                {specializations.map((s) => (
+                  <option key={s.id} value={s.name}>
+                    {s.name}
+                    {s.name === currentSpec ? " (current)" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="hosp-spec-dropdown-actions">
+            <button
+              className="hosp-btn hosp-btn--ghost"
+              onClick={handleClose}
+              disabled={saving}
+            >
+              Cancel
+            </button>
+            <button
+              className="hosp-btn hosp-btn--primary"
+              onClick={handleSave}
+              disabled={saving || loadingSpecs || !selected || selected === currentSpec}
+            >
+              {saving ? <span className="hosp-spinner" /> : "Save changes"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════════════════════════
+   Inline Add-Schedule Panel
+   ══════════════════════════════════════════════════════════════ */
 const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
   const token = getToken();
   const takenDays = new Set((existingDays || []).map(d => d.day));
@@ -51,59 +232,29 @@ const AddSchedulePanel = ({ docId, existingDays, onSuccess, onClose }) => {
     setSuccessMsg("");
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const errs = validate();
-  //   if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
-  //   setLoading(true); setServerError(""); setSuccessMsg("");
-
-  //   try {
-  //     const res = await fetch(
-  //       `https://tumorhospital.runasp.net/api/Schedule?docId=${docId}`,
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  //         body: JSON.stringify({ dayOfWeek: form.dayOfWeek, startTime: form.startTime + "" })
-  //       }
-  //     );
-  //     const data = await res.json().catch(() => ({}));
-  //     if (!res.ok) {
-  //       const errsObj = data.errors || data.Errors || {};
-  //       const msg = errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] || errsObj.startTime?.[0] || errsObj.StartTime?.[0] || errsObj.Identity?.[0] || errsObj.identity?.[0] || data.message || "Failed to create schedule. Please try again.";
-  //       setServerError(msg);
-  //       return;
-  //     }
-  //     setSuccessMsg("Schedule created successfully!");
-  //     setForm({ dayOfWeek: "", startTime: "" });
-  //     setFieldErrors({});
-  //     setTimeout(() => onSuccess(), 900);
-  //   } catch {
-  //     setServerError("Server error. Please try again later.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("SUBMIT FIRED");
     const errs = validate();
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return; }
     setLoading(true); setServerError(""); setSuccessMsg("");
 
     try {
       const res = await fetch(
-        `https://tumorhospital.runasp.net/api/Schedule?doctorId=${docId}`,
+        `${API}/Schedule?doctorId=${docId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ dayOfWeek: form.dayOfWeek, startTime: form.startTime + "" })
+          body: JSON.stringify({ dayOfWeek: form.dayOfWeek, startTime: form.startTime + ":00" })
         }
       );
       const data = await res.json().catch(() => ({}));
-            console.log(data);
       if (!res.ok) {
         const errsObj = data.errors || data.Errors || {};
-        const msg = errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] || errsObj.startTime?.[0] || errsObj.StartTime?.[0] || errsObj.Identity?.[0] || errsObj.identity?.[0] || data.message || "Failed to create schedule. Please try again.";
+        const msg =
+          errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] ||
+          errsObj.startTime?.[0] || errsObj.StartTime?.[0] ||
+          errsObj.Identity?.[0] || errsObj.identity?.[0] ||
+          data.message || "Failed to create schedule. Please try again.";
         setServerError(msg);
         return;
       }
@@ -112,7 +263,6 @@ const handleSubmit = async (e) => {
       setFieldErrors({});
       setTimeout(() => onSuccess(), 900);
     } catch {
-        console.log(errs);
       setServerError("Server error. Please try again later.");
     } finally {
       setLoading(false);
@@ -123,12 +273,12 @@ const handleSubmit = async (e) => {
     <div className="hosp-schedule-form-panel">
       <p className="hosp-schedule-form-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8" y1="2" x2="8" y2="6"/>
-          <line x1="3" y1="10" x2="21" y2="10"/>
-          <line x1="12" y1="14" x2="12" y2="18"/>
-          <line x1="10" y1="16" x2="14" y2="16"/>
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+          <line x1="12" y1="14" x2="12" y2="18" />
+          <line x1="10" y1="16" x2="14" y2="16" />
         </svg>
         Add working day
       </p>
@@ -136,12 +286,12 @@ const handleSubmit = async (e) => {
       {successMsg && (
         <div className="hosp-schedule-success">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
-            <polyline points="20 6 9 17 4 12"/>
+            <polyline points="20 6 9 17 4 12" />
           </svg>
           {successMsg}
         </div>
       )}
-      {/* <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="hosp-schedule-form-row">
           <div className={`hosp-schedule-field ${fieldErrors.dayOfWeek ? "has-error" : ""}`}>
             <label htmlFor="sched-day">Day of week</label>
@@ -164,33 +314,9 @@ const handleSubmit = async (e) => {
         </div>
         <div className="hosp-schedule-form-actions">
           <button type="button" className="hosp-btn hosp-btn--ghost" onClick={onClose} disabled={loading}>Cancel</button>
-          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>{loading ? <span className="hosp-spinner" /> : "Add schedule"}</button>
-        </div>
-      </form> */}
-    <form onSubmit={handleSubmit} noValidate>
-        <div className="hosp-schedule-form-row">
-          <div className={`hosp-schedule-field ${fieldErrors.dayOfWeek ? "has-error" : ""}`}>
-            <label htmlFor="sched-day">Day of week</label>
-            <select id="sched-day" name="dayOfWeek" value={form.dayOfWeek} onChange={handleChange}>
-              <option value="">Select a day…</option>
-              {ALLOWED_DAYS.map(day => (
-                <option key={day} value={day} disabled={takenDays.has(day)}>
-                  {day}{takenDays.has(day) ? " (already assigned)" : ""}
-                </option>
-              ))}
-            </select>
-            {fieldErrors.dayOfWeek && <span className="hosp-schedule-field-error">{fieldErrors.dayOfWeek}</span>}
-          </div>
-          <div className={`hosp-schedule-field ${fieldErrors.startTime ? "has-error" : ""}`}>
-            <label htmlFor="sched-time">Start time</label>
-            <input id="sched-time" name="startTime" type="time" min="06:00" max="16:00" value={form.startTime} onChange={handleChange} />
-            <span className="hosp-schedule-hint">Between 06:00 and 16:00 — shift is 8 hours</span>
-            {fieldErrors.startTime && <span className="hosp-schedule-field-error">{fieldErrors.startTime}</span>}
-          </div>
-        </div>
-        <div className="hosp-schedule-form-actions">
-          <button type="button" className="hosp-btn hosp-btn--ghost" onClick={onClose} disabled={loading}>Cancel</button>
-          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>{loading ? <span className="hosp-spinner" /> : "Add schedule"}</button>
+          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>
+            {loading ? <span className="hosp-spinner" /> : "Add schedule"}
+          </button>
         </div>
       </form>
     </div>
@@ -198,8 +324,8 @@ const handleSubmit = async (e) => {
 };
 
 /* ══════════════════════════════════════════════════════════════
-Inline Edit-Schedule Panel
-══════════════════════════════════════════════════════════════ */
+   Inline Edit-Schedule Panel
+   ══════════════════════════════════════════════════════════════ */
 const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSuccess, onClose }) => {
   const token = getToken();
   const parseTime = (t) => t ? t.substring(0, 5) : "";
@@ -235,7 +361,7 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
     setLoading(true); setServerError("");
     try {
       const res = await fetch(
-        `https://tumorhospital.runasp.net/api/Schedule?scheduleId=${scheduleId}&doctorId=${docId}`,
+        `${API}/Schedule?scheduleId=${scheduleId}&doctorId=${docId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -244,7 +370,11 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
       );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const msg = data.errors?.dayOfWeek?.[0] || data.errors?.startTime?.[0] || data.message || "Failed to update schedule.";
+        const errsObj = data.errors || data.Errors || {};
+        const msg =
+          errsObj.dayOfWeek?.[0] || errsObj.DayOfWeek?.[0] ||
+          errsObj.startTime?.[0] || errsObj.StartTime?.[0] ||
+          data.message || "Failed to update schedule.";
         setServerError(msg);
         return;
       }
@@ -258,8 +388,8 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
     <div className="hosp-schedule-form-panel hosp-schedule-form-panel--edit">
       <p className="hosp-schedule-form-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
         </svg>
         Update working day
       </p>
@@ -283,7 +413,9 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
         </div>
         <div className="hosp-schedule-form-actions">
           <button type="button" className="hosp-btn hosp-btn--ghost" onClick={onClose} disabled={loading}>Cancel</button>
-          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>{loading ? <span className="hosp-spinner" /> : "Save changes"}</button>
+          <button type="submit" className="hosp-btn hosp-btn--primary" disabled={loading}>
+            {loading ? <span className="hosp-spinner" /> : "Save changes"}
+          </button>
         </div>
       </form>
     </div>
@@ -291,8 +423,8 @@ const EditSchedulePanel = ({ docId, scheduleId, initialDay, initialTime, onSucce
 };
 
 /* ══════════════════════════════════════════════════════════════
-Inline Delete-Confirm Panel
-══════════════════════════════════════════════════════════════ */
+   Inline Delete-Confirm Panel
+   ══════════════════════════════════════════════════════════════ */
 const DeleteConfirmPanel = ({ docId, scheduleId, onSuccess, onClose }) => {
   const token = getToken();
   const [loading, setLoading] = useState(false);
@@ -302,7 +434,7 @@ const DeleteConfirmPanel = ({ docId, scheduleId, onSuccess, onClose }) => {
     setLoading(true); setError("");
     try {
       const res = await fetch(
-        `https://tumorhospital.runasp.net/api/Schedule?scheduleId=${scheduleId}&doctorId=${docId}`,
+        `${API}/Schedule?scheduleId=${scheduleId}&doctorId=${docId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json().catch(() => ({}));
@@ -321,10 +453,10 @@ const DeleteConfirmPanel = ({ docId, scheduleId, onSuccess, onClose }) => {
     <div className="hosp-schedule-form-panel hosp-schedule-form-panel--delete">
       <p className="hosp-schedule-form-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-          <line x1="10" y1="11" x2="10" y2="17"/>
-          <line x1="14" y1="11" x2="14" y2="17"/>
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <line x1="10" y1="11" x2="10" y2="17" />
+          <line x1="14" y1="11" x2="14" y2="17" />
         </svg>
         Confirm deletion
       </p>
@@ -332,15 +464,17 @@ const DeleteConfirmPanel = ({ docId, scheduleId, onSuccess, onClose }) => {
       <p className="hosp-schedule-confirm-msg">Are you sure you want to remove this working day? This action cannot be undone.</p>
       <div className="hosp-schedule-form-actions">
         <button className="hosp-btn hosp-btn--ghost" onClick={onClose} disabled={loading}>Cancel</button>
-        <button className="hosp-btn hosp-btn--danger" onClick={handleDelete} disabled={loading}>{loading ? <span className="hosp-spinner" /> : "Delete schedule"}</button>
+        <button className="hosp-btn hosp-btn--danger" onClick={handleDelete} disabled={loading}>
+          {loading ? <span className="hosp-spinner" /> : "Delete schedule"}
+        </button>
       </div>
     </div>
   );
 };
 
 /* ══════════════════════════════════════════════════════════════
-Main DoctorDetail component
-══════════════════════════════════════════════════════════════ */
+   Main DoctorDetail component
+   ══════════════════════════════════════════════════════════════ */
 const DoctorDetail = () => {
   const navigate = useNavigate();
   const { docId } = useParams();
@@ -348,9 +482,9 @@ const DoctorDetail = () => {
   const hospitalId = state?.hospitalId;
   const token = getToken();
 
-  const [doctor, setDoctor] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [doctor, setDoctor]       = useState(null);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
@@ -360,7 +494,7 @@ const DoctorDetail = () => {
     if (!docId) { setError("No doctor ID provided."); setLoading(false); return; }
     setLoading(true); setError("");
 
-    fetch(`https://tumorhospital.runasp.net/api/Hospital/doctor/${docId}`, {
+    fetch(`${API}/Hospital/doctor/${docId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(async res => {
@@ -368,8 +502,6 @@ const DoctorDetail = () => {
         if (res.status === 403) { setError("You don't have permission to view this doctor."); return; }
         if (!res.ok) { setError("Doctor not found or unavailable."); return; }
         setDoctor(await res.json());
-        // console.log(doctor);
-        
       })
       .catch(() => setError("Server error. Please try again."))
       .finally(() => setLoading(false));
@@ -384,10 +516,16 @@ const DoctorDetail = () => {
     fetchDoctor();
   };
 
-  const scheduleCount = doctor?.workingDays?.length ?? 0;
-  const scheduleIsFull = scheduleCount >= 5;
-  const canDelete = scheduleCount > 3;
+  // Refreshes doctor without resetting schedule UI state
+  const handleSpecSuccess = () => {
+    fetchDoctor();
+  };
 
+  const scheduleCount  = doctor?.workingDays?.length ?? 0;
+  const scheduleIsFull = scheduleCount >= 5;
+  const canDelete      = scheduleCount > 3;
+
+  // ── Loading skeleton ───────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="hosp-detail-page">
@@ -411,6 +549,7 @@ const DoctorDetail = () => {
     );
   }
 
+  // ── Error state ────────────────────────────────────────────────────────────
   if (error) {
     return (
       <div className="hosp-detail-page">
@@ -426,9 +565,9 @@ const DoctorDetail = () => {
               <div className="hosp-empty">
                 <div className="hosp-empty-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg>
                 </div>
                 <p className="hosp-empty-title">Unable to load</p>
@@ -442,15 +581,18 @@ const DoctorDetail = () => {
     );
   }
 
-  const hasImage = !!doctor?.profileImageUrl;
+  const hasImage     = !!doctor?.profileImageUrl;
   const consultation = formatCurrency(doctor?.consultationCost);
-  const followUp = formatCurrency(doctor?.followUpCost);
+  const followUp     = formatCurrency(doctor?.followUpCost);
   const videoCallCost = formatCurrency(doctor?.videoCallCost);
 
   return (
     <div className="hosp-detail-page">
       <div className="hosp-detail-inner">
-        <button className="hosp-back-btn" onClick={() => hospitalId ? navigate(`/admin/HospitalInfo/${hospitalId}`) : navigate(-1)}>
+        <button
+          className="hosp-back-btn"
+          onClick={() => hospitalId ? navigate(`/admin/HospitalInfo/${hospitalId}`) : navigate(-1)}
+        >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
             <polyline points="15 18 9 12 15 6" />
           </svg>
@@ -458,6 +600,7 @@ const DoctorDetail = () => {
         </button>
 
         <div className="hosp-detail-card">
+          {/* ── Hero ── */}
           <div className="hosp-detail-hero">
             <div className="hosp-detail-avatar">
               {hasImage ? (
@@ -467,20 +610,33 @@ const DoctorDetail = () => {
               )}
             </div>
             <div className="hosp-detail-hero-info">
-              <h1 className="hosp-detail-name">Dr. {doctor?.fullName || "— "}</h1>
-              <div className="hosp-detail-spec">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
-                {doctor?.specialization || "General "}
+              <h1 className="hosp-detail-name">Dr. {doctor?.fullName || "—"}</h1>
+
+              {/* ── Specialization row with inline changer ── */}
+              <div className="hosp-detail-spec-row">
+                <div className="hosp-detail-spec">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                  </svg>
+                  {doctor?.specialization || "—"}
+                </div>
+                <SpecializationChanger
+                  docId={docId}
+                  currentSpec={doctor?.specialization}
+                  onSuccess={handleSpecSuccess}
+                />
               </div>
+
               <div className="hosp-detail-meta">
                 <span className="hosp-detail-chip">{doctor?.gender || "—"}</span>
-                {doctor?.isSurgeon && <span className="hosp-detail-chip hosp-detail-chip--surgeon">✦ Surgeon</span>}
+                {doctor?.isSurgeon && (
+                  <span className="hosp-detail-chip hosp-detail-chip--surgeon">✦ Surgeon</span>
+                )}
               </div>
             </div>
           </div>
 
+          {/* ── Body ── */}
           <div className="hosp-detail-body">
             {doctor?.bio && (
               <>
@@ -494,26 +650,42 @@ const DoctorDetail = () => {
             <div className="hosp-cost-grid">
               <div className="hosp-cost-card">
                 <span className="hosp-cost-label">Consultation</span>
-                {consultation ? <span className="hosp-cost-value">{consultation}</span> : <span className="hosp-cost-value--na">Not set</span>}
+                {consultation
+                  ? <span className="hosp-cost-value">{consultation}</span>
+                  : <span className="hosp-cost-value--na">Not set</span>}
               </div>
               <div className="hosp-cost-card">
                 <span className="hosp-cost-label">Follow-up</span>
-                {followUp ? <span className="hosp-cost-value">{followUp}</span> : <span className="hosp-cost-value--na">Not set</span>}
+                {followUp
+                  ? <span className="hosp-cost-value">{followUp}</span>
+                  : <span className="hosp-cost-value--na">Not set</span>}
               </div>
               <div className="hosp-cost-card">
-                <span className="hosp-cost-label">video</span>
-                {doctor?.videoCallCost ? videoCallCost ? <span className="hosp-cost-value">{videoCallCost}</span> : <span className="hosp-cost-value--na">Not set</span> : <span className="hosp-cost-value--na">Not Set</span>}
+                <span className="hosp-cost-label">Video call</span>
+                {doctor?.videoCallCost
+                  ? videoCallCost
+                    ? <span className="hosp-cost-value">{videoCallCost}</span>
+                    : <span className="hosp-cost-value--na">Not set</span>
+                  : <span className="hosp-cost-value--na">Not set</span>}
               </div>
             </div>
 
             <div className="hosp-divider" />
 
+            {/* ── Schedule header ── */}
             <div className="hosp-schedule-header">
               <div className="hosp-schedule-header-left">
                 <span className="hosp-schedule-section-title">Working schedule</span>
-                <span className={`hosp-schedule-limit ${scheduleIsFull ? "hosp-schedule-limit--full" : ""}`}>{scheduleCount}/5 days</span>
+                <span className={`hosp-schedule-limit${scheduleIsFull ? " hosp-schedule-limit--full" : ""}`}>
+                  {scheduleCount}/5 days
+                </span>
               </div>
-              <button className="hosp-schedule-add-btn" onClick={() => setShowAddForm(prev => !prev)} disabled={scheduleIsFull} title={scheduleIsFull ? "Maximum of 5 working days reached" : "Add a working day"}>
+              <button
+                className="hosp-schedule-add-btn"
+                onClick={() => setShowAddForm(prev => !prev)}
+                disabled={scheduleIsFull}
+                title={scheduleIsFull ? "Maximum of 5 working days reached" : "Add a working day"}
+              >
                 {showAddForm ? (
                   <>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -543,11 +715,12 @@ const DoctorDetail = () => {
               />
             )}
 
+            {/* ── Schedule list ── */}
             {doctor?.workingDays?.length > 0 ? (
               <div className="hosp-schedule-list">
                 {doctor.workingDays.map((wd) => {
-                  const schedId = wd.id || wd.scheduleId;
-                  const isEditing = editingId === schedId;
+                  const schedId   = wd.id || wd.scheduleId;
+                  const isEditing  = editingId  === schedId;
                   const isDeleting = deletingId === schedId;
 
                   return (
@@ -559,20 +732,33 @@ const DoctorDetail = () => {
                           {wd.fromTime} — {wd.toTime}
                         </span>
                         <div className="hosp-schedule-actions">
-                          <button className="hosp-action-btn hosp-action-btn--reactivate" onClick={() => setEditingId(isEditing ? null : schedId)}>
+                          <button
+                            className="hosp-action-btn hosp-action-btn--reactivate"
+                            onClick={() => setEditingId(isEditing ? null : schedId)}
+                          >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                             </svg>
                             Update
                           </button>
-                          <button className="hosp-action-btn hosp-action-btn--delete" onClick={() => setDeletingId(isDeleting ? null : schedId)} disabled={!canDelete} title={!canDelete ? "Minimum 3 working days required" : "Delete schedule"}>
+                          <button
+                            className="hosp-action-btn hosp-action-btn--delete"
+                            onClick={() => setDeletingId(isDeleting ? null : schedId)}
+                            disabled={!canDelete}
+                            title={!canDelete ? "Minimum 3 working days required" : "Delete schedule"}
+                          >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-                              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                              <polyline points="3 6 5 6 21 6" />
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              <line x1="10" y1="11" x2="10" y2="17" />
+                              <line x1="14" y1="11" x2="14" y2="17" />
                             </svg>
                             Delete
                           </button>
                         </div>
                       </div>
+
                       {isEditing && (
                         <EditSchedulePanel
                           docId={docId}
