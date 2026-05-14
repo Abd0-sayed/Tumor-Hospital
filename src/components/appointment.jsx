@@ -106,14 +106,14 @@ const DoctorProfile = () => {
   }
 
   return (
-    <div className="doctor-profile-container">
+    <div className="doctor-profile">
       <button className="back-btn" onClick={() => navigate(-1)}>
         <FaArrowLeft />
         Back to Doctors
       </button>
 
-      <div className="profile-card">
-        <div className="profile-header">
+      <div className="profile">
+        <div className="header">
           <div className="image-wrapper">
             <img
               src={doctor.profileImageUrl || "https://via.placeholder.com/200"}
@@ -186,7 +186,9 @@ const DoctorProfile = () => {
                       </div>
 
                       {!slot.isAvailable && (
-                        <span className="booked-tag">Fully Booked</span>
+                        <span className="booked-tag" style={{ color: "red" }}>
+                          Fully Booked
+                        </span>
                       )}
                     </div>
                   ))}
@@ -199,9 +201,7 @@ const DoctorProfile = () => {
             </section>
           </div>
 
-          {/* RIGHT COLUMN */}
           <div className="right-column">
-            {/* PRICING */}
             <section className="info-section">
               <h2>
                 <FaMoneyBillWave />
@@ -216,6 +216,16 @@ const DoctorProfile = () => {
                     {doctor.consultationCost} EGP
                   </span>
                 </div>
+                {doctor.isAbleToAppointVideoCall ? (
+                  <div className="price-card">
+                    <span className="price-label">Video Call</span>
+                    <span className="price-amount">
+                      {doctor.videoCallCost} EGP
+                    </span>
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <div className="price-card">
                   <span className="price-label">Follow-Up</span>

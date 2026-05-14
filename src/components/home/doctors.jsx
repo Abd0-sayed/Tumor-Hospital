@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaLinkedinIn, FaFacebookF, FaInstagram } from "react-icons/fa";
 import "./homeStyle/doctorCards.scss";
+import { Link } from "react-router-dom";
 import PageLoad from "../pageLoad";
 const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
   return (
@@ -32,7 +33,11 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
         </div>
       </div>
 
-      <button className="view-profile-btn">Appoint Now</button>
+      <button className="view-profile-btn">
+        <Link to="doctorsPage" style={{ color: "white" }}>
+          Appoint Now
+        </Link>
+      </button>
     </div>
   );
 };
