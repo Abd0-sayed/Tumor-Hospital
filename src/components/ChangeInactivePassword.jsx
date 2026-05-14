@@ -4,6 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./style/Password.css";
 import { jwtDecode } from "jwt-decode";
 
+import { useAuth } from "../context/AuthContext";
+
+
 // Helper: get token from either storage
 const getToken = () =>
    sessionStorage.getItem("token");
@@ -11,6 +14,8 @@ const getToken = () =>
 const ChangeInactivePassword = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { updateAuth } = useAuth();
+
 
   // userId and token are passed via navigate state from Login
   const userId = state?.userId || localStorage.getItem("userId") || sessionStorage.getItem("userId");
@@ -108,15 +113,22 @@ const ChangeInactivePassword = () => {
       const storage = localStorage.getItem("token") ? localStorage : sessionStorage;
       storage.setItem("token",        data.token        ?? data.Token);
       storage.setItem("refreshToken", data.refreshToken ?? data.RefreshToken);
-      storage.setItem("userId",       data.userId       ?? data.UserId);
+      // storage.setItem("userId",       data.userId       ?? data.UserId);
       storage.setItem("userId",       data.userId       ?? data.UserId);
       const decoded = jwtDecode(data.token);
-            const role =decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-            storage.setItem("role", role);
+            const uprole =decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+            storage.setItem("role", uprole);
+            window.dispatchEvent(new Event("storageUpdate"));
+            //
+        updateAuth({
+              token: data.token,
+              role: uprole,
+            });
+            //
 
       setSuccess(true);
       setTimeout(() => navigate("/"), 2200);
-    } catch {
+    } catch(err) {
         console.log(err);
       setServerError(err.message ||"Server error. Please try again later.");
     } finally {

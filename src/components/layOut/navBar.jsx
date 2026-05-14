@@ -7,8 +7,14 @@ import { IoLocationSharp } from "react-icons/io5";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext.jsx";
+
+
 function NavDropdownExample() {
-  const role = sessionStorage.getItem("role");
+    const { auth } = useAuth();
+  const role =auth.role;
+  //const role = sessionStorage.getItem("role");
   return (
     <>
       <Container>
@@ -72,7 +78,7 @@ function NavDropdownExample() {
                   Profile
                 </Link>
               )}
-              {sessionStorage.getItem("token") ? (
+              {/*sessionStorage.getItem("token")*/auth.token ? (
                 <Link to="/logout" className="link">
                   Logout
                 </Link>
