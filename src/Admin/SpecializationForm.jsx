@@ -38,7 +38,7 @@ export default function SpecializationForm() {
   const [apiError, setApiError] = useState("");      // form-level
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess]   = useState(false);
-
+  const [originalName, setOriginalName] = useState("");
   // ── Pre-fill for edit ───────────────────────────────────────────────────────
   useEffect(() => {
     if (isEdit) {
@@ -48,6 +48,7 @@ export default function SpecializationForm() {
           name: s.name || "",
           description: s.description === "N/A" ? "" : s.description || "",
         });
+        setOriginalName(s.name || "");
       } else {
         // Fallback: fetch if arrived directly via URL
         fetchById();
@@ -68,6 +69,7 @@ export default function SpecializationForm() {
             name: found.name || "",
             description: found.description === "N/A" ? "" : found.description || "",
           });
+            setOriginalName(found.name || "");
         }
       }
     } catch {
@@ -111,9 +113,10 @@ export default function SpecializationForm() {
     setSubmitting(true);
     setApiError("");
     setErrors({});
+    const trimmedName = form.name.trim();
 
     const body = {
-      name: form.name.trim(),
+      name:  trimmedName === originalName ? "" : trimmedName,
       description: form.description.trim() || "N/A",
     };
 
