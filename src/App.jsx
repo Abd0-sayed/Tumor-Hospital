@@ -47,6 +47,10 @@ import UpdateReceptionistProfile from "../src/components/UpdateReceptionistProfi
 import Hosinfo from "./components/otherPages/hosinfo/HospitalInfo.jsx";
 import DoctorDetail from "./components/otherPages/hosinfo/DoctorDetail.jsx";
 import UpdateHospital from "./components/otherPages/hosinfo/UpdateHospital.jsx";
+//
+
+import SpecializationList from "./Admin/SpecializationList.jsx";
+import SpecializationForm from "./Admin/SpecializationForm.jsx";
 
 //
 import {
@@ -100,7 +104,7 @@ const router = createBrowserRouter(
         <Route path="addDoctor" element={<Adddoctor />} />
         <Route path="addRecipionist" element={<Addreciptionist />} />
         <Route path="addhospital" element={<Addhospital />} />
-        <Route path="addSpicialization" element={<Addspicialization />} />
+        {/* <Route path="addSpicialization" element={<Addspicialization />} /> */}
         <Route path="HospitalInfo/:hospitalId" element={<Hosinfo />} />
         <Route
           path="/admin/HospitalInfo/:hospitalId/DoctorDetail/:docId"
@@ -109,7 +113,12 @@ const router = createBrowserRouter(
         <Route
           path="/admin/HospitalInfo/:hospitalId/UpdateHospital"
           element={<UpdateHospital />}
-        />
+          />
+        {/*******************************  */}
+        <Route path="/admin/Specializations"          element={<SpecializationList />} />
+        <Route path="/admin/Specializations/Add"      element={<SpecializationForm />} />
+        <Route path="/admin/Specializations/Edit/:id" element={<SpecializationForm />} />
+        {/*******************************  */}
       </Route>
     </Route>,
   ),

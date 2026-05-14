@@ -61,7 +61,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         </NavLink>
 
         <NavLink
-          to="addSpicialization"
+          to="/admin/Specializations"
           className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
         >
           <MdVaccines className="nav-icon" /> Manage Specializations
