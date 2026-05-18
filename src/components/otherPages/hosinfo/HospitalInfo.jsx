@@ -206,7 +206,7 @@ const HospitalInfo = () => {
       if (!res.ok) { const data = await res.json().catch(() => ({})); setDeleteError(data.errors?.Identity?.[0] || data.message || "Delete failed."); return; }
       setDeleteTarget(null);
       fetchDoctors();
-      setDashboard(prev => prev ? { ...prev, numberOfDoctors: Math.max(0, (prev.numberOfDoctors ?? 1) - 1) } : prev);
+    //  setDashboard(prev => prev ? { ...prev, numberOfDoctors: Math.max(0, (prev.numberOfDoctors ?? 1) - 1) } : prev);
     } catch { setDeleteError("Server error. Please try again."); }
     finally { setDeleteLoading(false); }
   };
