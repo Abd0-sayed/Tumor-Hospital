@@ -51,7 +51,8 @@ import UpdateHospital from "./components/otherPages/hosinfo/UpdateHospital.jsx";
 
 import SpecializationList from "./Admin/SpecializationList.jsx";
 import SpecializationForm from "./Admin/SpecializationForm.jsx";
-
+//
+import Offers from "./Admin/Offers.jsx";
 //
 import {
   Route,
@@ -119,6 +120,7 @@ const router = createBrowserRouter(
         <Route path="/admin/Specializations/Add"      element={<SpecializationForm />} />
         <Route path="/admin/Specializations/Edit/:id" element={<SpecializationForm />} />
         {/*******************************  */}
+        <Route path="/admin/Offers" element={<Offers />} />
       </Route>
     </Route>,
   ),

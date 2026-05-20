@@ -87,6 +87,14 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         >
           <MdAttachMoney className="nav-icon" /> Manage Donations
         </NavLink>
+
+        <NavLink
+          to="/admin/Offers"
+          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+        >
+          <MdAttachMoney className="nav-icon" /> Manage Offers
+        </NavLink>
+
       </nav>
 
       <div className="sidebar-footer" style={{ color: "white" }}>
