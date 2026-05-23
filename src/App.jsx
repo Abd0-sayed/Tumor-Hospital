@@ -13,6 +13,7 @@ import "./auth/styles/Password.scss";
 import Admin from "./Admin/Admin.jsx";
 import Addreciptionist from "./Admin/Addreciptionist.jsx";
 import Addhospital from "./Admin/Addhospital.jsx";
+import BillsGrid from "./components/otherPages/bills.jsx";
 import Aupdateabout from "./Admin/Aupdateabout.jsx";
 import Addabout from "./Admin/Addabout.jsx";
 import TransactionFailure from "./components/otherPages/donationfail.jsx";
@@ -50,6 +51,7 @@ import UpdateHospital from "./components/otherPages/hosinfo/UpdateHospital.jsx";
 //
 
 import SpecializationList from "./Admin/SpecializationList.jsx";
+import AppointmentsTableRecep from "./components/otherPages/recepSchedule.jsx";
 import SpecializationForm from "./Admin/SpecializationForm.jsx";
 //
 import Offers from "./Admin/Offers.jsx";
@@ -65,6 +67,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
+      <Route path="ReceptionistTable" element={<AppointmentsTableRecep />} />
       <Route path="faq" element={<AccordionSection />} />
       <Route path="about" element={<AboutPage />} />
       <Route path="donations" element={<NeedsGrid />} />
@@ -75,6 +78,7 @@ const router = createBrowserRouter(
       <Route path="resetpassword" element={<Resetpass />} />
       <Route path="forgotpassword" element={<Forgotpass />} />
       <Route path="doctor" element={<Doctor />} />
+      <Route path="bills" element={<BillsGrid />} />
       <Route path="donations/successful" element={<TransactionSuccess />} />
       <Route path="donations/fail" element={<TransactionFailure />} />
       <Route path="patient" element={<Patient />} />
@@ -114,11 +118,17 @@ const router = createBrowserRouter(
         <Route
           path="/admin/HospitalInfo/:hospitalId/UpdateHospital"
           element={<UpdateHospital />}
-          />
+        />
         {/*******************************  */}
-        <Route path="/admin/Specializations"          element={<SpecializationList />} />
-        <Route path="/admin/Specializations/Add"      element={<SpecializationForm />} />
-        <Route path="/admin/Specializations/Edit/:id" element={<SpecializationForm />} />
+        <Route path="/admin/Specializations" element={<SpecializationList />} />
+        <Route
+          path="/admin/Specializations/Add"
+          element={<SpecializationForm />}
+        />
+        <Route
+          path="/admin/Specializations/Edit/:id"
+          element={<SpecializationForm />}
+        />
         {/*******************************  */}
         <Route path="/admin/Offers" element={<Offers />} />
       </Route>

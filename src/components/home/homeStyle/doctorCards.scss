@@ -93,7 +93,11 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease-in-out();
-
+    button {
+      background-color: transparent;
+      color: white;
+      border: none;
+    }
     &:hover {
       background-color: darken(v.$main-nav-color, 10%);
     }

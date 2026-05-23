@@ -4,23 +4,22 @@ import "./navBar.scss";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { LuClock4 } from "react-icons/lu";
 import { IoLocationSharp } from "react-icons/io5";
+import { NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 
-import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-
 function NavDropdownExample() {
-    const { auth } = useAuth();
-  const role =auth.role;
-  //const role = sessionStorage.getItem("role");
+  const { auth } = useAuth();
+  const role = auth.role;
   return (
     <>
       <Container>
         <header>
-          <h1 className="myLogo">MED</h1>
-
+          <NavLink to="/">
+            <h1 className="myLogo">MED</h1>
+          </NavLink>
           <ul>
             <li>
               <MdOutlineLocalPhone />
@@ -49,9 +48,11 @@ function NavDropdownExample() {
 
       <Navbar expand="lg" className="navbar navbar-dark">
         <Container>
-          <h1 className="myLogo" id="shrink" style={{ color: "white" }}>
-            MED
-          </h1>
+          <NavLink to={"/"}>
+            <h1 className="myLogo" id="shrink" style={{ color: "white" }}>
+              MED
+            </h1>
+          </NavLink>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav>
@@ -64,7 +65,6 @@ function NavDropdownExample() {
               <Link to="/donations" className="link">
                 Donate
               </Link>
-
               {role === "Admin" ? (
                 <Link to="/admin" className="link">
                   Profile
@@ -78,7 +78,22 @@ function NavDropdownExample() {
                   Profile
                 </Link>
               )}
-              {/*sessionStorage.getItem("token")*/auth.token ? (
+              {role !== "Admin" && role ? (
+                <Link to="/ReceptionistTable" className="link">
+                  Schedule
+                </Link>
+              ) : (
+                <></>
+              )}
+              {role === "Patient" || role === "Receptionist" ? (
+                <Link to="/bills" className="link">
+                  Bills
+                </Link>
+              ) : (
+                <></>
+              )}
+
+              {auth.token ? (
                 <Link to="/logout" className="link">
                   Logout
                 </Link>

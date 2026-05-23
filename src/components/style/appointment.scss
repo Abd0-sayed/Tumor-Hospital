@@ -7,6 +7,26 @@ $bg-light: #f8fafd;
 $text-body: #4a5568;
 $text-muted: #718096;
 
+$sky-brand: $secondary-nav;
+$sky-brand-hover: darken($secondary-nav, 10%);
+$slate-text-main: #1e293b;
+$slate-text-muted: #64748b;
+$border-light: #e2e8f0;
+$overlay-shadow:
+  0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+@keyframes modalReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .doctor-profile {
   width: 100%;
   margin: 0 auto;
@@ -73,6 +93,7 @@ $text-muted: #718096;
         overflow: hidden;
         background: $bg-light;
         padding: 2px;
+
         img {
           width: 100%;
           height: 100%;
@@ -142,7 +163,6 @@ $text-muted: #718096;
       }
     }
 
-    // BODY SECTION
     .profile-body {
       padding: ($text-padding * 4);
 
@@ -182,7 +202,6 @@ $text-muted: #718096;
         }
       }
 
-      // PRICING GRID
       .pricing-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -194,7 +213,7 @@ $text-muted: #718096;
           border-radius: $main-border-radius;
           padding: ($text-padding * 2);
           text-align: center;
-          border-top: 4px $main-border-style $main-nav-color; // Strong accent top border
+          border-top: 4px $main-border-style $main-nav-color;
 
           &.highlight {
             border-top-color: $secondary-nav;
@@ -220,7 +239,6 @@ $text-muted: #718096;
         }
       }
 
-      // SCHEDULE GRID
       .schedule-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -287,7 +305,6 @@ $text-muted: #718096;
         }
       }
 
-      // ACTIONS
       .action-section {
         background: rgba($secondary-nav-color, 0.2);
         border: 1px $main-border-style $white-box-border;
@@ -322,6 +339,7 @@ $text-muted: #718096;
               color: #a0aec0;
               border-color: #e2e8f0;
               cursor: not-allowed;
+              width: 230px;
             }
           }
 
@@ -329,17 +347,18 @@ $text-muted: #718096;
             background-color: $secondary-nav;
             color: white;
             border: 1px $main-border-style $secondary-nav;
+            width: 230px;
 
             &:hover:not(:disabled) {
-              background-color: $main-nav-color;
-              border-color: $main-nav-color;
+              background-color: lighten($color: $main-nav-color, $amount: 10%);
+              border-color: lighten($color: $main-nav-color, $amount: 10%);
             }
           }
 
           .btn-secondary {
             background-color: white;
             color: $main-nav-color;
-            border: 1px $main-border-style $main-nav-color;
+            border: 1.5px $main-border-style $secondary-nav-color;
 
             &:hover:not(:disabled) {
               background-color: $secondary-nav-color;
@@ -352,6 +371,223 @@ $text-muted: #718096;
           color: $main-header-color;
           font-weight: 600;
           font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.booking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    background-color: #ffffff;
+    z-index: 9999;
+    border-radius: 12px;
+    box-shadow: $overlay-shadow;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    overflow: hidden;
+    animation: modalReveal 0.2s ease-out;
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid $border-light;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8fafc;
+
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: $slate-text-main;
+      }
+
+      .modal-subtitle {
+        margin: 0.25rem 0 0 0;
+        font-size: 0.85rem;
+        color: $slate-text-muted;
+
+        .highlight-type {
+          font-weight: 600;
+          color: $sky-brand;
+        }
+      }
+
+      .close-x-btn {
+        background: none;
+        border: none;
+        font-size: 1.75rem;
+        color: #94a3b8;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0.25rem;
+        transition: color 0.15s;
+
+        &:hover {
+          color: #334155;
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+
+      .modal-schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+
+      .modal-schedule-card {
+        background: #ffffff;
+        border: 1px solid $border-light;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 105px;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          border-color: #cbd5e1;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          .day-txt {
+            font-weight: 700;
+            color: $slate-text-main;
+          }
+
+          .date-txt {
+            font-size: 0.75rem;
+            background-color: #f1f5f9;
+            color: $slate-text-muted;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+          }
+        }
+
+        .time-txt {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.8rem;
+          color: $slate-text-muted;
+          margin-bottom: 0.5rem;
+
+          .clock-icon {
+            color: #94a3b8;
+          }
+        }
+
+        .status-indicator {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #94a3b8;
+        }
+
+        &.is-selected {
+          border-color: $sky-brand;
+          background-color: rgba(14, 165, 233, 0.04);
+          box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.15);
+
+          .status-indicator {
+            color: $sky-brand;
+            font-weight: 700;
+          }
+        }
+
+        &.is-booked {
+          background-color: #f8fafc;
+          border-style: dashed;
+          opacity: 0.6;
+          cursor: not-allowed;
+
+          .status-indicator {
+            color: #ef4444;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid $border-light;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      background-color: #f8fafc;
+
+      .btn-cancel {
+        background: transparent;
+        border: none;
+        color: $slate-text-muted;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: color 0.15s;
+
+        &:hover {
+          color: $slate-text-main;
+        }
+      }
+
+      .btn-confirm-submit {
+        background-color: $sky-brand;
+        color: #ffffff;
+        border: none;
+        font-weight: 700;
+        padding: 0.5rem 1.25rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 4px rgba(14, 165, 233, 0.15);
+        transition: background-color 0.15s;
+
+        &:hover:not(:disabled) {
+          background-color: $sky-brand-hover;
+        }
+
+        &:disabled {
+          background-color: #cbd5e1;
+          color: #94a3b8;
+          cursor: not-allowed;
+          box-shadow: none;
         }
       }
     }

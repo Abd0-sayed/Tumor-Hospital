@@ -18,15 +18,15 @@ const Landing = () => {
 
         <div className="hero-cards">
           <div className="card dark-blue">
-            <span>Book an Appointment</span>
+            <span>Available All The Time</span>
             <MdCalendarToday className="card-icon" />
           </div>
           <div className="card light-blue">
-            <span>Book an Appointment</span>
+            <span>We Care About The People</span>
             <MdPeopleOutline className="card-icon" />
           </div>
           <div className="card sky-blue">
-            <span>Book an Appointment</span>
+            <span>We Have Free Services</span>
             <MdAccountBalanceWallet className="card-icon" />
           </div>
         </div>

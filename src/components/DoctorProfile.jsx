@@ -56,11 +56,6 @@ const DoctorProfile = () => {
     fetchProfile();
   }, [userId, token, navigate]);
 
-  //   const splitName = (fullName = "") => {
-  //     const parts = fullName.trim().split(" ");
-  //     return { firstName: parts[0] || "", lastName: parts.slice(1).join(" ") || "" };
-  //   };
-
   if (loading) {
     return (
       <div className="profile-page">
@@ -105,12 +100,9 @@ const DoctorProfile = () => {
     );
   }
 
-  //   const { firstName, lastName } = splitName(profile?.fullName);
   const firstName = profile.firstName;
   const lastName = profile.lastName;
   const fullname = firstName + " " + lastName;
-
-  // const initials = (firstName?.[0] ?? "").toUpperCase() + (lastName?.[0] ?? "").toUpperCase() || "?";
 
   return (
     <div className="profile-page">

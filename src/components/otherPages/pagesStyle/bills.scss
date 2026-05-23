@@ -1,0 +1,222 @@
+@use "../../../style/_global_vars.scss" as *;
+@use "../../../style/_mixins.scss" as *;
+
+$text-highlight: $secondary-nav-color;
+$bg-light: #f8fafd;
+$main-border-radius: $main-border-raduis;
+$text-body: #4a5568;
+$text-muted: #718096;
+
+.doctor-profile {
+  width: 100%;
+  background-color: $bg-light;
+
+  .profile-dashboard-header {
+    width: 95%;
+    margin: 0 auto ($margin-between * 4) auto;
+
+    h1 {
+      color: $main-header-color;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: $text-muted;
+      font-size: 1.05rem;
+      margin-bottom: ($margin-between * 3);
+    }
+
+    .filter-card-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: ($margin-between * 2);
+      background-color: white;
+      padding: ($text-padding * 2);
+      border: 1px $main-border-style $white-box-border;
+      border-radius: $main-border-radius;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+      .input-field-wrapper {
+        flex: 1;
+        min-width: 240px;
+
+        input {
+          width: 100%;
+          padding: ($text-padding * 1.5);
+          font-size: 1rem;
+          color: $text-body;
+          background-color: $bg-light;
+          border: 1px $main-border-style $white-box-border;
+          border-radius: $main-border-radius;
+          outline: none;
+          transition: all 0.2s ease-out;
+
+          &:focus {
+            border-color: $secondary-nav;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba($text-highlight, 0.2);
+          }
+        }
+      }
+    }
+  }
+
+  // Modern Cards Grid Shell
+  .dashboard-cards-grid {
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: ($margin-between * 3);
+  }
+
+  // Individual Invoice Grid Block
+  .invoice-display-card {
+    background-color: white;
+    border: 1px $main-border-style $white-box-border;
+    border-radius: $main-border-radius;
+    padding: ($text-padding * 2.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    }
+
+    &.is-settled {
+      border-left: 4px $main-border-style $main-nav-color; // Distinct marker line for paid items
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: ($margin-between * 2.5);
+
+      .badge {
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border-radius: $main-border-radius;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &.confirm-badge {
+          background-color: #e6f4ea;
+          color: #137333;
+        }
+
+        &.pending-badge {
+          background-color: #fef7e0;
+          color: #b06000;
+        }
+      }
+    }
+
+    .card-main-content {
+      display: flex;
+      flex-direction: column;
+      gap: ($margin-between * 1.5);
+      margin-bottom: ($margin-between * 3);
+      padding-bottom: ($text-padding * 2);
+      border-bottom: 1px $main-border-style $white-box-border;
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+
+        .label {
+          color: $text-muted;
+        }
+
+        .value {
+          color: $text-body;
+          font-weight: 500;
+
+          &.strong {
+            color: $main-header-color;
+            font-weight: 600;
+          }
+
+          &.timestamp {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .card-footer-action-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: $margin-between;
+
+      .amount-group {
+        display: flex;
+        flex-direction: column;
+
+        .label {
+          font-size: 0.75rem;
+          color: $text-muted;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .amount-value {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: $secondary-text-color;
+        }
+      }
+
+      .btn-action {
+        padding: ($text-padding * 1.2) ($text-padding * 2.5);
+        font-size: 0.9rem;
+        font-weight: 700;
+        border-radius: $main-border-radius;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: $secondary-nav;
+        color: white;
+        border: 1px $main-border-style $secondary-nav;
+
+        &:hover:not(:disabled) {
+          background-color: lighten($color: $main-nav-color, $amount: 10%);
+          border-color: lighten($color: $main-nav-color, $amount: 10%);
+        }
+
+        &:disabled {
+          background-color: #e2e8f0;
+          color: #a0aec0;
+          border-color: #e2e8f0;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .loading-center-block {
+    text-align: center;
+    padding: ($text-padding * 10) 0;
+    color: $text-muted;
+  }
+}
+.invoice-reference-id {
+  font-weight: 700;
+  color: $main-header-color;
+  font-size: 0.95rem;
+  background-color: rgba($text-highlight, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+}

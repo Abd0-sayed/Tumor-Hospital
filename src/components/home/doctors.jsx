@@ -32,12 +32,11 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
           </a>
         </div>
       </div>
-
-      <button className="view-profile-btn">
-        <Link to="doctorsPage" style={{ color: "white" }}>
-          Appoint Now
+      <div className="view-profile-btn">
+        <Link to="doctorsPage">
+          <button>Appoint Now</button>
         </Link>
-      </button>
+      </div>
     </div>
   );
 };
