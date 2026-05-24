@@ -4,7 +4,12 @@ import "./style/needs.scss";
 import VolunteerExp from "./volunteerShow.jsx";
 import { toast } from "react-toastify";
 
+const getToken = () =>{
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+}
+
 const NeedManagement = () => {
+  const token= getToken();
   // --- States ---
   const [showModal, setShowModal] = useState(null); // 'add', 'edit', or null
   const [categories, setCategories] = useState([]);

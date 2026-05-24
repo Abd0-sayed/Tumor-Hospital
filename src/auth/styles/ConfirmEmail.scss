@@ -1,0 +1,459 @@
+// ── ConfirmEmail.scss ─────────────────────────────────────────────────────────
+// MEDDICAL auth design system
+// Fonts : Yeseva One (headings) · Work Sans (UI)
+// Colors: Navy #1C2756 · Blue #1A8FE3 · Periwinkle #C5CAE9
+// ─────────────────────────────────────────────────────────────────────────────
+
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+// ── Tokens ────────────────────────────────────────────────────────────────────
+$navy:          #1C2756;
+$blue:          #1A8FE3;
+$blue-hover:    #1578c2;
+$blue-light:    #EBF5FC;
+$periwinkle:    #C5CAE9;
+$periwinkle-bg: #F0F2FA;
+$dark:          #2D2D2D;
+$body-text:     #555B6E;
+$muted:         #8A93A8;
+$white:         #FFFFFF;
+$bg:            #F5F7FB;
+$border:        #DDE2EE;
+$danger:        #D0392B;
+$danger-bg:     #FEF2F1;
+$danger-border: #F5C6C2;
+$success:       #1A7A4A;
+$success-bg:    #EDF7F2;
+$success-border:#A7D9BA;
+
+$radius-sm:  6px;
+$radius-md:  10px;
+$radius-lg:  14px;
+$shadow-card: 0 4px 28px rgba(28,39,86,.10);
+$transition:  150ms ease;
+
+$ff-display: 'Yeseva One', serif;
+$ff-body:    'Work Sans', sans-serif;
+
+// ── Keyframes ─────────────────────────────────────────────────────────────────
+@keyframes ce-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ce-shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+@keyframes ce-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ce-tick-pop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes ce-countdown {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 113; } // 2π × 18 ≈ 113
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// PAGE SHELL
+// ════════════════════════════════════════════════════════════════════════════
+.ce-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  font-family: $ff-body;
+  background-color: $bg;
+  background-image:
+    radial-gradient(ellipse 60% 45% at 10% 0%,  rgba(26,143,227,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 55% at 90% 100%, rgba(28,39,86,.06)  0%, transparent 65%);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CARD
+// ════════════════════════════════════════════════════════════════════════════
+.ce-card {
+  background: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  width: 100%;
+  max-width: 440px;
+  padding: 2.6rem 2.4rem 2.4rem;
+  animation: ce-rise .38s cubic-bezier(.22,1,.36,1) both;
+}
+
+// ── Brand ─────────────────────────────────────────────────────────────────────
+.ce-brand {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: 2rem;
+}
+
+.ce-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-sm;
+  background: $navy;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $white;
+  }
+}
+
+.ce-brand-name {
+  font-family: $ff-display;
+  font-size: 1.35rem;
+  color: $navy;
+  letter-spacing: .02em;
+
+  span { color: $blue; }
+}
+
+// ── Icon badge (envelope) ────────────────────────────────────────────────────
+.ce-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: $blue-light;
+  margin: 0 auto 1.4rem;
+
+  svg {
+    width: 28px;
+    height: 28px;
+    color: $blue;
+  }
+}
+
+// ── Heading ───────────────────────────────────────────────────────────────────
+.ce-title {
+  font-family: $ff-display;
+  font-size: 1.7rem;
+  color: $navy;
+  margin: 0 0 .4rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.ce-subtitle {
+  font-size: .875rem;
+  color: $body-text;
+  text-align: center;
+  margin: 0 0 1.75rem;
+  line-height: 1.55;
+
+  strong {
+    color: $navy;
+    font-weight: 700;
+  }
+}
+
+// ── OTP field ─────────────────────────────────────────────────────────────────
+.ce-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: $navy;
+    margin-bottom: .45rem;
+  }
+}
+
+.ce-otp-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 1rem;
+  border: 1.5px solid $periwinkle;
+  border-radius: $radius-sm;
+  background: $white;
+  font-family: $ff-body;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: .25em;
+  color: $navy;
+  text-align: center;
+  outline: none;
+  transition: border-color $transition, box-shadow $transition;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: $periwinkle;
+    font-weight: 400;
+    letter-spacing: .1em;
+    font-size: 1rem;
+  }
+
+  &:focus {
+    border-color: $blue;
+    box-shadow: 0 0 0 3px rgba(26,143,227,.15);
+  }
+
+  &.has-error {
+    border-color: $danger;
+    box-shadow: 0 0 0 3px rgba(208,57,43,.1);
+    animation: ce-shake .35s ease;
+  }
+}
+
+// ── Verify button ─────────────────────────────────────────────────────────────
+.ce-verify-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: $radius-sm;
+  background: $navy;
+  color: $white;
+  font-family: $ff-body;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  transition: background $transition, box-shadow $transition, transform $transition;
+  margin-bottom: 1.5rem;
+
+  &:hover:not(:disabled) {
+    background: $blue;
+    box-shadow: 0 5px 18px rgba(26,143,227,.32);
+  }
+
+  &:active:not(:disabled) { transform: scale(.98); }
+
+  &:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+}
+
+// ── Spinner inside button ─────────────────────────────────────────────────────
+.ce-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,.35);
+  border-top-color: $white;
+  border-radius: 50%;
+  animation: ce-spin .7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+// ── Divider ───────────────────────────────────────────────────────────────────
+.ce-divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+  color: $muted;
+  font-size: .8rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: $border;
+  }
+}
+
+// ── Resend row ────────────────────────────────────────────────────────────────
+.ce-resend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.ce-timer {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .85rem;
+  color: $muted;
+}
+
+// SVG countdown ring
+.ce-timer-ring {
+  flex-shrink: 0;
+}
+
+.ce-timer-ring-bg {
+  stroke: $border;
+  fill: none;
+}
+
+.ce-timer-ring-fill {
+  stroke: $blue;
+  fill: none;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset .9s linear;
+}
+
+.ce-timer-ring-fill--done {
+  stroke: $periwinkle;
+}
+
+.ce-timer-text {
+  font-weight: 700;
+  color: $navy;
+
+  &--done { color: $muted; }
+}
+
+// Resend button
+.ce-resend-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  height: 38px;
+  padding: 0 1.1rem;
+  border: 1.5px solid $periwinkle;
+  border-radius: $radius-sm;
+  background: $white;
+  font-family: $ff-body;
+  font-size: .85rem;
+  font-weight: 700;
+  color: $navy;
+  cursor: pointer;
+  transition: background $transition, color $transition, border-color $transition, box-shadow $transition;
+
+  svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  &:hover:not(:disabled) {
+    background: $blue;
+    border-color: $blue;
+    color: $white;
+    box-shadow: 0 4px 14px rgba(26,143,227,.28);
+  }
+
+  &:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+  }
+}
+
+// ── Status messages ───────────────────────────────────────────────────────────
+.ce-message {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .7rem .9rem;
+  border-radius: $radius-sm;
+  font-size: .875rem;
+  font-weight: 500;
+  margin-top: 1.1rem;
+  line-height: 1.5;
+
+  svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  &--error {
+    background: $danger-bg;
+    border: 1px solid $danger-border;
+    border-left: 3px solid $danger;
+    color: $danger;
+    animation: ce-shake .35s ease;
+  }
+
+  &--success {
+    background: $success-bg;
+    border: 1px solid $success-border;
+    border-left: 3px solid $success;
+    color: $success;
+  }
+
+  &--info {
+    background: $blue-light;
+    border: 1px solid rgba(26,143,227,.25);
+    border-left: 3px solid $blue;
+    color: $navy;
+  }
+}
+
+// ── Success state (full card replace) ─────────────────────────────────────────
+.ce-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: .5rem 0;
+}
+
+.ce-success-tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: $success-bg;
+  border: 2px solid $success-border;
+  margin-bottom: 1.25rem;
+  animation: ce-tick-pop .4s cubic-bezier(.34,1.56,.64,1) both;
+
+  svg {
+    width: 32px;
+    height: 32px;
+    color: $success;
+  }
+}
+
+.ce-success-title {
+  font-family: $ff-display;
+  font-size: 1.5rem;
+  color: $navy;
+  margin: 0 0 .5rem;
+}
+
+.ce-success-msg {
+  font-size: .875rem;
+  color: $body-text;
+  margin: 0 0 .3rem;
+  line-height: 1.55;
+}
+
+.ce-success-redirect {
+  font-size: .8rem;
+  color: $muted;
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .ce-card {
+    padding: 2rem 1.4rem 1.8rem;
+  }
+
+  .ce-title { font-size: 1.45rem; }
+
+  .ce-resend-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

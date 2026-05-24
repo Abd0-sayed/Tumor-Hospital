@@ -1,14 +1,18 @@
 import "./style/about.scss";
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+const getToken = () =>{
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+}
 
 function Aupdateabout() {
+  const token= getToken();
   const [updatedabout, setupdatedabout] = useState({});
   const params = useParams();
   const myNavigator = useNavigate();
 
   useEffect(() => {
-    fetch(`https://tumorhospital.runasp.net/api/about`)
+    fetch(`https://tumorhospital.runasp.net/api/about`,{ headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         if (!res.ok) {
           throw "Couldn't fetch data";
@@ -25,7 +29,7 @@ function Aupdateabout() {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/about/${params.aboutid}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
       body: JSON.stringify(updatedabout),
     })
       .then((res) => {

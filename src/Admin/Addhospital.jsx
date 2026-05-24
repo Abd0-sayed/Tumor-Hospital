@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss"; // Ensure SASS is imported
-
+const getToken = () =>{
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+}
 export default function Addhospital() {
+  const token= getToken();
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
     name: "", // Changed from firstName to match your input name
@@ -34,7 +37,7 @@ export default function Addhospital() {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/Hospital`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
       body: JSON.stringify(formData),
     })
       .then((res) => {

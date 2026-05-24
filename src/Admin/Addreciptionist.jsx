@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss";
-
+const getToken = () =>{
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+}
 export default function Addreceptionist() {
+  const token= getToken();
   const [hospitalname, sethosName] = useState([]);
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,7 +18,7 @@ export default function Addreceptionist() {
   });
 
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals")
+    fetch("https://tumorhospital.runasp.net/api/Hospitals",{ headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json())
       .then((data) => sethosName(data))
       .catch((error) => console.error("Error:", error));

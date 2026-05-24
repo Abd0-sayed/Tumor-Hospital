@@ -2,7 +2,12 @@ import { useState } from "react";
 import "./style/about.scss";
 import { Link, useNavigate } from "react-router-dom";
 
+const getToken = () =>{
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+}
+
 function Addabout() {
+  const token= getToken();
   const [about, setabout] = useState({});
   const myNavigator = useNavigate();
 
@@ -10,7 +15,7 @@ function Addabout() {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/about`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${token}`},
       body: JSON.stringify(about),
     })
       .then((res) => {
