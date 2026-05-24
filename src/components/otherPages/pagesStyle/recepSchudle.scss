@@ -140,8 +140,9 @@ td {
     }
     &:disabled {
       cursor: not-allowed;
-      background-color: $text-muted;
+      border: none;
       color: darken($text-muted, 15%);
+      background-color: lighten($color: $text-muted, $amount: 15%);
     }
   }
 }
