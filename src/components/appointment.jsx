@@ -113,7 +113,11 @@ const DoctorProfile = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to process booking request with the server.");
+        const errorData = await response.json();
+
+        throw new Error(
+          errorData.message || "Something went wrong with the database",
+        );
       }
 
       toast.success("Appointment successfully created!");

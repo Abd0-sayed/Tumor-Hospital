@@ -17,9 +17,13 @@ function NavDropdownExample() {
     <>
       <Container>
         <header>
-          <NavLink to="/">
+          {role === "Patient" || !role ? (
+            <NavLink to={"/"}>
+              <h1 className="myLogo">MED</h1>
+            </NavLink>
+          ) : (
             <h1 className="myLogo">MED</h1>
-          </NavLink>
+          )}
           <ul>
             <li>
               <MdOutlineLocalPhone />
@@ -48,15 +52,21 @@ function NavDropdownExample() {
 
       <Navbar expand="lg" className="navbar navbar-dark">
         <Container>
-          <NavLink to={"/"}>
+          {role === "Patient" || !role ? (
+            <NavLink to={"/"}>
+              <h1 className="myLogo" id="shrink" style={{ color: "white" }}>
+                MED
+              </h1>
+            </NavLink>
+          ) : (
             <h1 className="myLogo" id="shrink" style={{ color: "white" }}>
               MED
             </h1>
-          </NavLink>
+          )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav>
-              {role === "patient" || !role ? (
+              {role === "Patient" || !role ? (
                 <Link to="/" className="link">
                   Home
                 </Link>
