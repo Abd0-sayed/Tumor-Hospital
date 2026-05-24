@@ -73,9 +73,11 @@ function NavDropdownExample() {
               ) : (
                 <></>
               )}
-              <Link to="/about" className="link">
-                About
-              </Link>
+              {role !== "Patient" && role && (
+                <Link to="/about" className="link">
+                  About
+                </Link>
+              )}
               <Link to="/donations" className="link">
                 Donate
               </Link>
