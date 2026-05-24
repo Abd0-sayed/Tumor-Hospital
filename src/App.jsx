@@ -67,7 +67,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
-      <Route path="ReceptionistTable" element={<AppointmentsTableRecep />} />
+      <Route path="timeTable" element={<AppointmentsTableRecep />} />
       <Route path="faq" element={<AccordionSection />} />
       <Route path="about" element={<AboutPage />} />
       <Route path="donations" element={<NeedsGrid />} />

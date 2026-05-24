@@ -56,9 +56,13 @@ function NavDropdownExample() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav>
-              <Link to="/" className="link">
-                Home
-              </Link>
+              {role === "patient" || !role ? (
+                <Link to="/" className="link">
+                  Home
+                </Link>
+              ) : (
+                <></>
+              )}
               <Link to="/about" className="link">
                 About
               </Link>
@@ -79,7 +83,7 @@ function NavDropdownExample() {
                 </Link>
               )}
               {role !== "Admin" && role ? (
-                <Link to="/ReceptionistTable" className="link">
+                <Link to="/timeTable" className="link">
                   Schedule
                 </Link>
               ) : (

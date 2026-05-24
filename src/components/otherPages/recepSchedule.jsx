@@ -147,8 +147,8 @@ const AppointmentsTable = () => {
               >
                 <option value="">All Statuses</option>
                 <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="Cancelled">Cancelled</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
                 <option value="Completed">Completed</option>
                 <option value="Absent">Absent</option>
               </select>
@@ -272,7 +272,7 @@ const AppointmentsTable = () => {
                                   handleAppointmentAction(currentId, "accept")
                                 }
                               >
-                                {isProcessingThisRow ? "..." : "Accept"}
+                                {isProcessingThisRow ? "wait..." : "Accept"}
                               </button>
                               <button
                                 className="btn-action btn-reject"
@@ -283,7 +283,7 @@ const AppointmentsTable = () => {
                                   handleAppointmentAction(currentId, "reject")
                                 }
                               >
-                                {isProcessingThisRow ? "..." : "Reject"}
+                                {isProcessingThisRow ? "wait..." : "Reject"}
                               </button>
                             </div>
                           </td>
