@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss";
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+  
 export default function Addreceptionist() {
   const token= getToken();
   const [hospitalname, sethosName] = useState([]);

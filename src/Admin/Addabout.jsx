@@ -2,9 +2,9 @@ import { useState } from "react";
 import "./style/about.scss";
 import { Link, useNavigate } from "react-router-dom";
 
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
 
 function Addabout() {
   const token= getToken();

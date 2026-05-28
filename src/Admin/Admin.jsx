@@ -14,7 +14,8 @@ import PageLoad from "../components/pageLoad";
 import HospitalCard from "./HospitalCard";
 //
 const getToken = () =>
-  localStorage.getItem("token") || sessionStorage.getItem("token");
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
 //
 function Admin() {
   //

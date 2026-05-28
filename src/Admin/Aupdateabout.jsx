@@ -1,10 +1,10 @@
 import "./style/about.scss";
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
-
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");  
+  
 function Aupdateabout() {
   const token= getToken();
   const [updatedabout, setupdatedabout] = useState({});

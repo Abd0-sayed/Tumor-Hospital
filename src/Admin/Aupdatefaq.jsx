@@ -2,9 +2,10 @@ import "./style/admin.scss";
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+  
 function Aupdatefaq() {
   const token= getToken();
   const [updatedfaq, setupdatedfaq] = useState({});

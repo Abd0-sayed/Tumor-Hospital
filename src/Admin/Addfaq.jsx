@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "../Admin/style/admin.scss"; // Ensure the path is correct for your project
 import { Link, useNavigate } from "react-router-dom";
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+  
 export default function Addfaq() {
   const token= getToken();
   const [faq, setfaq] = useState({});

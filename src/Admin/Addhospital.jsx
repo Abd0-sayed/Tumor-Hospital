@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss"; // Ensure SASS is imported
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+  
 export default function Addhospital() {
   const token= getToken();
   const myNavigator = useNavigate();

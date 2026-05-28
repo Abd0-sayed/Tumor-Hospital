@@ -4,9 +4,9 @@ import "./style/needs.scss";
 import VolunteerExp from "./volunteerShow.jsx";
 import { toast } from "react-toastify";
 
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
 
 const NeedManagement = () => {
   const token= getToken();

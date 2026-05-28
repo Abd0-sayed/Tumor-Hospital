@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style/admin.scss";
 import "./style/doctor.scss";
-const getToken = () =>{
-  localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () =>
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+  
 export default function Adddoctor() {
   const token= getToken();
   const [Specialization, setSpec] = useState([]);
