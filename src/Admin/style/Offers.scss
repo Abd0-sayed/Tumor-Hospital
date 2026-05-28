@@ -3,56 +3,59 @@
 // Navy #1C2756 · Blue #1A8FE3 · Periwinkle #C5CAE9
 // ─────────────────────────────────────────────────────────────────────────────
 
-@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&family=Work+Sans:wght@400;500;600;700&display=swap");
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
-$navy:           #1C2756;
-$navy-hover:     #16204a;
-$blue:           #1A8FE3;
-$blue-hover:     #1578c2;
-$blue-light:     #EBF5FC;
-$periwinkle:     #C5CAE9;
-$periwinkle-bg:  #F0F2FA;
-$dark:           #2D2D2D;
-$body-text:      #555B6E;
-$muted:          #8A93A8;
-$white:          #FFFFFF;
-$bg:             #F5F7FB;
-$border:         #DDE2EE;
+$navy: #1c2756;
+$navy-hover: #16204a;
+$blue: #1a8fe3;
+$blue-hover: #1578c2;
+$blue-light: #ebf5fc;
+$periwinkle: #c5cae9;
+$periwinkle-bg: #f0f2fa;
+$dark: #2d2d2d;
+$body-text: #555b6e;
+$muted: #8a93a8;
+$white: #ffffff;
+$bg: #f5f7fb;
+$border: #dde2ee;
 
-$danger:         #D0392B;
-$danger-bg:      #FEF2F1;
-$danger-border:  #F5C6C2;
+$danger: #d0392b;
+$danger-bg: #fef2f1;
+$danger-border: #f5c6c2;
 
-$success:        #1A7A4A;
-$success-bg:     #EDF7F2;
-$success-border: #A7D9BA;
+$success: #1a7a4a;
+$success-bg: #edf7f2;
+$success-border: #a7d9ba;
 
-$warning:        #B45309;
-$warning-bg:     #FFFBEB;
-$warning-border: #FDE68A;
+$warning: #b45309;
+$warning-bg: #fffbeb;
+$warning-border: #fde68a;
 
-$amber:          #D97706;
-$amber-bg:       #FFF8EC;
-$amber-border:   #FDE68A;
+$amber: #d97706;
+$amber-bg: #fff8ec;
+$amber-border: #fde68a;
 
-$expired:        #6B7280;
-$expired-bg:     #F3F4F6;
-$expired-border: #D1D5DB;
+$expired: #6b7280;
+$expired-bg: #f3f4f6;
+$expired-border: #d1d5db;
 
-$radius-sm:      6px;
-$radius-md:      10px;
-$radius-lg:      14px;
-$shadow-card:    0 2px 12px rgba(28,39,86,.07);
-$shadow:         0 4px 24px rgba(28,39,86,.11);
-$shadow-hover:   0 8px 32px rgba(28,39,86,.14);
-$transition:     150ms ease;
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 14px;
+$shadow-card: 0 2px 12px rgba(28, 39, 86, 0.07);
+$shadow: 0 4px 24px rgba(28, 39, 86, 0.11);
+$shadow-hover: 0 8px 32px rgba(28, 39, 86, 0.14);
+$transition: 150ms ease;
 
-$ff-display:     'Yeseva One', serif;
-$ff-body:        'Work Sans', sans-serif;
-
+$ff-display: Arial, Helvetica, sans-serif;
+$ff-body: Arial, Helvetica, sans-serif;
 // ── Mixins ────────────────────────────────────────────────────────────────────
-@mixin flex-center { display: flex; align-items: center; justify-content: center; }
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @mixin btn-base {
   display: inline-flex;
@@ -64,51 +67,105 @@ $ff-body:        'Work Sans', sans-serif;
   font-family: $ff-body;
   font-weight: 600;
   cursor: pointer;
-  transition: background $transition, color $transition, border-color $transition, box-shadow $transition, transform $transition;
+  transition:
+    background $transition,
+    color $transition,
+    border-color $transition,
+    box-shadow $transition,
+    transform $transition;
   white-space: nowrap;
 
-  &:active  { transform: scale(0.97); }
-  &:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+  &:active {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
 
-  svg { width: 14px; height: 14px; flex-shrink: 0; }
+  svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
 }
 
 // ── Keyframes ─────────────────────────────────────────────────────────────────
 @keyframes off-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes off-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes off-pop {
-  from { transform: scale(.88); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+  from {
+    transform: scale(0.88);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes off-slide-down {
-  from { opacity: 0; transform: translateY(-8px) scaleY(.96); }
-  to   { opacity: 1; transform: translateY(0)    scaleY(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
 }
 
 @keyframes off-shake {
-  0%,100% { transform: translateX(0); }
-  20%     { transform: translateX(-5px); }
-  40%     { transform: translateX(5px); }
-  60%     { transform: translateX(-3px); }
-  80%     { transform: translateX(3px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
 }
 
 @keyframes off-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes shimmer {
-  0%   { background-position: -700px 0; }
-  100% { background-position:  700px 0; }
+  0% {
+    background-position: -700px 0;
+  }
+  100% {
+    background-position: 700px 0;
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -116,9 +173,11 @@ $ff-body:        'Work Sans', sans-serif;
 // ════════════════════════════════════════════════════════════════════════════
 .off-page {
   min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif !important;
   background: $bg;
   font-family: $ff-body;
   padding: 2.5rem 1.5rem 4rem;
+  margin: -2rem;
 }
 
 .off-inner {
@@ -142,12 +201,12 @@ $ff-body:        'Work Sans', sans-serif;
   font-family: $ff-display;
   font-size: 2rem;
   color: $navy;
-  margin: 0 0 .3rem;
+  margin: 0 0 0.3rem;
   line-height: 1.15;
 }
 
 .off-page-subtitle {
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: $muted;
   margin: 0;
 }
@@ -157,7 +216,7 @@ $ff-body:        'Work Sans', sans-serif;
   @include btn-base;
   height: 44px;
   padding: 0 1.35rem;
-  font-size: .9rem;
+  font-size: 0.9rem;
   background: $navy;
   color: $white;
   border-color: $navy;
@@ -166,7 +225,7 @@ $ff-body:        'Work Sans', sans-serif;
   &:hover:not(:disabled) {
     background: $blue;
     border-color: $blue;
-    box-shadow: 0 4px 14px rgba(26,143,227,.32);
+    box-shadow: 0 4px 14px rgba(26, 143, 227, 0.32);
   }
 }
 
@@ -174,13 +233,13 @@ $ff-body:        'Work Sans', sans-serif;
 .off-alert {
   display: flex;
   align-items: flex-start;
-  gap: .65rem;
-  padding: .75rem 1rem;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
   border-radius: $radius-sm;
-  font-size: .875rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  margin-bottom: .5rem;
-  animation: off-shake .35s ease;
+  margin-bottom: 0.5rem;
+  animation: off-shake 0.35s ease;
 
   &--error {
     background: $danger-bg;
@@ -206,13 +265,13 @@ $ff-body:        'Work Sans', sans-serif;
   border-radius: $radius-lg;
   padding: 1.5rem 1.75rem 1.4rem;
   box-shadow: $shadow-card;
-  animation: off-slide-down .22s cubic-bezier(.22,1,.36,1) both;
+  animation: off-slide-down 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .off-form-header {
   display: flex;
   align-items: center;
-  gap: .75rem;
+  gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
@@ -225,18 +284,21 @@ $ff-body:        'Work Sans', sans-serif;
   color: $blue;
   flex-shrink: 0;
 
-  svg { width: 18px; height: 18px; }
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .off-form-title {
   font-family: $ff-display;
   font-size: 1.2rem;
   color: $navy;
-  margin: 0 0 .15rem;
+  margin: 0 0 0.15rem;
 }
 
 .off-form-subtitle {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: $muted;
   margin: 0;
 }
@@ -245,61 +307,73 @@ $ff-body:        'Work Sans', sans-serif;
 .off-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: .9rem 1.1rem;
+  gap: 0.9rem 1.1rem;
 
-  @media (max-width: 600px) { grid-template-columns: 1fr; }
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .off-form-field {
   display: flex;
   flex-direction: column;
-  gap: .35rem;
+  gap: 0.35rem;
 
-  &--full { grid-column: 1 / -1; }
+  &--full {
+    grid-column: 1 / -1;
+  }
 
   label {
-    font-size: .75rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .06em;
+    letter-spacing: 0.06em;
     color: $navy;
   }
 
   input,
   textarea {
     width: 100%;
-    padding: .6rem .85rem;
+    padding: 0.6rem 0.85rem;
     border: 1.5px solid $periwinkle;
     border-radius: $radius-sm;
     background: $white;
     font-family: $ff-body;
-    font-size: .9rem;
+    font-size: 0.9rem;
     color: $dark;
     outline: none;
-    transition: border-color $transition, box-shadow $transition;
+    transition:
+      border-color $transition,
+      box-shadow $transition;
     box-sizing: border-box;
     resize: vertical;
 
-    &::placeholder { color: $muted; }
+    &::placeholder {
+      color: $muted;
+    }
 
     &:focus {
       border-color: $blue;
-      box-shadow: 0 0 0 3px rgba(26,143,227,.14);
+      box-shadow: 0 0 0 3px rgba(26, 143, 227, 0.14);
     }
   }
 
-  textarea { min-height: 78px; line-height: 1.55; }
+  textarea {
+    min-height: 78px;
+    line-height: 1.55;
+  }
 
   &.has-error {
-    input, textarea {
+    input,
+    textarea {
       border-color: $danger;
-      box-shadow: 0 0 0 3px rgba(208,57,43,.1);
+      box-shadow: 0 0 0 3px rgba(208, 57, 43, 0.1);
     }
   }
 }
 
 .off-field-error {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: $danger;
 }
@@ -307,7 +381,7 @@ $ff-body:        'Work Sans', sans-serif;
 // ── Form actions ──────────────────────────────────────────────────────────────
 .off-form-actions {
   display: flex;
-  gap: .65rem;
+  gap: 0.65rem;
   justify-content: flex-end;
   margin-top: 1.25rem;
 }
@@ -316,7 +390,7 @@ $ff-body:        'Work Sans', sans-serif;
   @include btn-base;
   height: 42px;
   padding: 0 1.2rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   background: none;
   color: $body-text;
   border-color: $border;
@@ -332,7 +406,7 @@ $ff-body:        'Work Sans', sans-serif;
   @include btn-base;
   height: 42px;
   padding: 0 1.3rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   background: $navy;
   color: $white;
   border-color: $navy;
@@ -340,7 +414,7 @@ $ff-body:        'Work Sans', sans-serif;
   &:hover:not(:disabled) {
     background: $blue;
     border-color: $blue;
-    box-shadow: 0 4px 14px rgba(26,143,227,.3);
+    box-shadow: 0 4px 14px rgba(26, 143, 227, 0.3);
   }
 }
 
@@ -353,17 +427,23 @@ $ff-body:        'Work Sans', sans-serif;
   border-radius: $radius-lg;
   box-shadow: $shadow-card;
   overflow: hidden;
-  animation: off-rise .38s cubic-bezier(.22,1,.36,1) both;
+  animation: off-rise 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
 
-  &--current  { border-top: 3px solid $blue; }
-  &--upcoming { border-top: 3px solid $amber; }
-  &--expired  { border-top: 3px solid $expired; }
+  &--current {
+    border-top: 3px solid $blue;
+  }
+  &--upcoming {
+    border-top: 3px solid $amber;
+  }
+  &--expired {
+    border-top: 3px solid $expired;
+  }
 }
 
 .off-section-header {
   display: flex;
   align-items: center;
-  gap: .85rem;
+  gap: 0.85rem;
   padding: 1.2rem 1.6rem;
   border-bottom: 1px solid $border;
 }
@@ -375,28 +455,43 @@ $ff-body:        'Work Sans', sans-serif;
   border-radius: $radius-sm;
   flex-shrink: 0;
 
-  svg { width: 18px; height: 18px; }
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
-  &--current  { background: $blue-light;    color: $blue; }
-  &--upcoming { background: $amber-bg;      color: $amber; }
-  &--expired  { background: $expired-bg;    color: $expired; }
+  &--current {
+    background: $blue-light;
+    color: $blue;
+  }
+  &--upcoming {
+    background: $amber-bg;
+    color: $amber;
+  }
+  &--expired {
+    background: $expired-bg;
+    color: $expired;
+  }
 }
 
-.off-section-title-wrap { flex: 1; min-width: 0; }
+.off-section-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
 
 .off-section-title {
   font-family: $ff-display;
   font-size: 1.15rem;
   color: $navy;
-  margin: 0 0 .1rem;
+  margin: 0 0 0.1rem;
   line-height: 1.2;
 }
 
 .off-section-count {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .06em;
+  letter-spacing: 0.06em;
   color: $muted;
   margin: 0;
 }
@@ -411,7 +506,9 @@ $ff-body:        'Work Sans', sans-serif;
 .off-card-wrap {
   border-bottom: 1px solid $border;
 
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .off-card {
@@ -421,7 +518,9 @@ $ff-body:        'Work Sans', sans-serif;
   padding: 1.15rem 1.6rem;
   transition: background $transition;
 
-  &:hover { background: $bg; }
+  &:hover {
+    background: $bg;
+  }
 }
 
 // ── Discount badge ────────────────────────────────────────────────────────────
@@ -434,9 +533,18 @@ $ff-body:        'Work Sans', sans-serif;
   border-radius: $radius-md;
   gap: 0;
 
-  &--current  { background: $blue-light;  color: $blue;    }
-  &--upcoming { background: $amber-bg;    color: $amber;   }
-  &--expired  { background: $expired-bg;  color: $expired; }
+  &--current {
+    background: $blue-light;
+    color: $blue;
+  }
+  &--upcoming {
+    background: $amber-bg;
+    color: $amber;
+  }
+  &--expired {
+    background: $expired-bg;
+    color: $expired;
+  }
 }
 
 .off-discount-pct {
@@ -447,10 +555,10 @@ $ff-body:        'Work Sans', sans-serif;
 }
 
 .off-discount-label {
-  font-size: .6rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: 0.05em;
   margin-top: 1px;
 }
 
@@ -464,42 +572,49 @@ $ff-body:        'Work Sans', sans-serif;
   font-family: $ff-display;
   font-size: 1rem;
   color: $navy;
-  margin: 0 0 .25rem;
+  margin: 0 0 0.25rem;
   line-height: 1.2;
 }
 
 .off-card-desc {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: $body-text;
-  margin: 0 0 .55rem;
+  margin: 0 0 0.55rem;
   line-height: 1.5;
 
-  &--empty { color: $muted; font-style: italic; }
+  &--empty {
+    color: $muted;
+    font-style: italic;
+  }
 }
 
 .off-card-dates {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .off-date-chip {
   display: inline-flex;
   align-items: center;
-  gap: .3rem;
-  font-size: .75rem;
+  gap: 0.3rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: .2rem .6rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 99px;
   background: $periwinkle-bg;
   color: $navy;
 
-  svg { width: 11px; height: 11px; color: $muted; }
+  svg {
+    width: 11px;
+    height: 11px;
+    color: $muted;
+  }
 }
 
 .off-date-arrow {
-  font-size: .75rem;
+  font-size: 0.75rem;
   color: $muted;
 }
 
@@ -507,7 +622,7 @@ $ff-body:        'Work Sans', sans-serif;
 .off-card-actions {
   display: flex;
   align-items: center;
-  gap: .45rem;
+  gap: 0.45rem;
   flex-shrink: 0;
   flex-wrap: wrap;
 }
@@ -515,8 +630,8 @@ $ff-body:        'Work Sans', sans-serif;
 .off-action-btn {
   @include btn-base;
   height: 34px;
-  padding: 0 .85rem;
-  font-size: .8rem;
+  padding: 0 0.85rem;
+  font-size: 0.8rem;
 
   &--edit {
     background: $blue-light;
@@ -560,7 +675,7 @@ $ff-body:        'Work Sans', sans-serif;
   border-top: 1.5px solid $blue-light;
   padding: 1.2rem 1.6rem;
   background: $blue-light;
-  animation: off-slide-down .2s cubic-bezier(.22,1,.36,1) both;
+  animation: off-slide-down 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .off-card-edit-panel--reactivate {
@@ -572,16 +687,20 @@ $ff-body:        'Work Sans', sans-serif;
 .off-empty {
   @include flex-center;
   flex-direction: column;
-  gap: .6rem;
+  gap: 0.6rem;
   padding: 2.5rem 1.5rem;
   text-align: center;
   color: $muted;
 
-  svg { width: 38px; height: 38px; color: $periwinkle; }
+  svg {
+    width: 38px;
+    height: 38px;
+    color: $periwinkle;
+  }
 }
 
 .off-empty-msg {
-  font-size: .875rem;
+  font-size: 0.875rem;
   margin: 0;
 }
 
@@ -600,7 +719,9 @@ $ff-body:        'Work Sans', sans-serif;
   padding: 1.15rem 1.6rem;
   border-bottom: 1px solid $border;
 
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .off-skeleton-box {
@@ -614,16 +735,22 @@ $ff-body:        'Work Sans', sans-serif;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .off-skeleton-line {
   height: 13px;
   border-radius: 4px;
 
-  &--wide   { width: 60%; }
-  &--medium { width: 40%; }
-  &--short  { width: 25%; }
+  &--wide {
+    width: 60%;
+  }
+  &--medium {
+    width: 40%;
+  }
+  &--short {
+    width: 25%;
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -632,22 +759,22 @@ $ff-body:        'Work Sans', sans-serif;
 .off-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(28,39,86,.46);
+  background: rgba(28, 39, 86, 0.46);
   backdrop-filter: blur(3px);
   @include flex-center;
   z-index: 1000;
   padding: 1rem;
-  animation: off-fade .2s ease;
+  animation: off-fade 0.2s ease;
 }
 
 .off-modal {
   background: $white;
   border-radius: $radius-lg;
-  box-shadow: 0 20px 60px rgba(28,39,86,.22);
+  box-shadow: 0 20px 60px rgba(28, 39, 86, 0.22);
   padding: 2rem 1.75rem 1.6rem;
   max-width: 400px;
   width: 100%;
-  animation: off-pop .25s cubic-bezier(.34,1.56,.64,1) both;
+  animation: off-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .off-modal-icon {
@@ -659,18 +786,21 @@ $ff-body:        'Work Sans', sans-serif;
   color: $danger;
   margin-bottom: 1rem;
 
-  svg { width: 22px; height: 22px; }
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 .off-modal-title {
   font-family: $ff-display;
   font-size: 1.3rem;
   color: $navy;
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
 
 .off-modal-msg {
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: $body-text;
   line-height: 1.6;
   margin: 0 0 1.4rem;
@@ -683,7 +813,7 @@ $ff-body:        'Work Sans', sans-serif;
 
 .off-modal-actions {
   display: flex;
-  gap: .65rem;
+  gap: 0.65rem;
   justify-content: flex-end;
 }
 
@@ -691,19 +821,23 @@ $ff-body:        'Work Sans', sans-serif;
   @include btn-base;
   height: 42px;
   padding: 0 1.2rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   background: none;
   color: $body-text;
   border-color: $border;
 
-  &:hover:not(:disabled) { background: $bg; color: $navy; border-color: $navy; }
+  &:hover:not(:disabled) {
+    background: $bg;
+    color: $navy;
+    border-color: $navy;
+  }
 }
 
 .off-modal-delete-btn {
   @include btn-base;
   height: 42px;
   padding: 0 1.2rem;
-  font-size: .875rem;
+  font-size: 0.875rem;
   background: $danger;
   color: $white;
   border-color: $danger;
@@ -711,7 +845,7 @@ $ff-body:        'Work Sans', sans-serif;
   &:hover:not(:disabled) {
     background: #b02e23;
     border-color: #b02e23;
-    box-shadow: 0 4px 14px rgba(208,57,43,.3);
+    box-shadow: 0 4px 14px rgba(208, 57, 43, 0.3);
   }
 }
 
@@ -719,27 +853,31 @@ $ff-body:        'Work Sans', sans-serif;
 .off-spinner {
   width: 16px;
   height: 16px;
-  border: 2.5px solid rgba(255,255,255,.35);
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
   border-top-color: currentColor;
   border-radius: 50%;
-  animation: off-spin .7s linear infinite;
+  animation: off-spin 0.7s linear infinite;
   display: inline-block;
   flex-shrink: 0;
 }
 
 .off-spinner--dark {
-  border-color: rgba(28,39,86,.15);
+  border-color: rgba(28, 39, 86, 0.15);
   border-top-color: $navy;
 }
 
 // ── Responsive ───────────────────────────────────────────────────────────────
 @media (max-width: 640px) {
-  .off-page { padding: 1.5rem .85rem 3rem; }
-  .off-page-title { font-size: 1.6rem; }
+  .off-page {
+    padding: 1.5rem 0.85rem 3rem;
+  }
+  .off-page-title {
+    font-size: 1.6rem;
+  }
 
   .off-card {
     flex-direction: column;
-    gap: .75rem;
+    gap: 0.75rem;
   }
 
   .off-card-actions {

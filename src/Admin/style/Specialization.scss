@@ -3,30 +3,30 @@
 // navy → blue button pattern, and the established CSS variable palette.
 // ────────────────────────────────────────────────────────────────────────────
 
-@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&family=Work+Sans:wght@400;500;600;700&display=swap");
 
 // ── Variables ────────────────────────────────────────────────────────────────
 :root {
-  --navy:          #1C2756;
-  --blue:          #1A8FE3;
-  --blue-light:    #EBF5FC;
-  --periwinkle:    #C5CAE9;
-  --periwinkle-bg: #F0F2FA;
-  --dark:          #2D2D2D;
-  --body-text:     #555B6E;
-  --muted:         #8A93A8;
-  --bg:            #F5F7FB;
-  --danger:        #D0392B;
-  --danger-light:  #FDECEA;
-  --success:       #1A7A4A;
-  --success-light: #E6F4ED;
-  --white:         #FFFFFF;
-  --radius-sm:     6px;
-  --radius-md:     10px;
-  --radius-lg:     14px;
-  --shadow-card:   0 2px 16px rgba(28, 39, 86, 0.08);
-  --shadow-hover:  0 6px 24px rgba(28, 39, 86, 0.13);
-  --transition:    0.2s ease;
+  --navy: #1c2756;
+  --blue: #1a8fe3;
+  --blue-light: #ebf5fc;
+  --periwinkle: #c5cae9;
+  --periwinkle-bg: #f0f2fa;
+  --dark: #2d2d2d;
+  --body-text: #555b6e;
+  --muted: #8a93a8;
+  --bg: #f5f7fb;
+  --danger: #d0392b;
+  --danger-light: #fdecea;
+  --success: #1a7a4a;
+  --success-light: #e6f4ed;
+  --white: #ffffff;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-card: 0 2px 16px rgba(28, 39, 86, 0.08);
+  --shadow-hover: 0 6px 24px rgba(28, 39, 86, 0.13);
+  --transition: 0.2s ease;
 }
 
 // ── Mixins ───────────────────────────────────────────────────────────────────
@@ -47,11 +47,13 @@
   border-radius: var(--radius-sm);
   background: var(--navy);
   color: var(--white);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition), box-shadow var(--transition);
+  transition:
+    background var(--transition),
+    box-shadow var(--transition);
 
   &:hover:not(:disabled) {
     background: var(--blue);
@@ -75,11 +77,14 @@
   border-radius: var(--radius-sm);
   background: var(--white);
   color: var(--body-text);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color var(--transition), color var(--transition), background var(--transition);
+  transition:
+    border-color var(--transition),
+    color var(--transition),
+    background var(--transition);
 
   &:hover:not(:disabled) {
     border-color: var(--blue);
@@ -95,30 +100,60 @@
 
 // ── Keyframes ────────────────────────────────────────────────────────────────
 @keyframes spec-fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes spec-shake {
-  0%, 100% { transform: translateX(0); }
-  20%       { transform: translateX(-6px); }
-  40%       { transform: translateX(6px); }
-  60%       { transform: translateX(-4px); }
-  80%       { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
 }
 
 @keyframes spec-skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.45; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 @keyframes spec-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spec-slide-down {
-  from { opacity: 0; transform: scaleY(0.95); }
-  to   { opacity: 1; transform: scaleY(1); }
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -126,9 +161,10 @@
 // ════════════════════════════════════════════════════════════════════════════
 
 .spec-page {
+  margin: -2rem;
   min-height: 100vh;
   background: var(--bg);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   padding: 36px 24px 60px;
 }
 
@@ -148,7 +184,7 @@
 }
 
 .spec-page-title {
-  font-family: 'Yeseva One', serif;
+  font-family: "Yeseva One", serif;
   font-size: 1.9rem;
   color: var(--navy);
   margin: 0 0 4px;
@@ -226,14 +262,18 @@
   border: 1.5px solid var(--periwinkle);
   border-radius: var(--radius-sm);
   background: var(--white);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   font-size: 0.875rem;
   color: var(--dark);
   outline: none;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
   box-sizing: border-box;
 
-  &::placeholder { color: var(--muted); }
+  &::placeholder {
+    color: var(--muted);
+  }
 
   &:focus {
     border-color: var(--blue);
@@ -276,7 +316,7 @@
     th {
       padding: 14px 18px;
       text-align: left;
-      font-family: 'Work Sans', sans-serif;
+      font-family: "Work Sans", sans-serif;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -290,9 +330,13 @@
     border-bottom: 1px solid var(--periwinkle-bg);
     transition: background var(--transition);
 
-    &:last-child { border-bottom: none; }
+    &:last-child {
+      border-bottom: none;
+    }
 
-    &:hover { background: var(--blue-light); }
+    &:hover {
+      background: var(--blue-light);
+    }
   }
 
   td {
@@ -343,20 +387,26 @@
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: background var(--transition), color var(--transition);
+    transition:
+      background var(--transition),
+      color var(--transition);
     font-size: 1rem;
     background: transparent;
 
     &--edit {
       color: var(--blue);
 
-      &:hover { background: var(--blue-light); }
+      &:hover {
+        background: var(--blue-light);
+      }
     }
 
     &--delete {
       color: var(--danger);
 
-      &:hover { background: var(--danger-light); }
+      &:hover {
+        background: var(--danger-light);
+      }
     }
 
     &:disabled {
@@ -392,7 +442,7 @@
 }
 
 .spec-empty-title {
-  font-family: 'Yeseva One', serif;
+  font-family: "Yeseva One", serif;
   font-size: 1.1rem;
   color: var(--navy);
   margin: 0;
@@ -415,9 +465,15 @@
   background: var(--periwinkle-bg);
   animation: spec-skeleton-pulse 1.4s ease infinite;
 
-  &--short  { width: 80px; }
-  &--medium { width: 140px; }
-  &--long   { width: 220px; }
+  &--short {
+    width: 80px;
+  }
+  &--medium {
+    width: 140px;
+  }
+  &--long {
+    width: 220px;
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -456,7 +512,7 @@
 }
 
 .spec-modal-title {
-  font-family: 'Yeseva One', serif;
+  font-family: "Yeseva One", serif;
   font-size: 1.25rem;
   color: var(--navy);
   margin: 0 0 8px;
@@ -481,7 +537,9 @@
   justify-content: center;
 }
 
-.spec-modal-cancel-btn { @include outline-btn; }
+.spec-modal-cancel-btn {
+  @include outline-btn;
+}
 .spec-modal-delete-btn {
   @include navy-btn;
   background: var(--danger);
@@ -510,7 +568,7 @@
 .spec-form-page {
   min-height: 100vh;
   background: var(--bg);
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   @include flex-center;
   padding: 40px 24px;
 }
@@ -545,7 +603,7 @@
 }
 
 .spec-form-title {
-  font-family: 'Yeseva One', serif;
+  font-family: "Yeseva One", serif;
   font-size: 1.5rem;
   color: var(--navy);
   margin: 0 0 4px;
@@ -570,7 +628,9 @@
   margin-bottom: 24px;
   transition: color var(--transition);
 
-  &:hover { color: var(--blue); }
+  &:hover {
+    color: var(--blue);
+  }
 }
 
 // ── Fields ────────────────────────────────────────────────────────────────────
@@ -594,15 +654,19 @@
     border: 1.5px solid var(--periwinkle);
     border-radius: var(--radius-sm);
     background: var(--white);
-    font-family: 'Work Sans', sans-serif;
+    font-family: "Work Sans", sans-serif;
     font-size: 0.9rem;
     color: var(--dark);
     outline: none;
-    transition: border-color var(--transition), box-shadow var(--transition);
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
     box-sizing: border-box;
     resize: vertical;
 
-    &::placeholder { color: var(--muted); }
+    &::placeholder {
+      color: var(--muted);
+    }
 
     &:focus {
       border-color: var(--blue);
@@ -637,7 +701,10 @@
   color: var(--muted);
   text-align: right;
 
-  &--over { color: var(--danger); font-weight: 600; }
+  &--over {
+    color: var(--danger);
+    font-weight: 600;
+  }
 }
 
 // ── Form-level alert ──────────────────────────────────────────────────────────
@@ -676,7 +743,7 @@
 }
 
 .spec-form-success-title {
-  font-family: 'Yeseva One', serif;
+  font-family: "Yeseva One", serif;
   font-size: 1.15rem;
   color: var(--navy);
   margin: 0;
@@ -696,5 +763,9 @@
   margin-top: 28px;
 }
 
-.spec-cancel-btn { @include outline-btn; }
-.spec-submit-btn { @include navy-btn; }
+.spec-cancel-btn {
+  @include outline-btn;
+}
+.spec-submit-btn {
+  @include navy-btn;
+}
