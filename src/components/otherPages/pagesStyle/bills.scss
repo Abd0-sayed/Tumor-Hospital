@@ -220,3 +220,27 @@ $text-muted: #718096;
   padding: 4px 8px;
   border-radius: 4px;
 }
+label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: $main-header-color;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+select {
+  width: 100%;
+  padding: ($text-padding * 1.2);
+  font-size: 1rem;
+  color: $text-body;
+  background-color: $bg-light;
+  border: 1px $main-border-style $white-box-border;
+  border-radius: $main-border-radius;
+  outline: none;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: $secondary-nav;
+    background-color: white;
+  }
+}

@@ -11,6 +11,11 @@ const BillsGrid = () => {
   const pageNumber = parseInt(searchParams.get("page") || "1", 10);
   const patientName = searchParams.get("patientName") || "";
   const globalBillCode = searchParams.get("billCode") || "";
+
+  // Custom simple month & year selections mapped directly out of URL params
+  const monthFilter = searchParams.get("month") || "";
+  const yearFilter = searchParams.get("year") || "";
+
   const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,6 +25,7 @@ const BillsGrid = () => {
 
   const [activeModalBill, setActiveModalBill] = useState(null);
   const [enteredBillCode, setEnteredBillCode] = useState("");
+
   const handleFilterChange = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) newParams.set(key, value);
@@ -90,6 +96,10 @@ const BillsGrid = () => {
           queryParams.append("pageNumber", pageNumber.toString());
           if (patientName) queryParams.append("patientName", patientName);
           if (globalBillCode) queryParams.append("billCode", globalBillCode);
+
+          // Append simple month/year parameters explicitly if present
+          if (monthFilter) queryParams.append("month", monthFilter);
+          if (yearFilter) queryParams.append("year", yearFilter);
         }
 
         const fetchURL = isReceptionist
@@ -119,7 +129,18 @@ const BillsGrid = () => {
     };
 
     fetchBills();
-  }, [pageNumber, patientName, globalBillCode, isReceptionist]);
+  }, [
+    pageNumber,
+    patientName,
+    globalBillCode,
+    monthFilter,
+    yearFilter,
+    isReceptionist,
+  ]);
+
+  // Generate continuous option range down from current year
+  const currentYear = new Date().getFullYear();
+  const yearsArray = Array.from({ length: 8 }, (_, i) => currentYear - i);
 
   return (
     <div className="doctor-profile">
@@ -148,6 +169,45 @@ const BillsGrid = () => {
                 value={globalBillCode}
                 onChange={(e) => handleFilterChange("billCode", e.target.value)}
               />
+            </div>
+
+            {/* Custom Month Select Field */}
+            <div className="input-field-wrapper custom-select-wrapper">
+              <select
+                value={monthFilter}
+                onChange={(e) => handleFilterChange("month", e.target.value)}
+                className="filter-select-element"
+              >
+                <option value="">All Months</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+
+            {/* Custom Year Select Field */}
+            <div className="input-field-wrapper custom-select-wrapper">
+              <select
+                value={yearFilter}
+                onChange={(e) => handleFilterChange("year", e.target.value)}
+                className="filter-select-element"
+              >
+                <option value="">All Years</option>
+                {yearsArray.map((yr) => (
+                  <option key={yr} value={yr}>
+                    {yr}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         )}

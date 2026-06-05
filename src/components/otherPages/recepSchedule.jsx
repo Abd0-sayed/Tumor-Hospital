@@ -16,6 +16,10 @@ const AppointmentsTable = () => {
   const reason = searchParams.get("reason") || "";
   const status = searchParams.get("status") || "";
 
+  // Track month and year individually in URL search params
+  const monthFilter = searchParams.get("month") || "";
+  const yearFilter = searchParams.get("year") || "";
+
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -257,6 +261,12 @@ const AppointmentsTable = () => {
         if (reason) params.append("appointmentReason", reason);
         if (status) params.append("appointmentStatus", status);
 
+        // Append parsed simple integer parameters directly to the query structure
+        if (isReceptionist) {
+          if (monthFilter) params.append("month", monthFilter);
+          if (yearFilter) params.append("year", yearFilter);
+        }
+
         let fetchURL = "https://tumorhospital.runasp.net/api/Appointments";
         if (role === "Patient") {
           fetchURL =
@@ -284,7 +294,19 @@ const AppointmentsTable = () => {
       }
     };
     fetchAppointments();
-  }, [pageNumber, reason, status, role, token]);
+  }, [
+    pageNumber,
+    reason,
+    status,
+    monthFilter,
+    yearFilter,
+    role,
+    token,
+    isReceptionist,
+  ]);
+
+  const currentYear = new Date().getFullYear();
+  const yearsArray = Array.from({ length: 8 }, (_, i) => currentYear - i);
 
   return (
     <div className="doctor-profile">
@@ -331,6 +353,50 @@ const AppointmentsTable = () => {
                 <option value="Absent">Absent</option>
               </select>
             </div>
+
+            {/* Rendered only if user is a receptionist */}
+            {isReceptionist && (
+              <>
+                <div className="filter-group">
+                  <label>Month</label>
+                  <select
+                    value={monthFilter}
+                    onChange={(e) =>
+                      handleFilterChange("month", e.target.value)
+                    }
+                  >
+                    <option value="">All Months</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                </div>
+
+                <div className="filter-group">
+                  <label>Year</label>
+                  <select
+                    value={yearFilter}
+                    onChange={(e) => handleFilterChange("year", e.target.value)}
+                  >
+                    <option value="">All Years</option>
+                    {yearsArray.map((yr) => (
+                      <option key={yr} value={yr}>
+                        {yr}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
           </div>
 
           {loading ? (
