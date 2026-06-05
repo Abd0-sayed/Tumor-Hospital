@@ -177,3 +177,265 @@ td {
     }
   }
 }
+
+/* Input Styling Context inside Modals */
+.input-field-group {
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.75rem;
+    margin-top: 0.25rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #334155;
+    background-color: #ffffff;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+}
+
+/* Action Trigger Buttons for Form Submission Modals */
+.btn-cancel {
+  background: none;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: #f8fafc;
+    color: #334155;
+  }
+}
+
+.btn-submit {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #1d4ed8;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-view-prescription {
+  background-color: lighten($main-nav-color, 10%);
+  color: white;
+  border: none;
+  padding: 0.35rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  &:hover {
+    background-color: $main-nav-color;
+    transform: translateY(-2px);
+  }
+}
+
+.prescription-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeInModal 0.2s ease-out;
+
+  .prescription-modal-card {
+    background: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .modal-header {
+      background-color: #1a233a; // Deep slate color matching medical dashboard tables
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      .close-x {
+        background: none;
+        border: none;
+        color: #a0aec0;
+        font-size: 1.5rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        transition: color 0.15s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          color: #718096;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        p {
+          margin: 0;
+          color: #2d3748;
+          font-size: 0.95rem;
+        }
+
+        .medication-name {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #1a202c;
+        }
+
+        .dosage-tag {
+          align-self: flex-start;
+          background-color: #f7fafc;
+          border: 1px solid #e2e8f0;
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: #4a5568;
+        }
+      }
+
+      .detail-dates-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #edf2f7;
+
+        p {
+          font-weight: 500;
+        }
+      }
+    }
+
+    .modal-footer {
+      background-color: #f7fafc;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid #edf2f7;
+    }
+  }
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-footer.group-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+
+  .left-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .right-actions {
+    display: flex;
+    margin-left: auto;
+  }
+}
+
+.btn-delete {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fee2e2;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-edit {
+  background-color: #f0fdfa;
+  color: #115e59;
+  border: 1px solid #ccfbf1;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: #ccfbf1;
+    border-color: #99f6e4;
+  }
+}

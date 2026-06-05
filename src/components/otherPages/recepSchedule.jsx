@@ -3,6 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import PageLoad from "../pageLoad.jsx";
 import "./pagesStyle/recepSchudle.scss";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const AppointmentsTable = () => {
   const role = sessionStorage.getItem("role");
   const isReceptionist = role === "Receptionist";
@@ -20,6 +23,32 @@ const AppointmentsTable = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
+  // View & Modify Prescription States
+  const [modalOpen, setModalOpen] = useState(false);
+  const [prescriptionData, setPrescriptionData] = useState(null);
+  const [prescriptionLoadingId, setPrescriptionLoadingId] = useState(null);
+  const [viewModalId, setViewModalId] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    medication: "",
+    dosage: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [isUpdatingOrDeleting, setIsUpdatingOrDeleting] = useState(false);
+
+  // Create Prescription States
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
+  const [isSubmittingPrescription, setIsSubmittingPrescription] =
+    useState(false);
+  const [formData, setFormData] = useState({
+    medication: "",
+    dosage: "",
+    startDate: "",
+    endDate: "",
+  });
+
   const handleFilterChange = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) newParams.set(key, value);
@@ -27,6 +56,155 @@ const AppointmentsTable = () => {
 
     if (key !== "page") newParams.set("page", "1");
     setSearchParams(newParams);
+  };
+
+  const handleViewPrescription = async (appointmentId) => {
+    setPrescriptionLoadingId(appointmentId);
+    setViewModalId(appointmentId);
+    setIsEditing(false);
+    try {
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/prescriptions/${appointmentId}`,
+        {
+          method: "GET",
+          headers: { accept: "*/*", Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+      const data = await response.json();
+
+      setPrescriptionData(data);
+      setEditFormData({
+        medication: data.medication || "",
+        dosage: data.dosage || "",
+        startDate: data.startDate ? data.startDate.split("T")[0] : "",
+        endDate: data.endDate ? data.endDate.split("T")[0] : "",
+      });
+      setModalOpen(true);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error fetching prescription: ${err.message}`);
+    } finally {
+      setPrescriptionLoadingId(null);
+    }
+  };
+
+  const handleUpdatePrescriptionSubmit = async (e) => {
+    e.preventDefault();
+    setIsUpdatingOrDeleting(true);
+
+    try {
+      const payload = {
+        appointmentId: viewModalId,
+        prescriptionId: prescriptionData.prescriptionId,
+        medication: editFormData.medication,
+        dosage: editFormData.dosage,
+        startDate: `${editFormData.startDate}T00:00:00`,
+        endDate: `${editFormData.endDate}T00:00:00`,
+      };
+
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/prescriptions/${prescriptionData.prescriptionId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+
+      toast.success("Prescription updated successfully!");
+      setModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error updating prescription: ${err.message}`);
+    } finally {
+      setIsUpdatingOrDeleting(false);
+    }
+  };
+
+  const handleDeletePrescription = async () => {
+    setIsUpdatingOrDeleting(true);
+
+    try {
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/prescriptions/${prescriptionData.prescriptionId}`,
+        {
+          method: "DELETE",
+          headers: { accept: "*/*", Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+
+      toast.success("Prescription deleted successfully!");
+      setModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error deleting prescription: ${err.message}`);
+    } finally {
+      setIsUpdatingOrDeleting(false);
+    }
+  };
+
+  const handleOpenCreateModal = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setFormData({ medication: "", dosage: "", startDate: "", endDate: "" });
+    setCreateModalOpen(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreatePrescriptionSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmittingPrescription(true);
+
+    try {
+      const payload = {
+        appointmentId: selectedAppointmentId,
+        medication: formData.medication,
+        dosage: formData.dosage,
+        startDate: `${formData.startDate}T00:00:00`,
+        endDate: `${formData.endDate}T00:00:00`,
+      };
+
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/prescriptions/${selectedAppointmentId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+
+      toast.success("Prescription added successfully!");
+      setCreateModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error saving prescription: ${err.message}`);
+    } finally {
+      setIsSubmittingPrescription(false);
+    }
   };
 
   const handleAppointmentAction = async (appointmentId, actionType) => {
@@ -63,7 +241,7 @@ const AppointmentsTable = () => {
       );
     } catch (err) {
       console.error(err);
-      alert(`Error updating request: ${err.message}`);
+      toast.error(`Error updating request: ${err.message}`);
     } finally {
       setActionLoadingId(null);
     }
@@ -191,6 +369,8 @@ const AppointmentsTable = () => {
                     <th>Reason</th>
                     <th>Date & Time</th>
                     <th>Status</th>
+                    <th>Video Call</th>
+                    {!isReceptionist && <th>Prescriptions</th>}
                     {isReceptionist && <th>Actions</th>}
                   </tr>
                 </thead>
@@ -199,6 +379,8 @@ const AppointmentsTable = () => {
                     const currentId = appt.id || appt.appointmentId;
                     const isPending = appt.status?.toLowerCase() === "pending";
                     const isProcessingThisRow = actionLoadingId === currentId;
+                    const isPrescriptionLoading =
+                      prescriptionLoadingId === currentId;
 
                     return (
                       <tr key={currentId}>
@@ -259,6 +441,48 @@ const AppointmentsTable = () => {
                             {appt.status}
                           </span>
                         </td>
+
+                        <td>
+                          <a
+                            href={appt.videoCallLink}
+                            target="_blank"
+                            style={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {appt.videoCallLink ? "Link" : "###"}
+                          </a>
+                        </td>
+
+                        {!isReceptionist && (
+                          <td>
+                            <div style={{ display: "flex", gap: "0.4rem" }}>
+                              <button
+                                type="button"
+                                className="btn-view-prescription"
+                                disabled={isPrescriptionLoading}
+                                onClick={() =>
+                                  handleViewPrescription(currentId)
+                                }
+                              >
+                                {isPrescriptionLoading ? "..." : "View"}
+                              </button>
+
+                              {role === "Doctor" && (
+                                <button
+                                  type="button"
+                                  className="btn-view-prescription"
+                                  onClick={() =>
+                                    handleOpenCreateModal(currentId)
+                                  }
+                                >
+                                  Add Prescription
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        )}
 
                         {isReceptionist && (
                           <td className="actions-cell">
@@ -328,6 +552,244 @@ const AppointmentsTable = () => {
           )}
         </div>
       </div>
+
+      {modalOpen && prescriptionData && (
+        <div className="prescription-modal-backdrop">
+          <form
+            className="prescription-modal-card"
+            onSubmit={handleUpdatePrescriptionSubmit}
+          >
+            <div className="modal-header">
+              <h3>
+                {isEditing ? "Edit Prescription" : "Prescription Details"}
+              </h3>
+              <button
+                type="button"
+                className="close-x"
+                onClick={() => setModalOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div
+                className={`detail-item ${isEditing ? "input-field-group" : ""}`}
+              >
+                <label>Medication</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="medication"
+                    required
+                    value={editFormData.medication}
+                    onChange={handleEditInputChange}
+                  />
+                ) : (
+                  <p className="medication-name">
+                    {prescriptionData.medication}
+                  </p>
+                )}
+              </div>
+
+              <div
+                className={`detail-item ${isEditing ? "input-field-group" : ""}`}
+              >
+                <label>Dosage</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="dosage"
+                    required
+                    value={editFormData.dosage}
+                    onChange={handleEditInputChange}
+                  />
+                ) : (
+                  <p className="dosage-tag">{prescriptionData.dosage}</p>
+                )}
+              </div>
+
+              <div className="detail-dates-grid">
+                <div
+                  className={`detail-item ${isEditing ? "input-field-group" : ""}`}
+                >
+                  <label>Start Date</label>
+                  {isEditing ? (
+                    <input
+                      type="date"
+                      name="startDate"
+                      required
+                      value={editFormData.startDate}
+                      onChange={handleEditInputChange}
+                    />
+                  ) : (
+                    <p>
+                      {prescriptionData.startDate
+                        ? prescriptionData.startDate.split("T")[0]
+                        : "---"}
+                    </p>
+                  )}
+                </div>
+                <div
+                  className={`detail-item ${isEditing ? "input-field-group" : ""}`}
+                >
+                  <label>End Date</label>
+                  {isEditing ? (
+                    <input
+                      type="date"
+                      name="endDate"
+                      required
+                      value={editFormData.endDate}
+                      onChange={handleEditInputChange}
+                    />
+                  ) : (
+                    <p>
+                      {prescriptionData.endDate
+                        ? prescriptionData.endDate.split("T")[0]
+                        : "---"}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-footer group-actions">
+              {role === "Doctor" && !isEditing && (
+                <div className="left-actions">
+                  <button
+                    type="button"
+                    className="btn-delete"
+                    disabled={isUpdatingOrDeleting}
+                    onClick={handleDeletePrescription}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-edit"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
+
+              <div className="right-actions">
+                {isEditing ? (
+                  <>
+                    <button
+                      type="button"
+                      className="btn-cancel"
+                      onClick={() => setIsEditing(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn-submit"
+                      disabled={isUpdatingOrDeleting}
+                    >
+                      {isUpdatingOrDeleting ? "Saving..." : "Save Changes"}
+                    </button>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {createModalOpen && (
+        <div className="prescription-modal-backdrop">
+          <form
+            className="prescription-modal-card"
+            onSubmit={handleCreatePrescriptionSubmit}
+          >
+            <div className="modal-header">
+              <h3>Create Prescription</h3>
+              <button
+                type="button"
+                className="close-x"
+                onClick={() => setCreateModalOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="detail-item input-field-group">
+                <label htmlFor="medication">Medication Name</label>
+                <input
+                  type="text"
+                  id="medication"
+                  name="medication"
+                  required
+                  placeholder="e.g. Paracetamol"
+                  value={formData.medication}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="detail-item input-field-group">
+                <label htmlFor="dosage">Dosage Instructions</label>
+                <input
+                  type="text"
+                  id="dosage"
+                  name="dosage"
+                  required
+                  placeholder="e.g. 500mg twice daily"
+                  value={formData.dosage}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="detail-dates-grid">
+                <div className="detail-item input-field-group">
+                  <label htmlFor="startDate">Start Date</label>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    required
+                    value={formData.startDate}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="detail-item input-field-group">
+                  <label htmlFor="endDate">End Date</label>
+                  <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    required
+                    value={formData.endDate}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => setCreateModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={isSubmittingPrescription}
+              >
+                {isSubmittingPrescription ? "Saving..." : "Save Prescription"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
