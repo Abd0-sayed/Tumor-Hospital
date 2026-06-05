@@ -38,7 +38,7 @@ export default function Addreceptionist() {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/Admin/create-receptionist`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
       body: JSON.stringify(formData),
     })
       .then((res) => {
