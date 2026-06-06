@@ -18,6 +18,16 @@ export default function Addreceptionist() {
     address: "",
   });
 
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+  
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Hospitals",{ headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json())
@@ -36,6 +46,7 @@ export default function Addreceptionist() {
 
   function Addrec(e) {
     e.preventDefault();
+    console.log(formData);
     fetch(`https://tumorhospital.runasp.net/api/Admin/create-receptionist`, {
       method: "POST",
       headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },

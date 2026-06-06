@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "./style/about.scss";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -11,24 +11,120 @@ function Addabout() {
   const [about, setabout] = useState({});
   const myNavigator = useNavigate();
 
-  function addabout(e) {
-    e.preventDefault();
-    fetch(`https://tumorhospital.runasp.net/api/about`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${token}`},
-      body: JSON.stringify(about),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw "about couldn't be updated. Kindly try again";
-        }
-        return res.json();
-      })
-      .then(() => {
-        myNavigator("/admin");
-      });
-  }
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
 
+  if (!token) return null;
+  //
+async function addabout(e) {
+  e.preventDefault();
+
+  try {
+    let accessToken =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    let response = await fetch(
+      "https://tumorhospital.runasp.net/api/about",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(about),
+      }
+    );
+
+    // Access token expired
+    if (response.status === 401) {
+      const refreshToken =
+        localStorage.getItem("refreshToken") ||
+        sessionStorage.getItem("refreshToken");
+
+      if (!refreshToken) {
+        myNavigator("/login");
+        return;
+      }
+
+      // Call refresh endpoint
+      const refreshResponse = await fetch(
+        "https://tumorhospital.runasp.net/api/Auth/Refresh-Token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            refreshToken,
+          }),
+        }
+      );
+
+      if (!refreshResponse.ok) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("refreshToken");
+
+        myNavigator("/login");
+        return;
+      }
+
+      const refreshData = await refreshResponse.json();
+
+      // Save new access token
+      localStorage.setItem("token", refreshData.token);
+
+      // Retry original request
+      response = await fetch(
+        "https://tumorhospital.runasp.net/api/about",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${refreshData.token}`,
+          },
+          body: JSON.stringify(about),
+        }
+      );
+    }
+
+    if (!response.ok) {
+      throw new Error("About couldn't be updated");
+    }
+
+    await response.json();
+
+    myNavigator("/admin");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//===========================================================================
+  // function addabout(e) {
+  //   e.preventDefault();
+  //   fetch(`https://tumorhospital.runasp.net/api/about`, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${token}`},
+  //     body: JSON.stringify(about),
+  //   })
+  //     .then((res) => {
+  //       if (!res.ok) {
+  //         throw "about couldn't be updated. Kindly try again";
+  //       }
+  //       return res.json();
+  //     })
+  //     .then(() => {
+  //       myNavigator("/admin");
+  //     });
+  // }
+//=============================================================================
   return (
     <div className="admin-form-page">
       <div className="form-card">

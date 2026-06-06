@@ -13,6 +13,16 @@ function Aupdatefaq() {
   const myNavigator = useNavigate();
   const id = params.faqid;
 
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+
   useEffect(() => {
     fetch(`https://tumorhospital.runasp.net/api/FAQs`,{ headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {

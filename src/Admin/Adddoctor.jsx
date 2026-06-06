@@ -35,6 +35,16 @@ export default function Adddoctor() {
     "Saturday",
   ];
 
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+
   useEffect(() => {
     fetch("https://tumorhospital.runasp.net/api/Specialization",{ headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../Admin/style/admin.scss"; // Ensure the path is correct for your project
 import { Link, useNavigate } from "react-router-dom";
 const getToken = () =>
@@ -9,6 +9,16 @@ export default function Addfaq() {
   const token= getToken();
   const [faq, setfaq] = useState({});
   const myNavigator = useNavigate();
+
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
 
   function addfaq(e) {
     e.preventDefault();

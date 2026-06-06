@@ -11,6 +11,16 @@ function Aupdateabout() {
   const params = useParams();
   const myNavigator = useNavigate();
 
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+
   useEffect(() => {
     fetch(`https://tumorhospital.runasp.net/api/about`,{ headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss"; // Ensure SASS is imported
 const getToken = () =>
@@ -16,6 +16,16 @@ export default function Addhospital() {
     maxNumberOfReceptionists: 0,
   });
 
+//
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+  
   // Basic Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;

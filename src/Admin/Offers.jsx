@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./style/Offers.scss";
 
 const API = "https://tumorhospital.runasp.net/api";
-
 const getToken = () =>
   localStorage.getItem("token") || sessionStorage.getItem("token");
 
@@ -23,6 +24,8 @@ const emptyForm = () => ({
   startDate: "",
   endDate: "",
 });
+
+
 
 // ── Extract server error (matches existing app error shape) ───────────────────
 const extractServerError = (data) => {
@@ -502,6 +505,19 @@ const SectionPanel = ({ type, title, icon, offers, loading, error, onEdit, onDel
 // MAIN OFFERS PAGE
 // ════════════════════════════════════════════════════════════════════════════
 export default function Offers() {
+
+  const myNavigator = useNavigate();
+
+ //
+ useEffect(() => {
+    if (!token) {
+      myNavigator("/login", { replace: true });
+    }
+  }, [token, myNavigator]);
+
+  if (!token) return null;
+  //
+ 
   // Data
   const [current,  setCurrent]  = useState([]);
   const [upcoming, setUpcoming] = useState([]);

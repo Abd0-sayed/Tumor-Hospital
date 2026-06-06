@@ -4,7 +4,7 @@ import doctor from "../assets/doctor-svgrepo-com.svg";
 import Admincrd from "./Admincrd";
 import profit from "../assets/money-receive-svgrepo-com.svg";
 import reciptionist from "../assets/office-secretary-svgrepo-com.svg";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import Achart from "./Achart";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +20,7 @@ const getToken = () =>
 function Admin() {
   //
     const token= getToken();
+      const navigate = useNavigate();
  //
     var x1array = ["Appointments", "Bills", "Patients"];
   var y1array = [100, 220, 150];
@@ -115,9 +116,17 @@ function Admin() {
       .catch((err) => console.log(err));
   }
   //----------------------------------------------------//
+  //
+ useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+  }, [token, navigate]);
+
+ if (!token) return null;
+  //
 
   if (loading) return <PageLoad />;
-
   return (
     <>
       <div className="main-div">
