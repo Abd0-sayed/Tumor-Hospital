@@ -35,7 +35,7 @@ function Admin() {
   const [faqs, setfaqs] = useState([]);
   const [about, setabout] = useState({});
   const [hospitals, sethospitals] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const notify = () => toast.success("FAQ Deleted Successfully!");
   //----dashboard------
   useEffect(() => {

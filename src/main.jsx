@@ -38,7 +38,9 @@ window.fetch = async (...args) => {
 
     window.location.replace("/login");
   }
-
+if (response.status === 403) {
+    window.location.replace("/Forbidden");
+}
   return response;
 };
 
