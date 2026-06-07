@@ -2,13 +2,10 @@ import { createContext, useContext, useState,useEffect } from "react";
 
 const AuthContext = createContext();
 const getStorage = () => {
-  return sessionStorage.getItem("token")
-    ? sessionStorage
-    : localStorage;
+  return sessionStorage.getItem("token") ? sessionStorage : localStorage;
 };
 export function AuthProvider({ children }) {
-
-   const [auth, setAuth] = useState(() => {
+  const [auth, setAuth] = useState(() => {
     const storage = getStorage();
 
     return {
@@ -18,7 +15,7 @@ export function AuthProvider({ children }) {
   });
 
   const updateAuth = ({ token, role }) => {
-        const storage = getStorage();
+    const storage = getStorage();
     if (token) {
       storage.setItem("token", token);
     }
