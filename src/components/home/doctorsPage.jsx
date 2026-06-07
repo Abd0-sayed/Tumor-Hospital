@@ -27,19 +27,25 @@ const DoctorsPage = () => {
     IsVideoCallDoctor: "",
   });
 
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const navigate = useNavigate();
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals")
+    fetch("https://tumorhospital.runasp.net/api/Hospital/governments", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => {
-        const uniqueGovs = [
-          ...new Set(data.map((h) => h.government).filter(Boolean)),
-        ];
-        setGovernments(uniqueGovs);
+        setGovernments(data);
       })
       .catch((err) => console.error("Failed to fetch hospitals:", err));
 
-    fetch("https://tumorhospital.runasp.net/api/Specialization")
+    fetch(
+      "https://tumorhospital.runasp.net/api/Specialization/Specialization-names",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
       .then((res) => res.json())
       .then((data) => {
         setSpecializations(data);

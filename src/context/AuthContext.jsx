@@ -47,69 +47,69 @@ export function AuthProvider({ children }) {
     });
   };
 
-  let isRefreshing = false;
+//   let isRefreshing = false;
 
-async function refreshAccessToken() {
-  const getStorage = () => {
-  return sessionStorage.getItem("refreshToken")
-    ? sessionStorage
-    : localStorage;
-};
-  if (isRefreshing) return;
+// async function refreshAccessToken() {
+//   const getStorage = () => {
+//   return sessionStorage.getItem("refreshToken")
+//     ? sessionStorage
+//     : localStorage;
+// };
+//   if (isRefreshing) return;
 
-  isRefreshing = true;
+//   isRefreshing = true;
 
-  try {
-    const storage = getStorage();
+//   try {
+//     const storage = getStorage();
 
-    const refreshToken = localStorage.getItem("refreshToken");
+//     const refreshToken = localStorage.getItem("refreshToken");
 
-    if (!refreshToken) return;
+//     if (!refreshToken) return;
 
-    const response = await fetch(
-      "https://tumorhospital.runasp.net/api/Auth/Refresh-Token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          refreshToken,
-        }),
-      }
-    );
+//     const response = await fetch(
+//       "https://tumorhospital.runasp.net/api/Auth/Refresh-Token",
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           refreshToken,
+//         }),
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("Refresh token failed");
-    }
+//     if (!response.ok) {
+//       throw new Error("Refresh token failed");
+//     }
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    storage.setItem("token", data.token);
-    storage.setItem("refreshToken", data.refreshToken);
+//     storage.setItem("token", data.token);
+//     storage.setItem("refreshToken", data.refreshToken);
 
-    setAuth((prev) => ({
-      ...prev,
-      token: data.token,
-    }));
-  } catch (error) {
-    console.error(error);
+//     setAuth((prev) => ({
+//       ...prev,
+//       token: data.token,
+//     }));
+//   } catch (error) {
+//     console.error(error);
 
-    logout();
-  } finally {
-    isRefreshing = false;
-  }
-}
+//     logout();
+//   } finally {
+//     isRefreshing = false;
+//   }
+// }
 
-useEffect(() => {
-  if (!auth.token) return;
+// useEffect(() => {
+//   if (!auth.token) return;
 
-  const intervalId = setInterval(() => {
-    refreshAccessToken();
-  }, 30000);
+//   const intervalId = setInterval(() => {
+//     refreshAccessToken();
+//   }, 30000);
 
-  return () => clearInterval(intervalId);
-}, [auth.token]);
+//   return () => clearInterval(intervalId);
+// }, [auth.token]);
 
   return (
     <AuthContext.Provider

@@ -12,7 +12,6 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
           alt={firstName}
         />
       </div>
-
       <div className="info-body">
         <h3 className="name">
           Dr. {firstName} {lastName}
@@ -32,11 +31,11 @@ const DoctorCard = ({ firstName, lastName, profileImageUrl, specialty }) => {
           </a>
         </div>
       </div>
-      <div className="view-profile-btn">
-        <Link to="doctorsPage">
-          <button>Appoint Now</button>
-        </Link>
-      </div>
+      <Link to="doctorsPage" className="view-profile-link">
+        <div className="view-profile-btn">
+          <button type="button">Appoint Now</button>
+        </div>
+      </Link>
     </div>
   );
 };
