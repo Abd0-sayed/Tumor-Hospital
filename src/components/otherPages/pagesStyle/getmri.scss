@@ -1,0 +1,161 @@
+
+
+// ── MRI Diagnostic Modal (Doctor view) ────────────────────────────────────
+$body-text: #666;
+$periwinkle: #c7d2fe;
+$muted: #888;
+$navy: #1e3a8a;
+$success: #16a34a;
+$dark: #111827;
+$periwinkle-bg: #eef2ff;
+$blue: #2563eb;
+.mri-diagnostic-modal-card {
+  max-width: 520px;
+  width: 100%;
+}
+
+.mri-diagnostic-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 0;
+  color: $body-text;
+  font-size: 0.95rem;
+
+  .mri-upload-icon {
+    font-size: 2.5rem;
+  }
+}
+
+.mri-diagnostic-image-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.mri-diagnostic-img {
+  width: 260px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid $periwinkle;
+  box-shadow: 0 4px 16px rgba(28, 39, 86, 0.10);
+}
+
+.mri-diagnostic-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid $periwinkle;
+  margin-bottom: 0.4rem;
+}
+
+.mri-diagnostic-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: $muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mri-diagnostic-class {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $navy;
+  text-transform: capitalize;
+}
+
+.mri-diagnostic-confidence {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $success;
+}
+
+.mri-diagnostic-probs {
+  margin-top: 1rem;
+
+  .mri-diagnostic-label {
+    display: block;
+    margin-bottom: 0.65rem;
+  }
+}
+
+.mri-prob-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.55rem;
+}
+
+.mri-prob-name {
+  width: 110px;
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: $dark;
+  text-transform: capitalize;
+
+  &--highlight {
+    color: $navy;
+    font-weight: 700;
+  }
+}
+
+.mri-prob-check {
+  color: $success;
+}
+
+.mri-prob-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: $periwinkle-bg;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.mri-prob-bar-fill {
+  height: 100%;
+  background: $periwinkle;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+
+  &--highlight {
+    background: $blue;
+  }
+}
+
+.mri-prob-pct {
+  width: 52px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $body-text;
+}
+
+// Doctor MRI Scan button
+.btn-mri-scan {
+  background: $navy;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $blue;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+.btn-action{
+    background: $navy !important;
+}

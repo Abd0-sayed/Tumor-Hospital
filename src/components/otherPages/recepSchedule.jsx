@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageLoad from "../pageLoad.jsx";
 import "./pagesStyle/recepSchudle.scss";
+import "./pagesStyle/mri-scan-styles.scss";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./pagesStyle/getmri.scss";
 
 const AppointmentsTable = () => {
   const role = sessionStorage.getItem("role");
@@ -59,6 +61,12 @@ const AppointmentsTable = () => {
   const [mriPreview, setMriPreview] = useState(null);
   const [isUploadingMri, setIsUploadingMri] = useState(false);
   const mriFileInputRef = useRef(null);
+  // ───────────────────────────────────────────────────────────────────────────
+
+  // ── MRI Diagnostic Result States (Doctor view) ─────────────────────────────
+  const [mriDiagnosticModalOpen, setMriDiagnosticModalOpen] = useState(false);
+  const [mriDiagnosticData, setMriDiagnosticData] = useState(null);
+  const [mriDiagnosticLoading, setMriDiagnosticLoading] = useState(false);
   // ───────────────────────────────────────────────────────────────────────────
 
   const handleFilterChange = (key, value) => {
@@ -261,7 +269,6 @@ const AppointmentsTable = () => {
 
   // ── MRI Upload Handlers ────────────────────────────────────────────────────
 
-  /** Open the MRI upload modal for a specific appointment */
   const handleOpenMriModal = (appointmentId) => {
     setMriAppointmentId(appointmentId);
     setMriFile(null);
@@ -269,7 +276,6 @@ const AppointmentsTable = () => {
     setMriModalOpen(true);
   };
 
-  /** Close the MRI modal and reset all related state */
   const handleCloseMriModal = () => {
     setMriModalOpen(false);
     setMriAppointmentId("");
@@ -278,19 +284,14 @@ const AppointmentsTable = () => {
     if (mriFileInputRef.current) mriFileInputRef.current.value = "";
   };
 
-  /** Handle file selection — store the file and generate a preview URL */
   const handleMriFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setMriFile(file);
-
-    // Generate a local object URL for the image preview
     const objectUrl = URL.createObjectURL(file);
     setMriPreview(objectUrl);
   };
 
-  /** Submit the MRI scan image to the API */
   const handleMriUploadSubmit = async (e) => {
     e.preventDefault();
     if (!mriFile) {
@@ -311,8 +312,6 @@ const AppointmentsTable = () => {
           headers: {
             accept: "*/*",
             Authorization: `Bearer ${token}`,
-            // NOTE: Do NOT set Content-Type manually for FormData —
-            // the browser sets it automatically with the correct boundary.
           },
           body,
         },
@@ -320,7 +319,6 @@ const AppointmentsTable = () => {
 
       if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
 
-      // Mark the appointment locally so the button becomes disabled immediately
       setAppointments((prev) =>
         prev.map((appt) => {
           const id = appt.id || appt.appointmentId;
@@ -338,6 +336,34 @@ const AppointmentsTable = () => {
       toast.error(`Error uploading scan: ${err.message}`);
     } finally {
       setIsUploadingMri(false);
+    }
+  };
+  // ───────────────────────────────────────────────────────────────────────────
+
+  // ── MRI Diagnostic Handler (Doctor) ───────────────────────────────────────
+
+  const handleViewMriDiagnostic = async (appointmentId) => {
+    setMriDiagnosticLoading(true);
+    setMriDiagnosticData(null);
+    setMriDiagnosticModalOpen(true);
+    try {
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/MRIscan/diagnostic/${appointmentId}`,
+        {
+          method: "GET",
+          headers: { accept: "*/*", Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+      const data = await response.json();
+      setMriDiagnosticData(data);
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error fetching MRI diagnostic: ${err.message}`);
+      setMriDiagnosticModalOpen(false);
+    } finally {
+      setMriDiagnosticLoading(false);
     }
   };
   // ───────────────────────────────────────────────────────────────────────────
@@ -520,8 +546,10 @@ const AppointmentsTable = () => {
                     {!isReceptionist && <th>Prescriptions</th>}
                     {isReceptionist && <th>Actions</th>}
 
-                    {/* ── NEW: MRI Scan column, visible only for patients ── */}
-                    {role === "Patient" && <th>MRI Scan</th>}
+                    {/* MRI Scan column — visible for Patient AND Doctor */}
+                    {(role === "Patient" || role === "Doctor") && (
+                      <th>MRI Scan</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -532,15 +560,18 @@ const AppointmentsTable = () => {
                     const isPrescriptionLoading =
                       prescriptionLoadingId === currentId;
 
-                    // ── MRI button logic ──────────────────────────────────
-                    // Clickable only when status is "Approved" AND no scan uploaded yet
+                    // Patient upload logic
                     const isApproved =
                       appt.status?.toLowerCase() === "approved";
                     const canUploadScan =
                       isApproved &&
                       (appt.isHaveRayFile === false ||
                         appt.isHaveRayFile === "False");
-                    // ─────────────────────────────────────────────────────
+
+                    // Doctor view logic — clickable only when scan has been uploaded
+                    const hasScan =
+                      appt.isHaveRayFile === true ||
+                      appt.isHaveRayFile === "True";
 
                     return (
                       <tr key={currentId}>
@@ -673,7 +704,7 @@ const AppointmentsTable = () => {
                           </td>
                         )}
 
-                        {/* ── NEW: MRI Scan cell ─────────────────────────── */}
+                        {/* MRI Scan cell — Patient uploads, Doctor views */}
                         {role === "Patient" && (
                           <td className="actions-cell">
                             <button
@@ -691,14 +722,32 @@ const AppointmentsTable = () => {
                                 canUploadScan && handleOpenMriModal(currentId)
                               }
                             >
-                              {appt.isHaveRayFile === true ||
-                              appt.isHaveRayFile === "True"
-                                ? "Uploaded ✓"
-                                : "Upload Scan"}
+                              {hasScan ? "Uploaded ✓" : "Upload Scan"}
                             </button>
                           </td>
                         )}
-                        {/* ─────────────────────────────────────────────── */}
+
+                        {role === "Doctor" && (
+                          <td className="actions-cell">
+                            <button
+                              type="button"
+                              // class="btn-view-prescription"
+                              className={`btn-action btn-mri-scan${hasScan ? "" : " btn-upload-scan--disabled"}`}
+                              disabled={!hasScan}
+                              title={
+                                hasScan
+                                  ? "View MRI scan diagnostic result"
+                                  : "No scan uploaded for this appointment"
+                              }
+                              onClick={() =>
+                                hasScan &&
+                                handleViewMriDiagnostic(currentId)
+                              }
+                            >
+                              MRI Scan
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     );
                   })}
@@ -980,7 +1029,7 @@ const AppointmentsTable = () => {
         </div>
       )}
 
-      {/* ── NEW: MRI Scan Upload Modal ──────────────────────────────────────── */}
+      {/* ── MRI Scan Upload Modal (Patient) ────────────────────────────────── */}
       {mriModalOpen && (
         <div className="prescription-modal-backdrop">
           <form
@@ -999,7 +1048,6 @@ const AppointmentsTable = () => {
             </div>
 
             <div className="modal-body">
-              {/* Drop / click zone */}
               <div
                 className="mri-upload-zone"
                 onClick={() => mriFileInputRef.current?.click()}
@@ -1012,8 +1060,23 @@ const AppointmentsTable = () => {
                   />
                 ) : (
                   <div className="mri-upload-placeholder">
-                    <span className="mri-upload-icon">🩻</span>
-                    <p className="mri-upload-hint">
+                  <span className="mri-upload-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                    </svg>
+                  </span>                   
+                   <p className="mri-upload-hint">
                       Click to select an MRI image
                     </p>
                     <p className="mri-upload-sub">
@@ -1023,7 +1086,6 @@ const AppointmentsTable = () => {
                 )}
               </div>
 
-              {/* Hidden native file input */}
               <input
                 ref={mriFileInputRef}
                 type="file"
@@ -1032,7 +1094,6 @@ const AppointmentsTable = () => {
                 onChange={handleMriFileChange}
               />
 
-              {/* Show selected file name */}
               {mriFile && (
                 <p className="mri-selected-filename">
                   <strong>Selected:</strong> {mriFile.name}
@@ -1058,6 +1119,131 @@ const AppointmentsTable = () => {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* ── NEW: MRI Diagnostic Result Modal (Doctor) ──────────────────────── */}
+      {mriDiagnosticModalOpen && (
+        <div className="prescription-modal-backdrop">
+          <div className="prescription-modal-card mri-diagnostic-modal-card">
+            <div className="modal-header">
+              <h3>MRI Scan Diagnostic</h3>
+              <button
+                type="button"
+                className="close-x"
+                onClick={() => {
+                  setMriDiagnosticModalOpen(false);
+                  setMriDiagnosticData(null);
+                }}
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {mriDiagnosticLoading ? (
+                <div className="mri-diagnostic-loading">
+                  <span className="mri-upload-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                    </svg>
+                  </span>                
+  <p>Loading diagnostic results...</p>
+                </div>
+              ) : mriDiagnosticData ? (
+                <>
+                  {/* Scan Image */}
+                  <div className="mri-diagnostic-image-wrap">
+                    <img
+                      src={mriDiagnosticData.imageURL}
+                      alt="MRI Scan"
+                      className="mri-diagnostic-img"
+                    />
+                  </div>
+
+                  {/* Predicted Class */}
+                  <div className="mri-diagnostic-result">
+                    <span className="mri-diagnostic-label">
+                      Predicted Class
+                    </span>
+                    <span className="mri-diagnostic-class">
+                      {mriDiagnosticData.explainResponseDto?.predicted_class}
+                    </span>
+                  </div>
+
+                  {/* Confidence */}
+                  <div className="mri-diagnostic-result">
+                    <span className="mri-diagnostic-label">Confidence</span>
+                    <span className="mri-diagnostic-confidence">
+                      {(
+                        (mriDiagnosticData.explainResponseDto?.confidence ??
+                          0) * 100
+                      ).toFixed(2)}
+                      %
+                    </span>
+                  </div>
+
+                  {/* Probabilities */}
+                  <div className="mri-diagnostic-probs">
+                    <p className="mri-diagnostic-label">
+                      Class Probabilities
+                    </p>
+                    {Object.entries(
+                      mriDiagnosticData.explainResponseDto?.probabilities ?? {},
+                    ).map(([cls, prob]) => {
+                      const pct = ((prob ?? 0) * 100).toFixed(2);
+                      const isPredicted =
+                        cls ===
+                        mriDiagnosticData.explainResponseDto?.predicted_class;
+                      return (
+                        <div key={cls} className="mri-prob-row">
+                          <span
+                            className={`mri-prob-name${isPredicted ? " mri-prob-name--highlight" : ""}`}
+                          >
+                            {cls.charAt(0).toUpperCase() + cls.slice(1)}
+                            {isPredicted && (
+                              <span className="mri-prob-check"> ✓</span>
+                            )}
+                          </span>
+                          <div className="mri-prob-bar-wrap">
+                            <div
+                              className={`mri-prob-bar-fill${isPredicted ? " mri-prob-bar-fill--highlight" : ""}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          <span className="mri-prob-pct">{pct}%</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : null}
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn-submit"
+                onClick={() => {
+                  setMriDiagnosticModalOpen(false);
+                  setMriDiagnosticData(null);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {/* ─────────────────────────────────────────────────────────────────────── */}
