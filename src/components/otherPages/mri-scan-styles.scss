@@ -1,0 +1,110 @@
+/* ─────────────────────────────────────────────────────────────────
+   MRI SCAN — additions to recepSchudle.scss
+   Paste these rules at the bottom of your existing stylesheet.
+───────────────────────────────────────────────────────────────── */
+
+/* Upload Scan button in the table */
+.btn-upload-scan {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s ease, opacity 0.18s ease;
+
+  /* Active state — matches the project's "accept" palette */
+  background: #1a7f5a;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: #155f44;
+  }
+
+  /* Disabled / already-uploaded state */
+  &--disabled,
+  &:disabled {
+    background: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.75;
+  }
+}
+
+/* ── MRI Upload Modal ────────────────────────────────────────── */
+
+/* Slightly wider card for the image preview */
+.mri-modal-card {
+  max-width: 480px;
+  width: 95%;
+}
+
+/* Clickable drop zone */
+.mri-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px dashed #9ca3af;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: border-color 0.18s ease, background 0.18s ease;
+  overflow: hidden;
+
+  &:hover {
+    border-color: #1a7f5a;
+    background: #f0fdf7;
+  }
+}
+
+/* Preview image inside the drop zone */
+.mri-preview-img {
+  width: 100%;
+  height: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+/* Placeholder content when no image is chosen */
+.mri-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.mri-upload-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.mri-upload-hint {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.mri-upload-sub {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+/* Selected filename display */
+.mri-selected-filename {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: #4b5563;
+  word-break: break-all;
+}

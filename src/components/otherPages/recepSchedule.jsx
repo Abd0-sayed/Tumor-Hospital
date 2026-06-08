@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageLoad from "../pageLoad.jsx";
 import "./pagesStyle/recepSchudle.scss";
@@ -16,7 +16,6 @@ const AppointmentsTable = () => {
   const reason = searchParams.get("reason") || "";
   const status = searchParams.get("status") || "";
 
-  // Track month and year individually in URL search params
   const monthFilter = searchParams.get("month") || "";
   const yearFilter = searchParams.get("year") || "";
 
@@ -52,6 +51,15 @@ const AppointmentsTable = () => {
     startDate: "",
     endDate: "",
   });
+
+  // ── MRI Scan Upload States ──────────────────────────────────────────────────
+  const [mriModalOpen, setMriModalOpen] = useState(false);
+  const [mriAppointmentId, setMriAppointmentId] = useState("");
+  const [mriFile, setMriFile] = useState(null);
+  const [mriPreview, setMriPreview] = useState(null);
+  const [isUploadingMri, setIsUploadingMri] = useState(false);
+  const mriFileInputRef = useRef(null);
+  // ───────────────────────────────────────────────────────────────────────────
 
   const handleFilterChange = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
@@ -251,6 +259,89 @@ const AppointmentsTable = () => {
     }
   };
 
+  // ── MRI Upload Handlers ────────────────────────────────────────────────────
+
+  /** Open the MRI upload modal for a specific appointment */
+  const handleOpenMriModal = (appointmentId) => {
+    setMriAppointmentId(appointmentId);
+    setMriFile(null);
+    setMriPreview(null);
+    setMriModalOpen(true);
+  };
+
+  /** Close the MRI modal and reset all related state */
+  const handleCloseMriModal = () => {
+    setMriModalOpen(false);
+    setMriAppointmentId("");
+    setMriFile(null);
+    setMriPreview(null);
+    if (mriFileInputRef.current) mriFileInputRef.current.value = "";
+  };
+
+  /** Handle file selection — store the file and generate a preview URL */
+  const handleMriFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setMriFile(file);
+
+    // Generate a local object URL for the image preview
+    const objectUrl = URL.createObjectURL(file);
+    setMriPreview(objectUrl);
+  };
+
+  /** Submit the MRI scan image to the API */
+  const handleMriUploadSubmit = async (e) => {
+    e.preventDefault();
+    if (!mriFile) {
+      toast.warn("Please select an image before uploading.");
+      return;
+    }
+
+    setIsUploadingMri(true);
+    try {
+      const body = new FormData();
+      body.append("appointmentId", mriAppointmentId);
+      body.append("image", mriFile);
+
+      const response = await fetch(
+        "https://tumorhospital.runasp.net/api/MRIscan/explain",
+        {
+          method: "POST",
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+            // NOTE: Do NOT set Content-Type manually for FormData —
+            // the browser sets it automatically with the correct boundary.
+          },
+          body,
+        },
+      );
+
+      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+
+      // Mark the appointment locally so the button becomes disabled immediately
+      setAppointments((prev) =>
+        prev.map((appt) => {
+          const id = appt.id || appt.appointmentId;
+          if (id === mriAppointmentId) {
+            return { ...appt, isHaveRayFile: true };
+          }
+          return appt;
+        }),
+      );
+
+      toast.success("MRI scan uploaded successfully!");
+      handleCloseMriModal();
+    } catch (err) {
+      console.error(err);
+      toast.error(`Error uploading scan: ${err.message}`);
+    } finally {
+      setIsUploadingMri(false);
+    }
+  };
+  // ───────────────────────────────────────────────────────────────────────────
+
   useEffect(() => {
     const fetchAppointments = async () => {
       setLoading(true);
@@ -261,7 +352,6 @@ const AppointmentsTable = () => {
         if (reason) params.append("appointmentReason", reason);
         if (status) params.append("appointmentStatus", status);
 
-        // Append parsed simple integer parameters directly to the query structure
         if (isReceptionist) {
           if (monthFilter) params.append("month", monthFilter);
           if (yearFilter) params.append("year", yearFilter);
@@ -354,7 +444,6 @@ const AppointmentsTable = () => {
               </select>
             </div>
 
-            {/* Rendered only if user is a receptionist */}
             {isReceptionist && (
               <>
                 <div className="filter-group">
@@ -421,16 +510,8 @@ const AppointmentsTable = () => {
                         <th>Patient</th> <th>Doctor</th>
                       </>
                     )}
-                    {role === "Doctor" && (
-                      <>
-                        <th>Patient</th>
-                      </>
-                    )}
-                    {role === "Patient" && (
-                      <>
-                        <th>Doctor</th>
-                      </>
-                    )}
+                    {role === "Doctor" && <th>Patient</th>}
+                    {role === "Patient" && <th>Doctor</th>}
 
                     <th>Reason</th>
                     <th>Date & Time</th>
@@ -438,6 +519,9 @@ const AppointmentsTable = () => {
                     <th>Video Call</th>
                     {!isReceptionist && <th>Prescriptions</th>}
                     {isReceptionist && <th>Actions</th>}
+
+                    {/* ── NEW: MRI Scan column, visible only for patients ── */}
+                    {role === "Patient" && <th>MRI Scan</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -447,6 +531,16 @@ const AppointmentsTable = () => {
                     const isProcessingThisRow = actionLoadingId === currentId;
                     const isPrescriptionLoading =
                       prescriptionLoadingId === currentId;
+
+                    // ── MRI button logic ──────────────────────────────────
+                    // Clickable only when status is "Approved" AND no scan uploaded yet
+                    const isApproved =
+                      appt.status?.toLowerCase() === "approved";
+                    const canUploadScan =
+                      isApproved &&
+                      (appt.isHaveRayFile === false ||
+                        appt.isHaveRayFile === "False");
+                    // ─────────────────────────────────────────────────────
 
                     return (
                       <tr key={currentId}>
@@ -461,7 +555,7 @@ const AppointmentsTable = () => {
                         {role === "Doctor" && <td>{appt.patientName}</td>}
                         {isReceptionist && (
                           <>
-                            <td>{appt.patientName}</td>{" "}
+                            <td>{appt.patientName}</td>
                             <td>{appt.doctorName}</td>
                           </>
                         )}
@@ -578,6 +672,33 @@ const AppointmentsTable = () => {
                             </div>
                           </td>
                         )}
+
+                        {/* ── NEW: MRI Scan cell ─────────────────────────── */}
+                        {role === "Patient" && (
+                          <td className="actions-cell">
+                            <button
+                              type="button"
+                              className={`btn-action btn-upload-scan${canUploadScan ? "" : " btn-upload-scan--disabled"}`}
+                              disabled={!canUploadScan}
+                              title={
+                                !isApproved
+                                  ? "Only available for Approved appointments"
+                                  : !canUploadScan
+                                    ? "Scan already uploaded"
+                                    : "Upload MRI scan for this appointment"
+                              }
+                              onClick={() =>
+                                canUploadScan && handleOpenMriModal(currentId)
+                              }
+                            >
+                              {appt.isHaveRayFile === true ||
+                              appt.isHaveRayFile === "True"
+                                ? "Uploaded ✓"
+                                : "Upload Scan"}
+                            </button>
+                          </td>
+                        )}
+                        {/* ─────────────────────────────────────────────── */}
                       </tr>
                     );
                   })}
@@ -619,6 +740,7 @@ const AppointmentsTable = () => {
         </div>
       </div>
 
+      {/* ── Prescription View / Edit Modal ─────────────────────────────────── */}
       {modalOpen && prescriptionData && (
         <div className="prescription-modal-backdrop">
           <form
@@ -767,6 +889,7 @@ const AppointmentsTable = () => {
         </div>
       )}
 
+      {/* ── Create Prescription Modal ───────────────────────────────────────── */}
       {createModalOpen && (
         <div className="prescription-modal-backdrop">
           <form
@@ -856,6 +979,88 @@ const AppointmentsTable = () => {
           </form>
         </div>
       )}
+
+      {/* ── NEW: MRI Scan Upload Modal ──────────────────────────────────────── */}
+      {mriModalOpen && (
+        <div className="prescription-modal-backdrop">
+          <form
+            className="prescription-modal-card mri-modal-card"
+            onSubmit={handleMriUploadSubmit}
+          >
+            <div className="modal-header">
+              <h3>Upload MRI Scan</h3>
+              <button
+                type="button"
+                className="close-x"
+                onClick={handleCloseMriModal}
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {/* Drop / click zone */}
+              <div
+                className="mri-upload-zone"
+                onClick={() => mriFileInputRef.current?.click()}
+              >
+                {mriPreview ? (
+                  <img
+                    src={mriPreview}
+                    alt="Selected MRI scan preview"
+                    className="mri-preview-img"
+                  />
+                ) : (
+                  <div className="mri-upload-placeholder">
+                    <span className="mri-upload-icon">🩻</span>
+                    <p className="mri-upload-hint">
+                      Click to select an MRI image
+                    </p>
+                    <p className="mri-upload-sub">
+                      Supported formats: JPG, PNG, JPEG, WEBP
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Hidden native file input */}
+              <input
+                ref={mriFileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleMriFileChange}
+              />
+
+              {/* Show selected file name */}
+              {mriFile && (
+                <p className="mri-selected-filename">
+                  <strong>Selected:</strong> {mriFile.name}
+                </p>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn-cancel"
+                disabled={isUploadingMri}
+                onClick={handleCloseMriModal}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={isUploadingMri || !mriFile}
+              >
+                {isUploadingMri ? "Uploading..." : "Upload Scan"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+      {/* ─────────────────────────────────────────────────────────────────────── */}
     </div>
   );
 };
