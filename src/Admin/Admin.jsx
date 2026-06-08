@@ -53,7 +53,7 @@ function Admin() {
         console.error("Error:", error);
         setLoading(false);
       });
-  }, []);
+  }, [token]);
   //----------------------------------------------------//
 
   //-------About-------
