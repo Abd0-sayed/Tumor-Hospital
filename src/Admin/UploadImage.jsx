@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 
 function UploadImage() {
   const [file, setFile] = useState(null);
@@ -6,6 +6,9 @@ function UploadImage() {
   const handleChange = (e) => {
     setFile(e.target.files[0]);
   };
+
+  const token =
+    sessionStorage.getItem("token") || localStorage.getItem("token");
 
   const handleUpload = async () => {
     const formData = new FormData();
@@ -17,6 +20,10 @@ function UploadImage() {
         {
           method: "POST",
           body: formData,
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 

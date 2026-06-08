@@ -5,11 +5,10 @@ import VolunteerExp from "./volunteerShow.jsx";
 import { toast } from "react-toastify";
 
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");
+  localStorage.getItem("token") || sessionStorage.getItem("token");
 
 const NeedManagement = () => {
-  const token= getToken();
+  const token = getToken();
   // --- States ---
   const [showModal, setShowModal] = useState(null); // 'add', 'edit', or null
   const [categories, setCategories] = useState([]);
@@ -63,6 +62,9 @@ const NeedManagement = () => {
         `https://tumorhospital.runasp.net/api/Need/${id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -105,6 +107,9 @@ const NeedManagement = () => {
       const res = await fetch(url, {
         method: isEdit ? "PUT" : "POST",
         body: payload,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (res.ok) {

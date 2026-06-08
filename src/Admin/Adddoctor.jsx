@@ -3,11 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "./style/admin.scss";
 import "./style/doctor.scss";
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");
-  
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+
 export default function Adddoctor() {
-  const token= getToken();
+  const token = getToken();
   const [Specialization, setSpec] = useState([]);
   const [hospitalname, sethosName] = useState([]);
   const myNavigator = useNavigate();
@@ -35,8 +34,8 @@ export default function Adddoctor() {
     "Saturday",
   ];
 
-//
- useEffect(() => {
+  //
+  useEffect(() => {
     if (!token) {
       myNavigator("/login", { replace: true });
     }
@@ -46,12 +45,16 @@ export default function Adddoctor() {
   //
 
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Specialization",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/Specialization", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => setSpec(data))
       .catch((err) => console.error(err));
 
-    fetch("https://tumorhospital.runasp.net/api/Hospitals",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/Hospitals", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => sethosName(data))
       .catch((err) => console.error(err));
@@ -122,7 +125,10 @@ export default function Adddoctor() {
 
     fetch(`https://tumorhospital.runasp.net/api/Admin/create-doctor`, {
       method: "POST",
-      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(formData),
     })
       .then((res) => {

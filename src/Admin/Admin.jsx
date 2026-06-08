@@ -4,7 +4,7 @@ import doctor from "../assets/doctor-svgrepo-com.svg";
 import Admincrd from "./Admincrd";
 import profit from "../assets/money-receive-svgrepo-com.svg";
 import reciptionist from "../assets/office-secretary-svgrepo-com.svg";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Achart from "./Achart";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,15 +14,14 @@ import PageLoad from "../components/pageLoad";
 import HospitalCard from "./HospitalCard";
 //
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");
+  localStorage.getItem("token") || sessionStorage.getItem("token");
 //
 function Admin() {
   //
-    const token= getToken();
-      const navigate = useNavigate();
- //
-    var x1array = ["Appointments", "Bills", "Patients"];
+  const token = getToken();
+  const navigate = useNavigate();
+  //
+  var x1array = ["Appointments", "Bills", "Patients"];
   var y1array = [100, 220, 150];
   var x2array = [
     "pendingBills",
@@ -40,7 +39,9 @@ function Admin() {
   //----dashboard------
   useEffect(() => {
     setLoading(true);
-    fetch("https://tumorhospital.runasp.net/api/Admin/Dashboard",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/Admin/Dashboard", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => {
         return response.json();
       })
@@ -57,7 +58,9 @@ function Admin() {
 
   //-------About-------
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/about",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/about", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         setabout(data);
@@ -68,7 +71,10 @@ function Admin() {
   function deleteabout(id) {
     fetch(`https://tumorhospital.runasp.net/api/about/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) {
@@ -81,7 +87,9 @@ function Admin() {
 
   //---------hospital data-------
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/Hospitals", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -92,7 +100,9 @@ function Admin() {
 
   //-------FAQS--------
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/FAQs",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/FAQs", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         setfaqs(data);
@@ -103,7 +113,10 @@ function Admin() {
   function deletefaq(id) {
     fetch(`https://tumorhospital.runasp.net/api/FAQs/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" , Authorization: `Bearer ${token}`},
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) {
@@ -117,13 +130,13 @@ function Admin() {
   }
   //----------------------------------------------------//
   //
- useEffect(() => {
+  useEffect(() => {
     if (!token) {
       navigate("/login", { replace: true });
     }
   }, [token, navigate]);
 
- if (!token) return null;
+  if (!token) return null;
   //
 
   if (loading) return <PageLoad />;

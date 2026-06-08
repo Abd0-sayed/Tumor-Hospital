@@ -57,8 +57,8 @@ import SpecializationForm from "./Admin/SpecializationForm.jsx";
 import Offers from "./Admin/Offers.jsx";
 //
 //
-import Forbidden from "./components/otherPages/errorsPages/Forbidden.jsx"
-import Notfound from "./components/otherPages/errorsPages/Notfound.jsx"
+import Forbidden from "./components/otherPages/errorsPages/Forbidden.jsx";
+import Notfound from "./components/otherPages/errorsPages/Notfound.jsx";
 //
 import {
   Route,
@@ -103,7 +103,7 @@ const router = createBrowserRouter(
         element={<UpdateReceptionistProfile />}
       />
       {/* **************************** */}
-            <Route path="Forbidden" element={<Forbidden />} />
+      <Route path="Forbidden" element={<Forbidden />} />
       {/* ***************************************** */}
       <Route path="admin" element={<AdminLayout />}>
         <Route index element={<Admin />} />

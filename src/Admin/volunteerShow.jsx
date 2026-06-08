@@ -4,13 +4,20 @@ import * as XLSX from "xlsx";
 
 const VolunteerExp = () => {
   const [isExporting, setIsExporting] = useState(false);
-
+  const token =
+    sessionStorage.getItem("token") || localStorage.getItem("token");
   const handleExportExcel = async () => {
     setIsExporting(true);
     try {
       const res = await fetch(
         "https://tumorhospital.runasp.net/api/Volunteer/Volunteers",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+
       const json = await res.json();
 
       const volunteerData = json.data || [];
