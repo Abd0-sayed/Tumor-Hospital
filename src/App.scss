@@ -1,1 +1,68 @@
+@use "./style/_global_vars.scss" as *;
+.chat-bot-system-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999; // Keeps it safely above tables, footers, and cards
+  font-family: sans-serif;
 
+  .chat-toggle-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: $secondary-nav; // Matches your ChatBot interface theme accent
+    color: #ffffff;
+    border: none;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px $secondary-nav;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+      background-color: darken($color: $secondary-nav, $amount: 10%);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .chat-window-wrapper {
+    position: relative;
+    width: 470px; // Constrains window size nicely for a floating widget layout
+    max-width: 90vw;
+
+    .chatbot-container {
+      margin: 0 !important; // Overrides center-page auto margins from baseline standalone code
+      height: 520px; // Compact floating widget aspect ratio
+    }
+
+    .chat-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: #ffffff; // Sits on top of the green header bubble
+      font-size: 1.75rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 10005;
+      opacity: 0.85;
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+
+      &:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+  }
+}

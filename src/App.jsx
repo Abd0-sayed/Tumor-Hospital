@@ -1,4 +1,5 @@
 import "./App.scss";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RootLayout from "./components/layOut/rootLayout.jsx";
@@ -15,6 +16,7 @@ import Addreciptionist from "./Admin/Addreciptionist.jsx";
 import Addhospital from "./Admin/Addhospital.jsx";
 import BillsGrid from "./components/otherPages/bills.jsx";
 import Aupdateabout from "./Admin/Aupdateabout.jsx";
+import ChatBot from "./components/chatBot.jsx";
 import Addabout from "./Admin/Addabout.jsx";
 import TransactionFailure from "./components/otherPages/donationfail.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
@@ -143,11 +145,38 @@ const router = createBrowserRouter(
   ),
 );
 function App() {
+  const role = sessionStorage.getItem("role");
+  const [isChatOpen, setIsChatOpen] = useState(false);
   return (
     <div>
       <ToastContainer position="top-right" autoClose={2000} limit={2} />
-
       <RouterProvider router={router} />
+      {role === "Patient" && (
+        <div className="chat-bot-system-wrapper">
+          {!isChatOpen ? (
+            <button
+              type="button"
+              className="chat-toggle-circle"
+              onClick={() => setIsChatOpen(true)}
+              aria-label="Open support chat"
+            >
+              💬
+            </button>
+          ) : (
+            <div className="chat-window-wrapper">
+              <button
+                type="button"
+                className="chat-close-btn"
+                onClick={() => setIsChatOpen(false)}
+              >
+                &times;
+              </button>
+
+              <ChatBot />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
