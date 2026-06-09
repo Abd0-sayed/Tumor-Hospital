@@ -72,7 +72,7 @@ const Login = () => {
       }
 
       // ── Persist tokens ────────────────────────────────────────────────
-      const storage = form.rememberMe ? localStorage : sessionStorage;
+      const storage =sessionStorage;
       storage.setItem("token", data.Token ?? data.token);
       localStorage.setItem(
         "refreshToken",
@@ -85,8 +85,7 @@ const Login = () => {
       const decoded = jwtDecode(token);
       const role =
         decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-      storage.setItem("role", role);
-
+      storage.setItem("role", role);      
       if (role === "Admin") {
         window.location.href = "/admin";
       } else if (role === "Doctor") {

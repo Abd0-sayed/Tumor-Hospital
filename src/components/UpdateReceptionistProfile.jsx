@@ -66,7 +66,7 @@ const ReceptionistUpdate = () => {
         );
       }
       setSuccess(true);
-      setTimeout(() => navigate("/Reciptionprofile"), 1500);
+      setTimeout(() => navigate("/ReceptionistProfile"), 1500);
     } catch (err) {
       setError(err.message || "An unexpected error occurred");
     } finally {
