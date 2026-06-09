@@ -1,4 +1,9 @@
 @use "./style/_global_vars.scss" as *;
+* {
+  font-weight: 600 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
 .chat-bot-system-wrapper {
   position: fixed;
   bottom: 24px;
