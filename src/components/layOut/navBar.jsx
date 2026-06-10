@@ -29,7 +29,7 @@ function NavDropdownExample() {
               <MdOutlineLocalPhone />
               <div>
                 <p>EMERGENCY</p>
-                <code>123456789</code>
+                <code>+201021542001</code>
               </div>
             </li>
             <li>
@@ -43,7 +43,7 @@ function NavDropdownExample() {
               <IoLocationSharp />
               <div>
                 <p>LOCATION</p>
-                <code>Some Place</code>
+                <code>Egypt</code>
               </div>
             </li>
           </ul>
