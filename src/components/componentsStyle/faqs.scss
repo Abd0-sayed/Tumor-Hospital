@@ -1,11 +1,11 @@
 @use "../../style/_global_vars.scss" as v;
 .body {
-  width: 80%;
+  margin: 80px 50%;
+  width: 70%;
   color: white;
   background-color: v.$main-nav-color;
   padding: 40px;
-  border: 3px solid black;
-  margin: 0 50%;
+  border: 2px solid black;
   transform: translatex(-50%);
   h1 {
     padding-bottom: 20px;

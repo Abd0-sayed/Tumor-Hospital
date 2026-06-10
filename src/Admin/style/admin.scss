@@ -1,6 +1,10 @@
 @use "../../style/_global_vars.scss" as *;
 @use "../../style/_mixins.scss" as m;
 
+html {
+  scroll-behavior: smooth;
+}
+
 %transition {
   transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -172,14 +176,14 @@
   }
 }
 
-.btn-edit {
+.btn-edit-admin {
   @extend .dashboard-btn;
   background-color: $secondary-nav;
   color: white;
   margin-right: 10px;
 }
 
-.btn-delete {
+.btn-delete-admin {
   @extend .dashboard-btn;
   background-color: red;
   color: white;

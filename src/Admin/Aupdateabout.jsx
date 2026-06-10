@@ -2,17 +2,16 @@ import "./style/about.scss";
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");  
-  
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+
 function Aupdateabout() {
-  const token= getToken();
+  const token = getToken();
   const [updatedabout, setupdatedabout] = useState({});
   const params = useParams();
   const myNavigator = useNavigate();
 
-//
- useEffect(() => {
+  //
+  useEffect(() => {
     if (!token) {
       myNavigator("/login", { replace: true });
     }
@@ -22,7 +21,9 @@ function Aupdateabout() {
   //
 
   useEffect(() => {
-    fetch(`https://tumorhospital.runasp.net/api/about`,{ headers: { Authorization: `Bearer ${token}` } })
+    fetch(`https://tumorhospital.runasp.net/api/about`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => {
         if (!res.ok) {
           throw "Couldn't fetch data";
@@ -33,13 +34,16 @@ function Aupdateabout() {
         setupdatedabout(data);
       })
       .catch((errors) => console.log(errors));
-  }, []);
+  }, [token]);
 
   function updateabout(e) {
     e.preventDefault();
     fetch(`https://tumorhospital.runasp.net/api/about/${params.aboutid}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(updatedabout),
     })
       .then((res) => {
@@ -49,7 +53,7 @@ function Aupdateabout() {
         return res.json();
       })
       .then(() => {
-        myNavigator("/admin");
+        myNavigator("/admin#about");
       });
   }
 

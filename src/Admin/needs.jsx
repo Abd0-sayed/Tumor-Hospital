@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import NeedsGrid from "../components/otherPages/needs.jsx";
 import "./style/needs.scss";
+import "react-toastify/dist/ReactToastify.css";
 import VolunteerExp from "./volunteerShow.jsx";
 import { toast } from "react-toastify";
 
@@ -55,8 +56,6 @@ const NeedManagement = () => {
 
   // Removes a need based on ID
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this need?")) return;
-
     try {
       const res = await fetch(
         `https://tumorhospital.runasp.net/api/Need/${id}`,
@@ -69,10 +68,7 @@ const NeedManagement = () => {
       );
 
       if (res.ok) {
-        toast.success("Deleted successfully!", {
-          position: "bottom-right",
-          theme: "colored",
-        });
+        toast.success("Deleted successfully!");
         triggerRefresh();
       } else {
         toast.error("Delete failed. Check permissions.");
@@ -83,7 +79,6 @@ const NeedManagement = () => {
     }
   };
 
-  // CREATE/UPDATE: Uses FormData for Multipart Image Support
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -91,7 +86,6 @@ const NeedManagement = () => {
     const isEdit = showModal === "edit";
     const payload = new FormData();
 
-    // Required for .NET model binding on PUT requests
     if (isEdit) payload.append("Id", formData.id);
 
     payload.append("Title", formData.Title);
@@ -113,11 +107,7 @@ const NeedManagement = () => {
       });
 
       if (res.ok) {
-        toast.success(`Need ${isEdit ? "updated" : "created"} successfully!`, {
-          position: "bottom-center",
-          autoClose: 3000,
-          theme: "colored",
-        });
+        toast.success(`Need ${isEdit ? "updated" : "created"} successfully!`);
         closeModal();
         triggerRefresh();
       } else {
@@ -133,7 +123,6 @@ const NeedManagement = () => {
     }
   };
 
-  // Pre-populates the form with existing card data
   const handleEditClick = (need) => {
     setFormData({
       id: need.id,
@@ -170,6 +159,7 @@ const NeedManagement = () => {
               <input
                 type="text"
                 name="Title"
+                maxLength={30}
                 placeholder="Title"
                 required
                 value={formData.Title}
@@ -195,6 +185,7 @@ const NeedManagement = () => {
                 name="NeedAmount"
                 placeholder="Amount Required"
                 required
+                min={1}
                 value={formData.NeedAmount}
                 onChange={handleInputChange}
               />
@@ -209,7 +200,7 @@ const NeedManagement = () => {
                 <input
                   type="file"
                   name="Image"
-                  accept="image/*"
+                  accept=".jpeg, .jpg, .png"
                   required={showModal === "add"}
                   onChange={handleInputChange}
                 />

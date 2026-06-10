@@ -1,18 +1,17 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style/about.scss";
 import { Link, useNavigate } from "react-router-dom";
 
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");
+  localStorage.getItem("token") || sessionStorage.getItem("token");
 
 function Addabout() {
-  const token= getToken();
+  const token = getToken();
   const [about, setabout] = useState({});
   const myNavigator = useNavigate();
 
-//
- useEffect(() => {
+  //
+  useEffect(() => {
     if (!token) {
       myNavigator("/login", { replace: true });
     }
@@ -20,111 +19,85 @@ function Addabout() {
 
   if (!token) return null;
   //
-async function addabout(e) {
-  e.preventDefault();
+  async function addabout(e) {
+    e.preventDefault();
 
-  try {
-    let accessToken =
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("token");
+    try {
+      let accessToken =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
 
-    let response = await fetch(
-      "https://tumorhospital.runasp.net/api/about",
-      {
+      let response = await fetch("https://tumorhospital.runasp.net/api/about", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(about),
-      }
-    );
+      });
 
-    // Access token expired
-    if (response.status === 401) {
-      const refreshToken =
-        localStorage.getItem("refreshToken") ||
-        sessionStorage.getItem("refreshToken");
+      // Access token expired
+      if (response.status === 401) {
+        const refreshToken =
+          localStorage.getItem("refreshToken") ||
+          sessionStorage.getItem("refreshToken");
 
-      if (!refreshToken) {
-        myNavigator("/login");
-        return;
-      }
-
-      // Call refresh endpoint
-      const refreshResponse = await fetch(
-        "https://tumorhospital.runasp.net/api/Auth/Refresh-Token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            refreshToken,
-          }),
+        if (!refreshToken) {
+          myNavigator("/login");
+          return;
         }
-      );
 
-      if (!refreshResponse.ok) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("refreshToken");
+        // Call refresh endpoint
+        const refreshResponse = await fetch(
+          "https://tumorhospital.runasp.net/api/Auth/Refresh-Token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              refreshToken,
+            }),
+          },
+        );
 
-        myNavigator("/login");
-        return;
-      }
+        if (!refreshResponse.ok) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("refreshToken");
 
-      const refreshData = await refreshResponse.json();
+          myNavigator("/login");
+          return;
+        }
 
-      // Save new access token
-      localStorage.setItem("token", refreshData.token);
+        const refreshData = await refreshResponse.json();
 
-      // Retry original request
-      response = await fetch(
-        "https://tumorhospital.runasp.net/api/about",
-        {
+        // Save new access token
+        localStorage.setItem("token", refreshData.token);
+
+        // Retry original request
+        response = await fetch("https://tumorhospital.runasp.net/api/about", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${refreshData.token}`,
           },
           body: JSON.stringify(about),
-        }
-      );
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error("About couldn't be updated");
+      }
+
+      await response.json();
+
+      myNavigator("/admin#about");
+    } catch (error) {
+      console.error(error);
     }
-
-    if (!response.ok) {
-      throw new Error("About couldn't be updated");
-    }
-
-    await response.json();
-
-    myNavigator("/admin");
-  } catch (error) {
-    console.error(error);
   }
-}
 
-//===========================================================================
-  // function addabout(e) {
-  //   e.preventDefault();
-  //   fetch(`https://tumorhospital.runasp.net/api/about`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${token}`},
-  //     body: JSON.stringify(about),
-  //   })
-  //     .then((res) => {
-  //       if (!res.ok) {
-  //         throw "about couldn't be updated. Kindly try again";
-  //       }
-  //       return res.json();
-  //     })
-  //     .then(() => {
-  //       myNavigator("/admin");
-  //     });
-  // }
-//=============================================================================
   return (
     <div className="admin-form-page">
       <div className="form-card">
@@ -139,6 +112,7 @@ async function addabout(e) {
               <input
                 type="text"
                 id="hospitalName"
+                maxLength={200}
                 placeholder="Enter hospital name"
                 onChange={(e) =>
                   setabout((prev) => ({
@@ -154,6 +128,7 @@ async function addabout(e) {
               <textarea
                 id="description"
                 rows="3"
+                maxLength={2000}
                 placeholder="Hospital overview..."
                 onChange={(e) =>
                   setabout((prev) => ({ ...prev, description: e.target.value }))
@@ -163,9 +138,10 @@ async function addabout(e) {
 
             <div className="form-group">
               <label htmlFor="mission">Mission</label>
-              <input
+              <textarea
                 type="text"
                 id="mission"
+                maxLength={2000}
                 onChange={(e) =>
                   setabout((prev) => ({ ...prev, mission: e.target.value }))
                 }
@@ -174,8 +150,9 @@ async function addabout(e) {
 
             <div className="form-group">
               <label htmlFor="vision">Vision</label>
-              <input
+              <textarea
                 type="text"
+                maxLength={2000}
                 id="vision"
                 onChange={(e) =>
                   setabout((prev) => ({ ...prev, vision: e.target.value }))
@@ -200,6 +177,7 @@ async function addabout(e) {
               <input
                 type="text"
                 id="phone"
+                maxLength={14}
                 placeholder="+20..."
                 onChange={(e) =>
                   setabout((prev) => ({ ...prev, phone: e.target.value }))

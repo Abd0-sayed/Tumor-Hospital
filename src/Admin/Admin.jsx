@@ -6,9 +6,9 @@ import profit from "../assets/money-receive-svgrepo-com.svg";
 import reciptionist from "../assets/office-secretary-svgrepo-com.svg";
 import { Link, useNavigate } from "react-router-dom";
 import Achart from "./Achart";
-import { ToastContainer, toast, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import PageLoad from "../components/pageLoad";
 //
 import HospitalCard from "./HospitalCard";
@@ -66,7 +66,7 @@ function Admin() {
         setabout(data);
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [token]);
 
   function deleteabout(id) {
     fetch(`https://tumorhospital.runasp.net/api/about/${id}`, {
@@ -80,6 +80,7 @@ function Admin() {
         if (!res.ok) {
           throw "About couldn't be deleted";
         }
+        toast.success("About deleted Successfully");
         setabout({});
       })
       .catch((err) => console.log(err));
@@ -96,7 +97,7 @@ function Admin() {
         sethospitals(data);
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [token]);
 
   //-------FAQS--------
   useEffect(() => {
@@ -108,7 +109,7 @@ function Admin() {
         setfaqs(data);
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [token]);
 
   function deletefaq(id) {
     fetch(`https://tumorhospital.runasp.net/api/FAQs/${id}`, {
@@ -128,7 +129,38 @@ function Admin() {
       })
       .catch((err) => console.log(err));
   }
-  //----------------------------------------------------//
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = decodeURIComponent(location.hash.substring(1));
+
+      // Attempt immediate scroll
+      let element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+
+      // Fallback: Poll the DOM every 50ms for up to 2 seconds
+      // This catches elements that wait for dynamic rendering or API data
+      let attempts = 0;
+      const intervalId = setInterval(() => {
+        element = document.getElementById(targetId);
+        attempts++;
+
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          clearInterval(intervalId);
+        } else if (attempts > 40) {
+          clearInterval(intervalId); // Stop trying after 2 seconds
+        }
+      }, 50);
+
+      return () => clearInterval(intervalId); // Cleanup on unmount
+    }
+  }, [location]); //----------------------------------------------------//
   //
   useEffect(() => {
     if (!token) {
@@ -143,7 +175,6 @@ function Admin() {
   return (
     <>
       <div className="main-div">
-        {/* ----Admin Card---- */}
         <div className="cards">
           <Admincrd image={doctor} val={da.totalDoctors} title={"Doctors"} />
           <Admincrd
@@ -189,7 +220,7 @@ function Admin() {
         </div>
 
         {/************* FAQS *************************/}
-        <div className="my-container">
+        <div className="my-container" id="faqs">
           <h1>FAQS</h1>
 
           <table className="table-custome">
@@ -209,13 +240,13 @@ function Admin() {
                     <td>
                       <Link
                         to={`/admin/editFaq/${faqs.id}`}
-                        className="btn-edit"
+                        className="btn-edit-admin"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => deletefaq(faqs.id)}
-                        className="btn-delete"
+                        className="btn-delete-admin"
                       >
                         Delete
                       </button>
@@ -228,72 +259,63 @@ function Admin() {
           <Link to="/admin/addFaq" className="btn-add-main">
             Add New FAQ
           </Link>
-          <ToastContainer
-            position="top-center"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick={false}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-            transition={Bounce}
-            progressStyle={{ background: "red" }}
-          />
 
           <h1>About</h1>
 
-          <div className="about">
-            <table className="table-custome">
-              <thead>
-                <tr>
-                  <th>hospitalName</th>
-                  <th>description</th>
-                  <th>mission</th>
-                  <th>vision</th>
-                  <th>email</th>
-                  <th>phone</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  <tr key={about.id}>
-                    <td>{about.hospitalName}</td>
-                    <td>{about.description}</td>
-                    <td>{about.mission}</td>
-                    <td>{about.vision}</td>
-                    <td>{about.email}</td>
-                    <td>{about.phone}</td>
-                    <td className="d-flex justify-content-center">
-                      {Object.keys(about).length === 0 ? (
-                        <Link to="/admin/addAbout" className="btn-add-main no">
-                          Add About
-                        </Link>
-                      ) : (
-                        <>
-                          <Link
-                            to={`/admin/editAbout/${about.id}`}
-                            className="btn-edit"
-                          >
-                            Update
-                          </Link>
-                          <button
-                            onClick={() => deleteabout(about.id)}
-                            className="btn-delete"
-                          >
-                            Delete
-                          </button>
-                        </>
-                      )}
-                    </td>
+          <section id="about">
+            <div className="about">
+              <table className="table-custome">
+                <thead>
+                  <tr>
+                    <th>hospitalName</th>
+                    <th>description</th>
+                    <th>mission</th>
+                    <th>vision</th>
+                    <th>email</th>
+                    <th>phone</th>
+                    <th>Action</th>
                   </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {
+                    <tr key={about.id}>
+                      <td>{about.hospitalName}</td>
+                      <td>{about.description}</td>
+                      <td>{about.mission}</td>
+                      <td>{about.vision}</td>
+                      <td>{about.email}</td>
+                      <td>{about.phone}</td>
+                      <td className="d-flex justify-content-center">
+                        {Object.keys(about).length === 0 ? (
+                          <Link
+                            to="/admin/addAbout"
+                            className="btn-add-main no"
+                          >
+                            Add About
+                          </Link>
+                        ) : (
+                          <>
+                            <Link
+                              to={`/admin/editAbout/${about.id}`}
+                              className="btn-edit-admin"
+                            >
+                              Update
+                            </Link>
+                            <button
+                              onClick={() => deleteabout(about.id)}
+                              className="btn-delete-admin"
+                            >
+                              Delete
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
       </div>
     </>
