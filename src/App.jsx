@@ -18,7 +18,6 @@ import BillsGrid from "./components/otherPages/bills.jsx";
 import Aupdateabout from "./Admin/Aupdateabout.jsx";
 import ChatBot from "./components/chatBot.jsx";
 import Addabout from "./Admin/Addabout.jsx";
-import TransactionFailure from "./components/otherPages/donationfail.jsx";
 import Addfaq from "./Admin/Addfaq.jsx";
 import Appoint from "./components/appointment.jsx";
 import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
@@ -34,7 +33,6 @@ import Forgotpass from "./auth/ForgotPassword.jsx";
 import Resetpass from "./auth/ResetPassword.jsx";
 import Doctor from "./auth/Doctor.jsx";
 import Patient from "./auth/Patient.jsx";
-import TransactionSuccess from "./components/otherPages/donationSucc.jsx";
 //
 import ChangeInactivePassword from "../src/components/ChangeInactivePassword.jsx";
 import PatientProfile from "../src/components/PatientProfile.jsx";
@@ -84,8 +82,6 @@ const router = createBrowserRouter(
       <Route path="forgotpassword" element={<Forgotpass />} />
       <Route path="doctor" element={<Doctor />} />
       <Route path="bills" element={<BillsGrid />} />
-      <Route path="donations/successful" element={<TransactionSuccess />} />
-      <Route path="donations/fail" element={<TransactionFailure />} />
       <Route path="patient" element={<Patient />} />
       <Route path="DoctorProfile" element={<DoctorProfile />} />
       <Route path="ReceptionistProfile" element={<Reciptionprofile />} />

@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import "././pagesStyle/needs.scss";
+import { toast } from "react-toastify";
 import PageLoad from "../pageLoad";
 
 const NeedCard = ({ need, mode, onEdit, onDelete, onDonate }) => {
@@ -64,12 +65,28 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // 1. Move fetching into an isolated, reusable function
+  const fetchNeeds = useCallback(() => {
+    const categoryParam =
+      activeCategory === "All" ? "" : `&category=${activeCategory}`;
+    fetch(
+      `https://tumorhospital.runasp.net/api/Needs?pageNumber=${currentPage}${categoryParam}`,
+    )
+      .then((res) => res.json())
+      .then((data) => setNeedsData(data));
+  }, [currentPage, activeCategory]);
+
+  // 2. Trigger fetch on page load/filters change
+  useEffect(() => {
+    fetchNeeds();
+  }, [fetchNeeds]);
+
   const submitDonation = (e) => {
     e.preventDefault();
     const payload = {
       ...formData,
       charityNeedId: selectedNeedId,
-      amountDonated: Number(formData.amountDonated), // Fixed key mismatch
+      amountDonated: Number(formData.amountDonated),
     };
     sessionStorage.setItem("amount", formData.amountDonated);
 
@@ -84,7 +101,7 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
         }
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         setShowModal(false);
         setFormData({
           volunteerName: "",
@@ -92,7 +109,10 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
           phone: "",
           amountDonated: "",
         });
-        window.open(data.paymentUrl, "_blank");
+        toast.success("Donation Completed");
+
+        // 3. Call your fetch function here to refresh grid data instantly!
+        fetchNeeds();
       });
   };
 
@@ -101,16 +121,6 @@ const NeedsGrid = ({ mode, onEdit, onDelete }) => {
       .then((res) => res.json())
       .then((data) => setCategories(data.categories || []));
   }, []);
-
-  useEffect(() => {
-    const categoryParam =
-      activeCategory === "All" ? "" : `&category=${activeCategory}`;
-    fetch(
-      `https://tumorhospital.runasp.net/api/Needs?pageNumber=${currentPage}${categoryParam}`,
-    )
-      .then((res) => res.json())
-      .then((data) => setNeedsData(data));
-  }, [currentPage, activeCategory]);
 
   if (!needsData) return <PageLoad />;
 
