@@ -24,7 +24,6 @@ import Appoint from "./components/appointment.jsx";
 import Aupdatefaq from "./Admin/Aupdatefaq.jsx";
 import LogoutButton from "./components/logout.jsx";
 import Adddoctor from "./Admin/Adddoctor.jsx";
-import Addspicialization from "./Admin/Addspicialization.jsx";
 import DoctorsPage from "./components/home/doctorsPage.jsx";
 import AdminLayout from "./Admin/adminLayout.jsx";
 
