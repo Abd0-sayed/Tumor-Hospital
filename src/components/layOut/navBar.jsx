@@ -36,7 +36,7 @@ function NavDropdownExample() {
               <LuClock4 />
               <div>
                 <p>WORK HOUR</p>
-                <code>09:00 - 20:00</code>
+                <code>06:00 - 24:00</code>
               </div>
             </li>
             <li>
