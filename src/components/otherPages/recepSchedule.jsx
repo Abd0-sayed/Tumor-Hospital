@@ -90,10 +90,13 @@ const AppointmentsTable = () => {
           headers: { accept: "*/*", Authorization: `Bearer ${token}` },
         },
       );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const backendMessage = errorData?.message;
+        throw new Error(`${backendMessage}`);
+      }
 
-      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
       const data = await response.json();
-
       setPrescriptionData(data);
       setEditFormData({
         medication: data.medication || "",
@@ -103,8 +106,7 @@ const AppointmentsTable = () => {
       });
       setModalOpen(true);
     } catch (err) {
-      console.error(err);
-      toast.error(`Error fetching prescription: ${err.message}`);
+      toast.error(err.message);
     } finally {
       setPrescriptionLoadingId(null);
     }
@@ -137,13 +139,17 @@ const AppointmentsTable = () => {
         },
       );
 
-      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const backendMessage = errorData?.message;
+        throw new Error(backendMessage);
+      }
 
       toast.success("Prescription updated successfully!");
       setModalOpen(false);
     } catch (err) {
       console.error(err);
-      toast.error(`Error updating prescription: ${err.message}`);
+      toast.error(`${err.message}`);
     } finally {
       setIsUpdatingOrDeleting(false);
     }
@@ -215,13 +221,17 @@ const AppointmentsTable = () => {
         },
       );
 
-      if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
-
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        // Fallback message if your error payload structure differs for this endpoint
+        const backendMessage = errorData?.errors?.DateConflict[0];
+        throw new Error(backendMessage);
+      }
       toast.success("Prescription added successfully!");
       setCreateModalOpen(false);
     } catch (err) {
       console.error(err);
-      toast.error(`Error saving prescription: ${err.message}`);
+      toast.error(`${err.message}`);
     } finally {
       setIsSubmittingPrescription(false);
     }
@@ -679,7 +689,7 @@ const AppointmentsTable = () => {
                           <td className="actions-cell">
                             <div className="action-buttons">
                               <button
-                                className="btn-action btn-accept"
+                                className="btn-action-recep btn-accept"
                                 disabled={
                                   !isPending || actionLoadingId !== null
                                 }
@@ -690,7 +700,7 @@ const AppointmentsTable = () => {
                                 {isProcessingThisRow ? "wait..." : "Accept"}
                               </button>
                               <button
-                                className="btn-action btn-reject"
+                                className="btn-action-recep btn-reject"
                                 disabled={
                                   !isPending || actionLoadingId !== null
                                 }
@@ -732,7 +742,7 @@ const AppointmentsTable = () => {
                             <button
                               type="button"
                               // class="btn-view-prescription"
-                              className={`btn-action btn-mri-scan${hasScan ? "" : " btn-upload-scan--disabled"}`}
+                              className={`btn-mri-scan${hasScan ? "" : " btn-upload-scan--disabled"}`}
                               disabled={!hasScan}
                               title={
                                 hasScan
@@ -740,8 +750,7 @@ const AppointmentsTable = () => {
                                   : "No scan uploaded for this appointment"
                               }
                               onClick={() =>
-                                hasScan &&
-                                handleViewMriDiagnostic(currentId)
+                                hasScan && handleViewMriDiagnostic(currentId)
                               }
                             >
                               MRI Scan
@@ -1060,23 +1069,23 @@ const AppointmentsTable = () => {
                   />
                 ) : (
                   <div className="mri-upload-placeholder">
-                  <span className="mri-upload-icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12 20h9" />
-                      <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                    </svg>
-                  </span>                   
-                   <p className="mri-upload-hint">
+                    <span className="mri-upload-icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                      </svg>
+                    </span>
+                    <p className="mri-upload-hint">
                       Click to select an MRI image
                     </p>
                     <p className="mri-upload-sub">
@@ -1158,8 +1167,8 @@ const AppointmentsTable = () => {
                       <path d="M12 20h9" />
                       <path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                     </svg>
-                  </span>                
-  <p>Loading diagnostic results...</p>
+                  </span>
+                  <p>Loading diagnostic results...</p>
                 </div>
               ) : mriDiagnosticData ? (
                 <>
@@ -1196,9 +1205,7 @@ const AppointmentsTable = () => {
 
                   {/* Probabilities */}
                   <div className="mri-diagnostic-probs">
-                    <p className="mri-diagnostic-label">
-                      Class Probabilities
-                    </p>
+                    <p className="mri-diagnostic-label">Class Probabilities</p>
                     {Object.entries(
                       mriDiagnosticData.explainResponseDto?.probabilities ?? {},
                     ).map(([cls, prob]) => {
@@ -1252,3 +1259,4 @@ const AppointmentsTable = () => {
 };
 
 export default AppointmentsTable;
+

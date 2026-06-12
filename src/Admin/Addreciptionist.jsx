@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Admin/style/admin.scss";
+import { toast } from "react-toastify";
 const getToken = () =>
-  localStorage.getItem("token") ||
-  sessionStorage.getItem("token");
-  
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+
 export default function Addreceptionist() {
-  const token= getToken();
+  const token = getToken();
   const [hospitalname, sethosName] = useState([]);
   const myNavigator = useNavigate();
   const [formData, setFormData] = useState({
@@ -18,8 +18,8 @@ export default function Addreceptionist() {
     address: "",
   });
 
-//
- useEffect(() => {
+  //
+  useEffect(() => {
     if (!token) {
       myNavigator("/login", { replace: true });
     }
@@ -27,13 +27,15 @@ export default function Addreceptionist() {
 
   if (!token) return null;
   //
-  
+
   useEffect(() => {
-    fetch("https://tumorhospital.runasp.net/api/Hospitals",{ headers: { Authorization: `Bearer ${token}` } })
+    fetch("https://tumorhospital.runasp.net/api/Hospitals", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => sethosName(data))
-      .catch((error) => console.error("Error:", error));
-  }, []);
+      .catch((error) => toast.error("Error:", error));
+  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,17 +48,24 @@ export default function Addreceptionist() {
 
   function Addrec(e) {
     e.preventDefault();
-    console.log(formData);
     fetch(`https://tumorhospital.runasp.net/api/Admin/create-receptionist`, {
       method: "POST",
-      headers: { "Content-Type": "application/json",Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(formData),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Receptionist couldn't be created.");
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          const backendMessage = errorData?.errors?.Identity?.[0];
+          toast.error(backendMessage);
+          throw new Error("Receptionist couldn't be created.");
+        }
         return res.json();
       })
-      .then(() => myNavigator("/admin"))
+      .then(() => toast.success("Receptionist Added successfully"))
       .catch((err) => console.error(err));
   }
 

@@ -15,7 +15,9 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.18s ease, opacity 0.18s ease;
+  transition:
+    background 0.18s ease,
+    opacity 0.18s ease;
 
   /* Active state — matches the project's "accept" palette */
   background: #1a7f5a;
@@ -54,7 +56,9 @@
   border-radius: 10px;
   cursor: pointer;
   background: #f9fafb;
-  transition: border-color 0.18s ease, background 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
   overflow: hidden;
 
   &:hover {
