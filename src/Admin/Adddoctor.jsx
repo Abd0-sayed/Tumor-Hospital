@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import "./style/admin.scss";
 import "./style/doctor.scss";
@@ -130,14 +131,18 @@ export default function Adddoctor() {
       },
       body: JSON.stringify(formData),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Doctor couldn't be created.");
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          const backendMessage = errorData?.errors?.Identity?.[0];
+          toast.error(backendMessage);
+          throw new Error("Doctor couldn't be created.");
+        }
         return res.json();
       })
-      .then(() => myNavigator("/admin"))
+      .then(() => toast.success("Doctor Added successfully"))
       .catch((err) => console.error(err));
   }
-
   return (
     <div className="admin-form-page">
       <div className="form-card">
