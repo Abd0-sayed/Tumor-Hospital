@@ -30,7 +30,6 @@ export default function Adddoctor() {
     "Tuesday",
     "Wednesday",
     "Thursday",
-    "Friday",
     "Saturday",
   ];
 
@@ -58,7 +57,7 @@ export default function Adddoctor() {
       .then((res) => res.json())
       .then((data) => sethosName(data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

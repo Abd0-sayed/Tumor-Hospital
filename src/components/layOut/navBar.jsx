@@ -18,7 +18,7 @@ function NavDropdownExample() {
       <Container>
         <header>
           {role === "Patient" || !role ? (
-            <NavLink to={"/"}>
+            <NavLink to={"/"} style={{ textDecoration: "none" }}>
               <h1 className="myLogo">MED</h1>
             </NavLink>
           ) : (
@@ -53,7 +53,7 @@ function NavDropdownExample() {
       <Navbar expand="lg" className="navbar navbar-dark">
         <Container>
           {role === "Patient" || !role ? (
-            <NavLink to={"/"}>
+            <NavLink to={"/"} style={{ textDecoration: "none" }}>
               <h1 className="myLogo" id="shrink" style={{ color: "white" }}>
                 MED
               </h1>

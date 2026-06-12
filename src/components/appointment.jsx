@@ -248,23 +248,35 @@ const DoctorProfile = () => {
               </h2>
               <div className="pricing-grid">
                 <div className="price-card">
-                  <span className="price-label">Consultation</span>
+                  <span className="price-label">
+                    Consultation {doctor.discountPercentage && "| Discount"}
+                  </span>
                   <span className="price-amount">
-                    {doctor.consultationCost} EGP
+                    {doctor.consultationCost} EGP&nbsp;| &nbsp;
+                    {doctor.discountPercentage &&
+                      `${((100 - doctor.discountPercentage) / 100) * doctor.consultationCost} EGP`}
                   </span>
                 </div>
                 {doctor.isAbleToAppointVideoCall && (
                   <div className="price-card">
-                    <span className="price-label">Video Call</span>
+                    <span className="price-label">
+                      Video Call {doctor.discountPercentage && "| Discount"}
+                    </span>
                     <span className="price-amount">
-                      {doctor.videoCallCost} EGP
+                      {doctor.videoCallCost} EGP&nbsp;| &nbsp;
+                      {doctor.discountPercentage &&
+                        `${((100 - doctor.discountPercentage) / 100) * doctor.videoCallCost} EGP`}
                     </span>
                   </div>
                 )}
                 <div className="price-card">
-                  <span className="price-label">Follow-Up</span>
+                  <span className="price-label">
+                    Follow-Up {doctor.discountPercentage && "| Discount"}
+                  </span>
                   <span className="price-amount">
-                    {doctor.followUpCost} EGP
+                    {doctor.followUpCost} EGP &nbsp;| &nbsp;
+                    {doctor.discountPercentage &&
+                      `${((100 - doctor.discountPercentage) / 100) * doctor.followUpCost} EGP`}
                   </span>
                 </div>
                 {doctor.isSurgeon && (
