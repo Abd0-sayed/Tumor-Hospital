@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Hospital.css";
+import { toast } from "react-toastify";
 
 const API = "https://tumorhospital.runasp.net/api";
 
@@ -161,9 +162,8 @@ const DeleteModal = ({ title, name, onConfirm, onCancel, loading }) => (
       </div>
       <h2 className="hosp-modal-title">{title}</h2>
       <p className="hosp-modal-msg">
-        You are about to permanently delete{" "}
-        <span className="hosp-modal-name">{name}</span>. This action cannot be
-        undone.
+        You are about to deactivate{" "}
+        <span className="hosp-modal-name">{name}</span>.
       </p>
       <div className="hosp-modal-actions">
         <button
@@ -178,7 +178,7 @@ const DeleteModal = ({ title, name, onConfirm, onCancel, loading }) => (
           onClick={onConfirm}
           disabled={loading}
         >
-          {loading ? <span className="hosp-spinner" /> : "Delete"}
+          {loading ? <span className="hosp-spinner" /> : "Deactivate"}
         </button>
       </div>
     </div>
@@ -314,6 +314,30 @@ const HospitalInfo = () => {
       .finally(() => setDashLoading(false));
   }, [hospitalId, token, navigate]);
 
+  const deleteUser = async (id) => {
+    try {
+      const response = await fetch(
+        `https://tumorhospital.runasp.net/api/Admin/Staff/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (response.ok) {
+        toast.success("User Deleted Successfully");
+        fetchDoctors();
+        fetchReceps();
+      } else {
+        console.error("Failed to delete staff member:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Network error during deletion:", error);
+    }
+  };
   // ── Doctors ──────────────────────────────────────────────────────────────
   const fetchDoctors = useCallback(() => {
     if (!hospitalId || !token) return;
@@ -931,14 +955,14 @@ const HospitalInfo = () => {
                                 <path d="M10 11v6M14 11v6" />
                                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
                               </svg>
-                              Delete
+                              Deactivate
                             </button>
                             <button
                               className="hosp-action-btn hosp-action-btn--reactivate"
                               disabled={!isDeleted || isReactivating}
                               title={
                                 !isDeleted
-                                  ? "Doctor is not deleted"
+                                  ? "Doctor is not Deactivated"
                                   : "Reactivate this doctor"
                               }
                               onClick={() => handleDocReactivate(doc.id)}
@@ -963,6 +987,12 @@ const HospitalInfo = () => {
                                   Reactivate
                                 </>
                               )}
+                            </button>
+                            <button
+                              id="my-btn"
+                              onClick={() => deleteUser(doc.id)}
+                            >
+                              Delete
                             </button>
                           </div>
                         </td>
@@ -1140,8 +1170,8 @@ const HospitalInfo = () => {
                               disabled={isDeleted}
                               title={
                                 isDeleted
-                                  ? "Receptionist is already deleted"
-                                  : "Delete receptionist"
+                                  ? "Receptionist is already Deactivated"
+                                  : "Deactivate receptionist"
                               }
                               onClick={() => {
                                 setRecDeleteError("");
@@ -1165,14 +1195,14 @@ const HospitalInfo = () => {
                                 <path d="M10 11v6M14 11v6" />
                                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
                               </svg>
-                              Delete
+                              Deactivate
                             </button>
                             <button
                               className="hosp-action-btn hosp-action-btn--reactivate"
                               disabled={!isDeleted || isReactivating}
                               title={
                                 !isDeleted
-                                  ? "Receptionist is not deleted"
+                                  ? "Receptionist is not Deactivated"
                                   : "Reactivate this receptionist"
                               }
                               onClick={() => handleRecReactivate(rec.id)}
@@ -1198,6 +1228,12 @@ const HospitalInfo = () => {
                                 </>
                               )}
                             </button>
+                            <button
+                              id="my-btn"
+                              onClick={() => deleteUser(rec.id)}
+                            >
+                              Delete
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -1220,7 +1256,7 @@ const HospitalInfo = () => {
       {/* Doctor delete modal */}
       {docDeleteTarget && (
         <DeleteModal
-          title="Delete doctor?"
+          title="Deactivate Doctor?"
           name={docDeleteTarget.name}
           onConfirm={handleDocDeleteConfirm}
           onCancel={() => {
@@ -1236,7 +1272,7 @@ const HospitalInfo = () => {
       {/* Receptionist delete modal */}
       {recDeleteTarget && (
         <DeleteModal
-          title="Delete receptionist?"
+          title="Deactivate Receptionist?"
           name={recDeleteTarget.name}
           onConfirm={handleRecDeleteConfirm}
           onCancel={() => {

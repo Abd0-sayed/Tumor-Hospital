@@ -252,9 +252,9 @@ const DoctorProfile = () => {
                     Consultation {doctor.discountPercentage && "| Discount"}
                   </span>
                   <span className="price-amount">
-                    {doctor.consultationCost} EGP&nbsp;| &nbsp;
+                    {doctor.consultationCost} EGP
                     {doctor.discountPercentage &&
-                      `${((100 - doctor.discountPercentage) / 100) * doctor.consultationCost} EGP`}
+                      ` | ${((100 - doctor.discountPercentage) / 100) * doctor.consultationCost} EGP`}
                   </span>
                 </div>
                 {doctor.isAbleToAppointVideoCall && (
@@ -263,9 +263,9 @@ const DoctorProfile = () => {
                       Video Call {doctor.discountPercentage && "| Discount"}
                     </span>
                     <span className="price-amount">
-                      {doctor.videoCallCost} EGP&nbsp;| &nbsp;
+                      {doctor.videoCallCost} EGP
                       {doctor.discountPercentage &&
-                        `${((100 - doctor.discountPercentage) / 100) * doctor.videoCallCost} EGP`}
+                        ` | ${((100 - doctor.discountPercentage) / 100) * doctor.videoCallCost} EGP`}
                     </span>
                   </div>
                 )}
@@ -274,9 +274,9 @@ const DoctorProfile = () => {
                     Follow-Up {doctor.discountPercentage && "| Discount"}
                   </span>
                   <span className="price-amount">
-                    {doctor.followUpCost} EGP &nbsp;| &nbsp;
+                    {doctor.followUpCost} EGP
                     {doctor.discountPercentage &&
-                      `${((100 - doctor.discountPercentage) / 100) * doctor.followUpCost} EGP`}
+                      ` | ${((100 - doctor.discountPercentage) / 100) * doctor.followUpCost} EGP`}
                   </span>
                 </div>
                 {doctor.isSurgeon && (
