@@ -1583,6 +1583,7 @@
 /* Reactivate button */
 .hosp-action-btn--reactivate {
   background: var(--warning-bg);
+  margin-right: 5px;
   color: var(--warning);
   border-color: var(--warning-border);
 }
